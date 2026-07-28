@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Admin - Lập Quẻ Lục Hào</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0c1222;
+            --card-bg: #1a2438;
+            --accent: #d97706;
+            --accent-hover: #b45309;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --border-color: rgba(255,255,255,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Glassmorphism Card */
+        .card {
+            background: rgba(26, 36, 56, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+        
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+        }
+
+        input[type="email"], input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats-badge {
+            background: rgba(217, 119, 6, 0.2);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px solid rgba(217, 119, 6, 0.3);
+        }
+
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .item-email {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-meta {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .add-form input {
+            margin-bottom: 0;
+            flex: 1;
+        }
+
+        #login-screen, #dashboard-screen, #error-screen {
+            display: none;
+        }
+        
+        #login-screen {
+            text-align: center;
+            max-width: 400px;
+            margin: 10vh auto;
+        }
+
+        .loader {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: var(--danger);
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .add-form {
+                flex-direction: column;
+            }
+            .list-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .item-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Login Screen -->
+        <div id="login-screen" class="card">
+            <h1>Quản Lý Truy Cập</h1>
+            <p style="margin-bottom: 2rem; color: var(--text-muted);">Đăng nhập bằng tài khoản Quản trị viên</p>
+            <button class="btn" id="btn-login" style="width: 100%;">
+                Đăng Nhập với Google
+            </button>
+            <div class="loader" id="login-loader" style="margin-top: 1rem;"></div>
+            <div id="login-error" class="error-message"></div>
+        </div>
+
+        <!-- Error Screen -->
+        <div id="error-screen" class="card" style="text-align: center; max-width: 400px; margin: 10vh auto;">
+            <h2 style="color: var(--danger)">Từ Chối Truy Cập</h2>
+            <p style="margin-bottom: 2rem;">Tài khoản của bạn không có quyền quản trị.</p>
+            <button class="btn" id="btn-logout-error">Đăng Xuất</button>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboard-screen">
+            <div class="header">
+                <h1>Quản Lý Truy Cập</h1>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="stats-badge">Đã duyệt: <span id="total-approved">0</span></div>
+                    <button class="btn btn-sm btn-danger" id="btn-logout">Đăng Xuất</button>
+                </div>
+            </div>
+
+            <!-- Pending Requests Card -->
+            <div class="card" style="border-left: 4px solid var(--accent);">
+                <h2>📋 Yêu Cầu Chờ Duyệt (<span id="total-pending">0</span>)</h2>
+                <div class="list-container" id="pending-container">
+                    <div style="text-align: center; color: var(--text-muted); padding: 1rem;">
+                        Đang tải yêu cầu chờ duyệt...
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Thêm Email Thủ Công</h2>
+                <div class="add-form">
+                    <input type="email" id="new-email" placeholder="Nhập địa chỉ email..." required>
+                    <button class="btn" id="btn-add">Thêm Email</button>
+                </div>
+                <div id="add-message" style="font-size: 0.875rem;"></div>
+            </div>
+
+            <div class="card">
+                <h2>Danh sách Whitelist</h2>
+                <div class="list-container" id="whitelist-container">
+                    <div style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                        Đang tải dữ liệu...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBSoi413dszpafIKJWqO9naMSCTUjATRxc",
+          authDomain: "luchaoio.firebaseapp.com",
+          projectId: "luchaoio",
+          storageBucket: "luchaoio.firebasestorage.app",
+          messagingSenderId: "986165751792",
+          appId: "1:986165751792:web:c012c3c553e3d7e2c2f735"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // UI Elements
+        const loginScreen = document.getElementById('login-screen');
+        const dashboardScreen = document.getElementById('dashboard-screen');
+        const errorScreen = document.getElementById('error-screen');
+        const btnLogin = document.getElementById('btn-login');
+        const btnLogout = document.getElementById('btn-logout');
+        const btnLogoutError = document.getElementById('btn-logout-error');
+        const loginLoader = document.getElementById('login-loader');
+        const loginError = document.getElementById('login-error');
+        
+        const btnAdd = document.getElementById('btn-add');
+        const newEmailInput = document.getElementById('new-email');
+        const addMessage = document.getElementById('add-message');
+        const whitelistContainer = document.getElementById('whitelist-container');
+        const totalApproved = document.getElementById('total-approved');
+
+        let whitelistUnsubscribe = null;
+        let devicesUnsubscribe = null;
+        const whitelistData = {};
+        const devicesData = {};
+
+        // Auth State Observer
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                showLoader();
+                try {
+                    // Check if admin
+                    const adminDoc = await db.collection('admins').doc(user.email).get();
+                    if (adminDoc.exists && adminDoc.data().role === 'admin') {
+                        showDashboard();
+                        loadData(user.email);
+                    } else {
+                        showErrorScreen();
+                    }
+                } catch (error) {
+                    console.error("Error checking admin status:", error);
+                    loginError.innerText = "Lỗi khi kiểm tra quyền truy cập.";
+                    showLogin();
+                }
+            } else {
+                showLogin();
+                if (whitelistUnsubscribe) whitelistUnsubscribe();
+                if (devicesUnsubscribe) devicesUnsubscribe();
+            }
+        });
+
+        // Login
+        btnLogin.addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.setCustomParameters({
+                prompt: 'select_account'
+            });
+            btnLogin.innerText = "Đang kết nối...";
+            auth.signInWithPopup(provider).catch(error => {
+                loginError.innerText = "Đăng nhập thất bại: " + error.message;
+                btnLogin.innerText = "Đăng Nhập với Google";
+            });
+        });
+
+        // Logout
+        const handleLogout = () => auth.signOut();
+        btnLogout.addEventListener('click', handleLogout);
+        btnLogoutError.addEventListener('click', handleLogout);
+
+        // Add Email
+        btnAdd.addEventListener('click', async () => {
+            const email = newEmailInput.value.trim().toLowerCase();
+            if (!email || !email.includes('@')) {
+                showMessage('Vui lòng nhập email hợp lệ.', 'var(--danger)');
+                return;
+            }
+
+            btnAdd.disabled = true;
+            try {
+                await db.collection('whitelist').doc(email).set({
+                    addedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    addedBy: auth.currentUser.email
+                });
+                newEmailInput.value = '';
+                showMessage('Đã thêm thành công!', 'var(--accent)');
+            } catch (error) {
+                console.error("Error adding email:", error);
+                showMessage('Lỗi khi thêm: ' + error.message, 'var(--danger)');
+            }
+            btnAdd.disabled = false;
+        });
+
+        function showMessage(msg, color) {
+            addMessage.innerText = msg;
+            addMessage.style.color = color;
+            setTimeout(() => addMessage.innerText = '', 3000);
+        }
+
+        // Load Data Realtime
+        function loadData(adminEmail) {
+            // Listen to pending requests
+            pendingUnsubscribe = db.collection('pending_requests').onSnapshot(snapshot => {
+                const pendingContainer = document.getElementById('pending-container');
+                const totalPending = document.getElementById('total-pending');
+                pendingContainer.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    pendingContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 1rem;">Không có yêu cầu chờ duyệt nào.</div>';
+                    if (totalPending) totalPending.innerText = '0';
+                    return;
+                }
+                
+                if (totalPending) totalPending.innerText = snapshot.size;
+                
+                snapshot.forEach(doc => {
+                    const email = doc.id;
+                    const data = doc.data();
+                    let dateStr = 'Mới đây';
+                    if (data.requestedAt && data.requestedAt.toDate) {
+                        dateStr = data.requestedAt.toDate().toLocaleDateString('vi-VN') + ' ' + data.requestedAt.toDate().toLocaleTimeString('vi-VN');
+                    }
+                    
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `
+                        <div class="item-info">
+                            <div class="item-email" style="font-weight: 600; color: #f59e0b;">${email}</div>
+                            <div class="item-meta">Khách bấm đăng nhập lúc: ${dateStr}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-sm" style="background-color: #22c55e;" onclick="approvePending('${email}')">✓ Duyệt Ngay</button>
+                            <button class="btn btn-sm btn-danger" onclick="rejectPending('${email}')">Xóa</button>
+                        </div>
+                    `;
+                    pendingContainer.appendChild(item);
+                });
+            }, error => {
+                console.error("Pending sync error:", error);
+                const pendingContainer = document.getElementById('pending-container');
+                const totalPending = document.getElementById('total-pending');
+                if (pendingContainer) {
+                    pendingContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 1rem;">Không có yêu cầu chờ duyệt nào (hoặc chưa bật Firestore Rules).</div>';
+                }
+                if (totalPending) totalPending.innerText = '0';
+            });
+
+            // Listen to whitelist
+            whitelistUnsubscribe = db.collection('whitelist').onSnapshot(snapshot => {
+                snapshot.forEach(doc => {
+                    whitelistData[doc.id] = doc.data();
+                });
+                // Remove deleted docs
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === 'removed') {
+                        delete whitelistData[change.doc.id];
+                    }
+                });
+                totalApproved.innerText = Object.keys(whitelistData).length;
+                renderList();
+            }, error => console.error("Whitelist sync error:", error));
+
+            // Listen to devices
+            devicesUnsubscribe = db.collection('user_devices').onSnapshot(snapshot => {
+                snapshot.forEach(doc => {
+                    devicesData[doc.id] = doc.data();
+                });
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === 'removed') {
+                        delete devicesData[change.doc.id];
+                    }
+                });
+                renderList();
+            }, error => console.error("Devices sync error:", error));
+        }
+
+        // Render the list
+        function renderList() {
+            whitelistContainer.innerHTML = '';
+            const emails = Object.keys(whitelistData).sort();
+            
+            if (emails.length === 0) {
+                whitelistContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 2rem;">Chưa có email nào trong danh sách.</div>';
+                return;
+            }
+
+            emails.forEach(email => {
+                const data = whitelistData[email];
+                const deviceData = devicesData[email] || {};
+                const deviceCount = deviceData.devices ? deviceData.devices.length : 0;
+                
+                let dateStr = 'N/A';
+                if (data.addedAt && data.addedAt.toDate) {
+                    dateStr = data.addedAt.toDate().toLocaleDateString('vi-VN') + ' ' + data.addedAt.toDate().toLocaleTimeString('vi-VN');
+                }
+
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div class="item-info">
+                        <div class="item-email">${email}</div>
+                        <div class="item-meta">Thêm lúc: ${dateStr} | Thiết bị: ${deviceCount}</div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-sm" onclick="resetDevices('${email}')" title="Xóa toàn bộ session thiết bị">Reset Thiết Bị</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteEmail('${email}')">Xóa</button>
+                    </div>
+                `;
+                whitelistContainer.appendChild(item);
+            });
+        }
+
+        // Global functions for inline handlers
+        window.approvePending = async (email) => {
+            try {
+                await db.collection('whitelist').doc(email).set({
+                    addedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    addedBy: auth.currentUser ? auth.currentUser.email : 'admin'
+                });
+                await db.collection('pending_requests').doc(email).delete();
+            } catch (error) {
+                alert("Lỗi khi duyệt: " + error.message);
+            }
+        };
+
+        window.rejectPending = async (email) => {
+            if (confirm(`Bạn có chắc muốn xóa yêu cầu chờ duyệt của ${email}?`)) {
+                try {
+                    await db.collection('pending_requests').doc(email).delete();
+                } catch (error) {
+                    alert("Lỗi khi xóa: " + error.message);
+                }
+            }
+        };
+
+        window.deleteEmail = async (email) => {
+            if (confirm(`Bạn có chắc chắn muốn xóa ${email} khỏi Whitelist?`)) {
+                try {
+                    await db.collection('whitelist').doc(email).delete();
+                } catch (error) {
+                    alert("Lỗi khi xóa: " + error.message);
+                }
+            }
+        };
+
+        window.resetDevices = async (email) => {
+            if (confirm(`Bạn có chắc chắn muốn reset thiết bị cho ${email}?`)) {
+                try {
+                    await db.collection('user_devices').doc(email).update({
+                        devices: []
+                    });
+                } catch (error) {
+                    // If doc doesn't exist, create it empty or ignore
+                    if (error.code === 'not-found') {
+                        await db.collection('user_devices').doc(email).set({
+                            devices: []
+                        });
+                    } else {
+                        alert("Lỗi khi reset: " + error.message);
+                    }
+                }
+            }
+        };
+
+        // Navigation helpers
+        function showLogin() {
+            loginScreen.style.display = 'block';
+            dashboardScreen.style.display = 'none';
+            errorScreen.style.display = 'none';
+            loginLoader.style.display = 'none';
+            btnLogin.style.display = 'inline-flex';
+        }
+
+        function showDashboard() {
+            loginScreen.style.display = 'none';
+            dashboardScreen.style.display = 'block';
+            errorScreen.style.display = 'none';
+        }
+
+        function showErrorScreen() {
+            loginScreen.style.display = 'none';
+            dashboardScreen.style.display = 'none';
+            errorScreen.style.display = 'block';
+        }
+
+        function showLoader() {
+            btnLogin.style.display = 'none';
+            loginLoader.style.display = 'block';
+            loginError.innerText = '';
+        }
+
+        // Init visibility
+        showLogin();
+    </script>
+</body>
+</html>

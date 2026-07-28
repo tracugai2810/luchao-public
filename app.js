@@ -3,6 +3,25 @@
    All divination logic and UI interactions
    ======================================== */
 
+// --- Anti-cheat / Anti-copy Security ---
+document.addEventListener('keydown', function (event) {
+    // Chặn F12
+    if (event.keyCode === 123) {
+        event.preventDefault();
+        return false;
+    }
+    // Chặn Ctrl+Shift+I, J (DevTools)
+    if (event.ctrlKey && event.shiftKey && (event.keyCode === 73 || event.keyCode === 74)) {
+        event.preventDefault();
+        return false;
+    }
+    // Chặn Ctrl+U (View Source)
+    if (event.ctrlKey && event.keyCode === 85) {
+        event.preventDefault();
+        return false;
+    }
+});
+
 // ============================================
 // CONSTANTS & DATA
 // ============================================
@@ -697,6 +716,10 @@ function renderCaptureHTML(data) {
                     }).join('');
                 })()}
             </div>
+        </div>
+
+        <div class="capture-footer">
+            <span>Quẻ được lập tại: <strong>luchao.io.vn</strong></span>
         </div>
     `;
 }

@@ -54,10 +54,16 @@
     <link rel="preload" href="am.png" as="image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2.0">
 
     <!-- html2canvas for screenshot -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
@@ -143,6 +149,52 @@
 </head>
 
 <body>
+    <!-- ========== AUTH OVERLAYS ========== -->
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-logo-icon">☰</div>
+            <h2 class="auth-title">Lập Quẻ Lục Hào</h2>
+            <p class="auth-subtitle">Vui lòng đăng nhập để sử dụng ứng dụng</p>
+            <button id="google-signin-btn" class="google-signin-btn" onclick="signInWithGoogle()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="google-icon">
+                Đăng nhập bằng Google
+            </button>
+            <p class="auth-note">Tài khoản cần được Admin cấp quyền trước khi sử dụng</p>
+        </div>
+    </div>
+
+    <!-- Denied Overlay -->
+    <div id="denied-overlay" class="auth-overlay" style="display:none">
+        <div class="auth-card">
+            <div class="auth-icon-warning">⚠️</div>
+            <h2 class="auth-title">Chưa Được Cấp Quyền</h2>
+            <p class="auth-subtitle">Tài khoản <strong id="denied-email"></strong> đã được lưu ở trạng thái chờ duyệt.</p>
+            <div class="auth-contact-box">
+                <p>Liên hệ Admin để được duyệt tài khoản:</p>
+                <a href="https://zalo.me/0396154013" target="_blank" class="zalo-btn">💬 Chat Zalo với Admin</a>
+            </div>
+            <button class="auth-signout-btn" onclick="signOut()">Đăng xuất</button>
+        </div>
+    </div>
+
+    <!-- Device Limit Overlay -->
+    <div id="device-limit-overlay" class="auth-overlay" style="display:none">
+        <div class="auth-card">
+            <div class="auth-icon-warning">🔒</div>
+            <h2 class="auth-title">Giới Hạn Thiết Bị</h2>
+            <p class="auth-subtitle">Tài khoản của bạn đã đăng nhập trên tối đa <strong>2 thiết bị</strong>.</p>
+            <div class="auth-contact-box">
+                <p>Liên hệ Admin để được hỗ trợ:</p>
+                <a href="https://zalo.me/0396154013" target="_blank" class="zalo-btn">💬 Chat Zalo với Admin</a>
+            </div>
+            <button class="auth-signout-btn" onclick="signOut()">Đăng xuất</button>
+        </div>
+    </div>
+
+    <!-- ========== MAIN APP CONTENT (hidden until auth) ========== -->
+    <div id="app-main-content" style="display:none">
     <div class="app-container">
         <!-- Header -->
         <header class="app-header">
@@ -186,7 +238,7 @@
                 <!-- Tab: Coins -->
                 <div id="tab-coins" class="tab-content active">
                     <button class="btn btn-secondary" onclick="startCoinToss()">
-                        <span class="btn-icon">🎲</span>
+                        <span class="tab-icon">🎲</span>
                         Gieo Xu (Thủ công)
                     </button>
 
@@ -364,9 +416,13 @@
             </div>
         </div>
     </div>
+    </div> <!-- end app-main-content -->
+
+    <!-- Auth Module (Deferred) -->
+    <script src="auth.js?v=2.0"></script>
 
     <!-- Main JavaScript App (Deferred for zero render-blocking) -->
-    <script src="app.js" defer></script>
+    <script src="app.js?v=2.0" defer></script>
 </body>
 
 </html>

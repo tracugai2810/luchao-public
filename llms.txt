@@ -1,0 +1,19 @@
+# Lập Quẻ Kinh Dịch Lục Hào Online
+
+> Lập Quẻ Kinh Dịch Lục Hào Online (https://luchao.io.vn/) là công cụ lập quẻ Kinh Dịch, An quẻ Lục Hào chính xác dựa trên Thời gian Dương lịch, Can Chi ngày giờ, Nạp Giáp 64 quẻ, Lục Thú và Lục Thân.
+
+## Các phương pháp gieo quẻ hỗ trợ
+- **Gieo Xu (Thủ công)**: Gieo 3 đồng xu 6 lần để xác định 6 hào từ Hào 1 đến Hào 6.
+- **Seri Tiền**: Nhập dãy số seri trên tờ tiền để lập quẻ theo phương pháp Mai Hoa & Lục Hào.
+- **Chọn Số**: Nhập 3 số tự nhiên (Thượng quái, Hạ quái, Hào động).
+
+## Tính năng chính
+- Tự động chuyển đổi thời gian sang Can Chi (Năm, Tháng, Ngày, Giờ).
+- Tra cứu 64 Quẻ Kinh Dịch, xác định Quẻ Thượng, Quẻ Hạ, Quẻ Biến.
+- An Lục Thân (Huynh Đệ, Tử Tôn, Thê Tài, Quan Quỷ, Phụ Mẫu), Lục Thú (Thanh Long, Chu Tước, Câu Trần, Đằng Xà, Bạch Hổ, Huyền Vũ).
+- Xác định Thế Hào, Ứng Hào, Bát Thuần, Lục Xung, Lục Hợp, Phản Ngâm, Phục Ngâm.
+- Tải ảnh kết quả quẻ sắc nét để lưu trữ hoặc chia sẻ.
+
+## Links & Documents
+- Website chính thức: https://luchao.io.vn/
+- Kiến thức & Hướng dẫn đầy đủ: https://luchao.io.vn/llms-full.txt

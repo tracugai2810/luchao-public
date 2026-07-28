@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Lập Quẻ Kinh Dịch Lục Hào Online</title>
+    <meta name="description" content="Ứng dụng lập quẻ Kinh Dịch Lục Hào online chính xác nhất. Gieo quẻ 3 đồng xu, Seri tiền, chọn số ngẫu nhiên. An nạp giáp 64 quẻ Kinh Dịch, lục thú, lục thân, thế ứng đầy đủ.">
+    <meta name="keywords" content="lập quẻ kinh dịch lục hào online, gieo quẻ lục hào online, lập quẻ lục hào, gieo xu lục hào, bói seri tiền, 64 quẻ kinh dịch, nạp giáp lục hào">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Lập Quẻ Kinh Dịch Lục Hào Online">
+    <meta name="theme-color" content="#7f1d1d">
+    
+    <!-- Geo Meta Tags -->
+    <meta name="geo.region" content="VN">
+    <meta name="geo.placename" content="Việt Nam">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://luchao.io.vn/">
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+
+    <!-- Image link for search engines & Schema -->
+    <link rel="image_src" href="https://luchao.io.vn/banner.jpg">
+    <meta itemprop="image" content="https://luchao.io.vn/banner.jpg">
+    <meta name="zalo-share-image" content="https://luchao.io.vn/banner.jpg">
+
+    <!-- Open Graph / Facebook / Zalo -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://luchao.io.vn/">
+    <meta property="og:site_name" content="Lập Quẻ Kinh Dịch Lục Hào Online">
+    <meta property="og:title" content="Lập Quẻ Kinh Dịch Lục Hào Online">
+    <meta property="og:description" content="Ứng dụng lập quẻ Kinh Dịch Lục Hào online chính xác nhất. Gieo 3 đồng xu, Seri tiền, chọn số. An quẻ Kinh Dịch, lục thú, lục thân tự động.">
+    <meta property="og:image" content="https://luchao.io.vn/banner.jpg">
+    <meta property="og:image:secure_url" content="https://luchao.io.vn/banner.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Lập Quẻ Kinh Dịch Lục Hào Online">
+    <meta property="og:locale" content="vi_VN">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://luchao.io.vn/">
+    <meta name="twitter:title" content="Lập Quẻ Kinh Dịch Lục Hào Online">
+    <meta name="twitter:description" content="Ứng dụng lập quẻ Kinh Dịch Lục Hào online chính xác nhất. Gieo 3 đồng xu, Seri tiền, chọn số. An quẻ Kinh Dịch, lục thú, lục thân tự động.">
+    <meta name="twitter:image" content="https://luchao.io.vn/banner.jpg">
+
+    <!-- Performance Preloads -->
+    <link rel="preload" href="duong.png" as="image">
+    <link rel="preload" href="am.png" as="image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- html2canvas for screenshot -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+
+    <!-- Structured Data (JSON-LD) for SEO & AI Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Lập Quẻ Kinh Dịch Lục Hào Online",
+      "url": "https://luchao.io.vn/",
+      "description": "Ứng dụng lập quẻ Kinh Dịch Lục Hào online chính xác dựa trên thời gian Can Chi, gieo 3 đồng xu, Seri tiền và chọn số.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript",
+      "author": {
+        "@type": "Organization",
+        "name": "Lập Quẻ Kinh Dịch Lục Hào Online",
+        "url": "https://luchao.io.vn/"
+      },
+      "image": "https://luchao.io.vn/banner.jpg"
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Lập quẻ Kinh Dịch Lục Hào trên luchao.io.vn có chính xác không?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hoàn toàn chính xác. Ứng dụng tự động quy đổi thời gian Dương lịch sang Can Chi Ngày, Tháng, Năm, Giờ và Tiết khí mặt trời chuẩn xác theo lịch thiên văn. Hệ thống an quẻ 100% theo đúng quy luật cổ thư Lục Hào Dự Đoán Học, Nạp Giáp 64 quẻ, an Thế Ứng, Lục Thân, Lục Thú, Phản Ngâm và Phục Ngâm linh ứng."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Các phương pháp gieo quẻ trên luchao.io.vn gồm những gì?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Website hỗ trợ 3 phương pháp gieo quẻ chính: 1. Gieo 3 đồng xu thủ công 6 lần. 2. Nhập số Seri tờ tiền để tính quẻ theo Mai Hoa Dịch Số. 3. Chọn 3 số ngẫu nhiên (Thượng quái, Hạ quái, Hào động)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Gieo quẻ bằng Seri tiền có chính xác không?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Phương pháp gieo quẻ bằng Seri tiền là ứng dụng của triết lý Vạn Vật Hữu Tượng trong Mai Hoa Dịch Số. Con số Seri trên tờ tiền tại thời điểm tâm niệm mang năng lượng thông tin linh ứng cho sự việc cần hỏi."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "Cách gieo quẻ Kinh Dịch Lục Hào Online chính xác",
+      "description": "Hướng dẫn 3 bước lập quẻ Kinh Dịch Lục Hào trực tuyến bằng 3 đồng xu hoặc Seri tiền.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Bước 1: Chọn thời gian và phương pháp",
+          "text": "Chọn thời gian cần lập quẻ (mặc định là thời gian hiện tại) và chọn phương pháp Gieo Xu, Seri Tiền hoặc Chọn Số."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Bước 2: Thực hiện gieo quẻ",
+          "text": "Nếu gieo xu: Tập trung tâm niệm sự việc và bấm gieo đủ 6 lần từ Hào 1 đến Hào 6. Nếu dùng Seri tiền: Nhập dãy số seri trên tờ tiền."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Bước 3: Xem kết quả và tải ảnh quẻ",
+          "text": "Bấm Lập Quẻ để nhận bảng kết quả an quẻ đầy đủ, sau đó nhấn Tải Ảnh để lưu lại kết quả."
+        }
+      ]
+    }
+    </script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">☰</div>
+                <h1>Lập Quẻ Lục Hào</h1>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section card">
+                <h2 class="section-title">
+                    <span class="icon">📅</span>
+                    Thông Tin Lập Quẻ
+                </h2>
+
+                <!-- Date Time Input -->
+                <div class="form-group">
+                    <label for="inputDate">Thời gian gieo quẻ (Dương lịch)</label>
+                    <input type="datetime-local" id="inputDate" class="form-input">
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="coins" onclick="switchTab('coins')">
+                        <span class="tab-icon">🔘</span>
+                        <span class="tab-text">Gieo Xu</span>
+                    </button>
+                    <button class="tab-btn" data-tab="serial" onclick="switchTab('serial')">
+                        <span class="tab-icon">💵</span>
+                        <span class="tab-text">Seri Tiền</span>
+                    </button>
+                    <button class="tab-btn" data-tab="number" onclick="switchTab('number')">
+                        <span class="tab-icon">🔢</span>
+                        <span class="tab-text">Chọn Số</span>
+                    </button>
+                </div>
+
+                <!-- Tab: Coins -->
+                <div id="tab-coins" class="tab-content active">
+                    <button class="btn btn-secondary" onclick="startCoinToss()">
+                        <span class="btn-icon">🎲</span>
+                        Gieo Xu (Thủ công)
+                    </button>
+
+                    <div class="lines-input" id="linesContainer">
+                        <!-- Lines will be generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab: Serial -->
+                <div id="tab-serial" class="tab-content">
+                    <div class="form-group">
+                        <label for="serialInput">Nhập dãy số Seri Tiền</label>
+                        <input type="text" id="serialInput" class="form-input" placeholder="Ví dụ: 12345678"
+                            inputmode="numeric" onkeyup="cleanSerialInput(this)">
+                        <small class="form-hint">Chỉ nhập số, bỏ qua chữ cái</small>
+                    </div>
+                </div>
+
+                <!-- Tab: Number -->
+                <div id="tab-number" class="tab-content">
+                    <div class="form-group">
+                        <label for="num1">Số 1 (Thượng Quái)</label>
+                        <input type="number" id="num1" class="form-input" placeholder="Nhập số bất kỳ"
+                            inputmode="numeric">
+                    </div>
+                    <div class="form-group">
+                        <label for="num2">Số 2 (Hạ Quái)</label>
+                        <input type="number" id="num2" class="form-input" placeholder="Nhập số bất kỳ"
+                            inputmode="numeric">
+                    </div>
+                    <div class="form-group">
+                        <label for="num3">Số 3 (Hào Động)</label>
+                        <input type="number" id="num3" class="form-input" placeholder="Nhập số bất kỳ"
+                            inputmode="numeric">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div id="divination-controls">
+                    <button class="btn btn-primary btn-submit" onclick="processDivination()">
+                        <span class="btn-icon">✨</span>
+                        Lập Quẻ
+                    </button>
+                </div>
+            </section>
+
+            <!-- Result Section -->
+            <section class="result-section" id="resultSection">
+                <!-- Result Card with Download Image -->
+                <div id="result-display" class="card result-card">
+                    <h2 class="section-title">
+                        <span class="icon">📊</span>
+                        Kết Quả Quẻ
+                    </h2>
+
+                    <!-- Image Display Area -->
+                    <div class="image-display" id="imageDisplay">
+                        <!-- Generated image will appear here -->
+                    </div>
+
+                    <div class="save-hint">
+                        <span class="hint-desktop">💡 Click chuột phải vào ảnh → "Lưu hình ảnh..." để tải về</span>
+                        <span class="hint-mobile">💡 Nhấn giữ vào ảnh để Lưu hoặc Chia sẻ</span>
+                    </div>
+
+                    <!-- Download Button for Mobile -->
+                    <div class="action-buttons">
+                        <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()">
+                            <span class="btn-icon">📥</span>
+                            Tải Ảnh
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEO & Knowledge Section for Search Engines and AI Overviews -->
+            <section class="seo-knowledge-section card">
+                <article class="seo-article">
+                    <h2 class="seo-title">Lập Quẻ Kinh Dịch Lục Hào Online</h2>
+                    <p class="seo-lead">
+                        <strong>Lục Hào Dự Đoán Học</strong> là phương pháp bói quẻ Đông Phương lâu đời dựa trên 64 Quẻ Kinh Dịch, Âm Dương Ngũ Hành, Nạp Giáp Thiên Can Địa Chi, Lục Thân và Lục Thú. Ứng dụng tại <strong>https://luchao.io.vn/</strong> hỗ trợ an quẻ chính xác, dự đoán tài lộc, sự nghiệp, công danh và vận trình đời sống.
+                    </p>
+                    
+                    <div class="seo-grid">
+                        <div class="seo-card">
+                            <h3>🎲 1. Gieo Xu Thủ Công</h3>
+                            <p>Sử dụng 3 đồng tiền đồng gieo 6 lần tương ứng với 6 Hào (từ Hào 1 đến Hào 6) để lập Quẻ Chủ và Quẻ Biến.</p>
+                        </div>
+                        <div class="seo-card">
+                            <h3>💵 2. Gieo Quẻ Seri Tiền</h3>
+                            <p>Ứng dụng nguyên lý Mai Hoa Dịch Số, chuyển đổi chuỗi số Seri trên tờ tiền thành Thượng Quái, Hạ Quái và Hào Động linh ứng.</p>
+                        </div>
+                        <div class="seo-card">
+                            <h3>🔢 3. Lập Quẻ Theo Số</h3>
+                            <p>Nhập 3 con số tự nhiên bất kỳ chọn ngẫu nhiên để an quẻ Lục Hào nhanh chóng và tiện lợi.</p>
+                        </div>
+                    </div>
+
+                    <div class="seo-faq">
+                        <h3>Hỏi Đáp Phổ Biến (FAQ)</h3>
+                        <details class="faq-item">
+                            <summary>Lập quẻ Kinh Dịch Lục Hào trên luchao.io.vn có chính xác không?</summary>
+                            <p>Hoàn toàn chính xác. Ứng dụng tự động quy đổi thời gian Dương lịch sang Can Chi Ngày, Tháng, Năm, Giờ và Tiết khí mặt trời chuẩn xác theo lịch thiên văn. Hệ thống an quẻ 100% theo đúng quy luật cổ thư Lục Hào Dự Đoán Học, Nạp Giáp 64 quẻ, an Thế Ứng, Lục Thân, Lục Thú, Phản Ngâm và Phục Ngâm linh ứng.</p>
+                        </details>
+                        <details class="faq-item">
+                            <summary>Làm thế nào để tải ảnh bảng quẻ kết quả?</summary>
+                            <p>Sau khi bấm "Lập Quẻ", bảng an quẻ sẽ được tự động xuất thành hình ảnh sắc nét. Bạn chỉ cần nhấn nút "Tải Ảnh" hoặc nhấn giữ vào hình ảnh để lưu về điện thoại/máy tính.</p>
+                        </details>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <!-- Hidden Capture Area (for html2canvas) -->
+        <div id="captureArea">
+            <div id="captureTarget"></div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay">
+            <div class="loader-content">
+                <div class="spinner"></div>
+                <p>Đang tạo ảnh kết quả...</p>
+            </div>
+        </div>
+
+        <!-- Coin Toss Modal -->
+        <div id="coin-toss-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Gieo Xu Lục Hào</h3>
+                    <button class="close-btn" onclick="closeCoinTossModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="coin-container">
+                        <div class="coin-wrapper">
+                            <div class="coin" id="coin-1">
+                                <div class="coin-face front" style="background-image: url('duong.png');"></div>
+                                <div class="coin-face back" style="background-image: url('am.png');"></div>
+                            </div>
+                        </div>
+                        <div class="coin-wrapper">
+                            <div class="coin" id="coin-2">
+                                <div class="coin-face front" style="background-image: url('duong.png');"></div>
+                                <div class="coin-face back" style="background-image: url('am.png');"></div>
+                            </div>
+                        </div>
+                        <div class="coin-wrapper">
+                            <div class="coin" id="coin-3">
+                                <div class="coin-face front" style="background-image: url('duong.png');"></div>
+                                <div class="coin-face back" style="background-image: url('am.png');"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="toss-controls">
+                        <div class="toss-info">
+                            <span id="toss-status">Sẵn sàng gieo hào 1...</span>
+                        </div>
+                        <button id="toss-btn" class="btn btn-primary" onclick="performToss()">
+                            Gieo Hào 1
+                        </button>
+                        <button id="finish-toss-btn" class="btn btn-download" onclick="finishTossSequence()"
+                            style="display: none;">
+                            Hoàn Tất
+                        </button>
+                    </div>
+
+                    <div class="toss-results-container">
+                        <div class="toss-results" id="toss-results-list">
+                            <!-- Results will be stacked here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript App (Deferred for zero render-blocking) -->
+    <script src="app.js" defer></script>
+</body>
+
+</html>

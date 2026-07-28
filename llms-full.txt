@@ -1,0 +1,38 @@
+# Kiến Thức Đầy Đủ Về Lập Quẻ Kinh Dịch Lục Hào Online - https://luchao.io.vn/
+
+## 1. Giới thiệu Lục Hào Dự Đoán Học & Kinh Dịch
+Lục Hào (hay thuật bói quẻ Lục Hào Dự Đoán Học) là một trong những phương pháp dự đoán cổ xưa chính xác nhất của Đông Phương dựa trên triết lý Âm Dương, Ngũ Hành, 8 Quái (Càn, Khảm, Cấn, Chấn, Tốn, Ly, Khôn, Đoài) và 64 Quẻ Kinh Dịch.
+
+Ứng dụng tại https://luchao.io.vn/ giúp người dùng lập quẻ nhanh chóng, an sao, nạp chi, an lục thú và lục thân hoàn toàn tự động theo đúng nguyên lý cổ thư.
+
+## 2. Các Quy Tắc An Quẻ Lục Hào
+- **Bát Quái & Ngũ Hành**:
+  - Càn (Kim), Đoài (Kim)
+  - Khảm (Thủy)
+  - Chấn (Mộc), Tốn (Mộc)
+  - Ly (Hỏa)
+  - Cấn (Thổ), Khôn (Thổ)
+
+- **Lục Thú Theo Can Ngày**:
+  - Giáp / Ất: Khởi Thanh Long từ Hào 1.
+  - Bính / Đinh: Khởi Chu Tước từ Hào 1.
+  - Mậu: Khởi Câu Trần từ Hào 1.
+  - Kỷ: Khởi Đằng Xà từ Hào 1.
+  - Canh / Tân: Khởi Bạch Hổ từ Hào 1.
+  - Nhâm / Quý: Khởi Huyền Vũ từ Hào 1.
+
+- **Lục Thân Ngũ Hành**:
+  - Cùng Ngũ Hành với Cung Quẻ: Huynh Đệ
+  - Sinh Cung Quẻ: Phụ Mẫu
+  - Cung Quẻ Sinh: Tử Tôn
+  - Cung Quẻ Khắc: Thê Tài
+  - Khắc Cung Quẻ: Quan Quỷ
+
+## 3. Hướng Dẫn Sử Dụng Tại https://luchao.io.vn/
+1. Truy cập https://luchao.io.vn/
+2. Chọn thời gian gieo quẻ (mặc định lấy thời gian hiện tại).
+3. Chọn 1 trong 3 phương pháp lập quẻ:
+   - Gieo xu thủ công (3 đồng xu).
+   - Dãy số Seri tờ tiền.
+   - 3 số tự nhiên ngẫu nhiên.
+4. Bấm "Lập Quẻ" để nhận kết quả chi tiết kèm ảnh bảng biểu quẻ chuẩn xác.

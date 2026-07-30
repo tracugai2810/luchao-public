@@ -16,25 +16,17 @@ const db = firebase.firestore();
 // Key lưu email trong localStorage
 const EMAIL_STORAGE_KEY = 'luchao_user_email';
 
-// Hàm tạo mã định danh (fingerprint) cho thiết bị hiện tại
-// KHÔNG dùng navigator.userAgent vì nó khác nhau giữa Safari và PWA standalone trên cùng 1 máy
+// Key lưu device UUID trong localStorage
+const DEVICE_UUID_KEY = 'luchao_device_id';
+
+// Hàm tạo mã định danh duy nhất (UUID) cho từng trình duyệt / thiết bị
 function getDeviceFingerprint() {
-    const data = [
-        screen.height,
-        screen.width,
-        screen.colorDepth,
-        Intl.DateTimeFormat().resolvedOptions().timeZone,
-        navigator.language,
-        navigator.hardwareConcurrency
-    ].join('||');
-    
-    let hash = 0;
-    for (let i = 0; i < data.length; i++) {
-        const char = data.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
+    let deviceId = localStorage.getItem(DEVICE_UUID_KEY);
+    if (!deviceId) {
+        deviceId = 'dev_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now().toString(36);
+        localStorage.setItem(DEVICE_UUID_KEY, deviceId);
     }
-    return 'dev_' + Math.abs(hash).toString(36);
+    return deviceId;
 }
 
 // Hàm quản lý hiển thị các màn hình UI khác nhau

@@ -142,8 +142,28 @@ async function processLogin(email) {
                 devices = doc.data().devices || [];
             }
             
-            if (!devices.includes(deviceId)) {
-                if (devices.length >= maxDevices && !isAdmin) {
+            const existingIndex = devices.indexOf(deviceId);
+            
+            if (existingIndex !== -1) {
+                // Thiết bị này ĐÃ TỪNG đăng nhập trước đây
+                if (devices.length > maxDevices) {
+                    // Nếu danh sách cũ đang vượt quá maxDevices (do dữ liệu lịch sử)
+                    // Chỉ cho phép nếu thiết bị này thuộc nhóm maxDevices thiết bị đăng nhập gần nhất
+                    const recentDevices = devices.slice(-maxDevices);
+                    if (!recentDevices.includes(deviceId)) {
+                        const err = new Error('DEVICE_LIMIT_EXCEEDED');
+                        err.maxLimit = maxDevices;
+                        err.userEmail = email;
+                        throw err;
+                    }
+                    devices = recentDevices;
+                }
+                // Cập nhật lại vị trí thiết bị mới nhất
+                devices = devices.filter(d => d !== deviceId);
+                devices.push(deviceId);
+            } else {
+                // Thiết bị MỚI TINH
+                if (devices.length >= maxDevices) {
                     const err = new Error('DEVICE_LIMIT_EXCEEDED');
                     err.maxLimit = maxDevices;
                     err.userEmail = email;

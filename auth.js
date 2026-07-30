@@ -173,6 +173,14 @@ async function processLogin(email) {
         });
     } catch (err) {
         if (err.message === 'DEVICE_LIMIT_EXCEEDED') {
+            // Xóa session và email đã lưu để chặn hoàn toàn thiết bị thừa
+            try {
+                localStorage.removeItem(EMAIL_STORAGE_KEY);
+                await auth.signOut();
+            } catch (e) {
+                console.log("Signout cleanup error:", e);
+            }
+
             const limitEmailEl = document.getElementById('limit-email');
             const limitMaxEl = document.getElementById('limit-max-count');
             if (limitEmailEl) limitEmailEl.innerText = err.userEmail || email;
@@ -291,34 +299,18 @@ function waitForAuthInit() {
 async function initAuth() {
     const savedEmail = localStorage.getItem(EMAIL_STORAGE_KEY);
     const currentUser = await waitForAuthInit();
+    const targetEmail = (currentUser && currentUser.email) ? currentUser.email : savedEmail;
     
-    if (currentUser && currentUser.email) {
-        // Trường hợp còn session Google cũ → dùng luôn email đó
+    if (targetEmail) {
         try {
-            await processLogin(currentUser.email);
-        } catch (error) {
-            console.error("Lỗi auto-login Google:", error);
-            showUI('login-overlay');
-        }
-    } else if (savedEmail) {
-        // Có email đã lưu → tự động đăng nhập
-        try {
-            await processLogin(savedEmail);
+            await processLogin(targetEmail);
         } catch (error) {
             console.error("Lỗi auto-login:", error);
-            if (error.message === 'DEVICE_LIMIT_EXCEEDED') {
-                const limitEmailEl = document.getElementById('limit-email');
-                const limitMaxEl = document.getElementById('limit-max-count');
-                if (limitEmailEl) limitEmailEl.innerText = error.userEmail || savedEmail;
-                if (limitMaxEl) limitMaxEl.innerText = error.maxLimit || 2;
-                showUI('device-limit-overlay');
-            } else {
-                localStorage.removeItem(EMAIL_STORAGE_KEY);
-                showUI('login-overlay');
-            }
+            localStorage.removeItem(EMAIL_STORAGE_KEY);
+            await auth.signOut();
+            showUI('login-overlay');
         }
     } else {
-        // Chưa đăng nhập → hiện form đăng nhập
         showUI('login-overlay');
     }
 }

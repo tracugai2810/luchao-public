@@ -2,7 +2,7 @@
 // Hãy thay thế các giá trị bên dưới bằng cấu hình dự án Firebase của bạn
 const firebaseConfig = {
   apiKey: "AIzaSyBSoi413dszpafIKJWqO9naMSCTUjATRxc",
-  authDomain: "luchao.io.vn",
+  authDomain: "luchaoio.firebaseapp.com",
   projectId: "luchaoio",
   storageBucket: "luchaoio.firebasestorage.app",
   messagingSenderId: "986165751792",
@@ -58,6 +58,11 @@ function showUI(activeElementId) {
     });
 }
 
+// ========== GOOGLE IDENTITY SERVICES (GIS) cho PWA Standalone ==========
+
+// Google OAuth Client ID (lấy từ Firebase project config)
+const GOOGLE_CLIENT_ID = '986165751792-83u0rnq48cu2drd9rsnd1m4j8tlj94p1.apps.googleusercontent.com';
+
 // Hàm phát hiện app đang chạy ở chế độ PWA standalone (thêm vào màn hình chính)
 function isRunningStandalone() {
     return (window.matchMedia('(display-mode: standalone)').matches) 
@@ -65,37 +70,134 @@ function isRunningStandalone() {
         || document.referrer.includes('android-app://'); // Android TWA
 }
 
-// Hàm xử lý đăng nhập bằng Google
-async function signInWithGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({
-        prompt: 'select_account'
+// Tải thư viện Google Identity Services
+function loadGISScript() {
+    return new Promise((resolve, reject) => {
+        if (window.google && window.google.accounts) {
+            resolve();
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Không thể tải Google Sign-In'));
+        document.head.appendChild(script);
     });
+}
+
+// Đăng nhập bằng Google Identity Services (One Tap / FedCM)
+// Hoạt động trong PWA standalone vì KHÔNG cần popup hay redirect
+async function signInWithGIS() {
+    await loadGISScript();
     
+    return new Promise((resolve, reject) => {
+        // Khởi tạo GIS với client ID
+        google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: async (response) => {
+                try {
+                    // Dùng ID token từ GIS để tạo credential Firebase
+                    const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
+                    // Đăng nhập Firebase bằng credential (không cần popup/redirect)
+                    await auth.signInWithCredential(credential);
+                    resolve();
+                } catch (error) {
+                    console.error('Lỗi signInWithCredential:', error);
+                    reject(error);
+                }
+            },
+            auto_select: true,
+            cancel_on_tap_outside: false,
+            itp_support: true,
+        });
+
+        // Thử hiển thị One Tap prompt (FedCM)
+        google.accounts.id.prompt((notification) => {
+            if (notification.isDisplayed()) {
+                // One Tap đang hiển thị, chờ user tương tác
+                return;
+            }
+            
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                const reason = notification.getNotDisplayedReason 
+                    ? notification.getNotDisplayedReason() 
+                    : (notification.getSkippedReason ? notification.getSkippedReason() : 'unknown');
+                console.warn('Google One Tap không hiển thị được:', reason);
+                
+                // Fallback: Render nút Google Sign-In chính thức
+                renderGoogleSignInButton();
+                // Không reject — chờ user click nút Google
+            }
+        });
+    });
+}
+
+// Render nút đăng nhập Google (fallback khi One Tap không hoạt động)
+function renderGoogleSignInButton() {
+    // Tạo container cho nút GIS nếu chưa có
+    let container = document.getElementById('gis-signin-container');
+    if (!container) {
+        const originalBtn = document.getElementById('google-signin-btn');
+        if (!originalBtn) return;
+        
+        container = document.createElement('div');
+        container.id = 'gis-signin-container';
+        container.style.display = 'flex';
+        container.style.justifyContent = 'center';
+        container.style.marginTop = '8px';
+        originalBtn.parentNode.insertBefore(container, originalBtn.nextSibling);
+    }
+    
+    // Ẩn nút custom ban đầu
+    const originalBtn = document.getElementById('google-signin-btn');
+    if (originalBtn) originalBtn.style.display = 'none';
+    
+    // Render nút Google Sign-In chính thức (dùng FedCM, không cần popup)
+    google.accounts.id.renderButton(container, {
+        theme: 'outline',
+        size: 'large',
+        text: 'signin_with',
+        shape: 'rectangular',
+        logo_alignment: 'left',
+        width: 300,
+    });
+}
+
+// ========== HÀM ĐĂNG NHẬP CHÍNH ==========
+
+async function signInWithGoogle() {
     try {
         // Cài đặt phiên đăng nhập duy trì ở bộ nhớ cục bộ
         await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         
         // Hiển thị loading
-        document.getElementById('google-signin-btn').innerText = "Đang kết nối...";
+        const btn = document.getElementById('google-signin-btn');
+        if (btn) btn.innerText = "Đang kết nối...";
         
         if (isRunningStandalone()) {
-            // Chế độ PWA standalone: popup bị chặn, dùng redirect thay thế
-            await auth.signInWithRedirect(provider);
+            // === CHẾ ĐỘ PWA STANDALONE ===
+            // Dùng Google Identity Services (FedCM/One Tap)
+            // Không cần popup hay redirect — hoạt động trực tiếp trong trang
+            await signInWithGIS();
         } else {
-            // Chế độ trình duyệt bình thường: dùng popup
+            // === CHẾ ĐỘ TRÌNH DUYỆT BÌNH THƯỜNG ===
+            // Dùng popup như bình thường
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
             await auth.signInWithPopup(provider);
         }
     } catch (error) {
         console.error("Lỗi đăng nhập Google:", error);
-        // Nếu popup bị chặn, tự động thử lại bằng redirect
+        
+        // Nếu popup bị chặn ở trình duyệt bình thường, thử GIS
         if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-            console.log("Popup bị chặn, chuyển sang Redirect...");
+            console.log("Popup bị chặn, thử Google Identity Services...");
             try {
-                await auth.signInWithRedirect(provider);
-            } catch (redirectError) {
-                console.error("Lỗi Redirect:", redirectError);
-                showError("Đăng nhập thất bại: " + redirectError.message);
+                await signInWithGIS();
+            } catch (gisError) {
+                console.error("GIS cũng thất bại:", gisError);
+                showError("Đăng nhập thất bại. Vui lòng thử lại.");
             }
         } else {
             showError("Đăng nhập thất bại: " + error.message);
@@ -135,8 +237,20 @@ window.signInWithGoogle = signInWithGoogle;
 // Hàm xử lý đăng xuất
 async function signOut() {
     try {
+        // Revoke GIS nếu đang chạy
+        if (window.google && window.google.accounts && window.google.accounts.id) {
+            google.accounts.id.disableAutoSelect();
+        }
         await auth.signOut();
         showUI('login-overlay');
+        // Khôi phục nút đăng nhập gốc nếu đã bị ẩn
+        const originalBtn = document.getElementById('google-signin-btn');
+        if (originalBtn) {
+            originalBtn.style.display = '';
+            originalBtn.innerText = 'Đăng nhập bằng Google';
+        }
+        const gisContainer = document.getElementById('gis-signin-container');
+        if (gisContainer) gisContainer.remove();
     } catch (error) {
         console.error("Lỗi đăng xuất:", error);
         showError("Có lỗi xảy ra khi đăng xuất.");

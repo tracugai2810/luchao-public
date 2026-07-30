@@ -2,7 +2,7 @@
 // Hãy thay thế các giá trị bên dưới bằng cấu hình dự án Firebase của bạn
 const firebaseConfig = {
   apiKey: "AIzaSyBSoi413dszpafIKJWqO9naMSCTUjATRxc",
-  authDomain: "luchaoio.firebaseapp.com",
+  authDomain: "luchao.io.vn",
   projectId: "luchaoio",
   storageBucket: "luchaoio.firebasestorage.app",
   messagingSenderId: "986165751792",

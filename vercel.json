@@ -1,5 +1,11 @@
 {
   "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/__/auth/(.*)",
+      "destination": "https://luchaoio.firebaseapp.com/__/auth/$1"
+    }
+  ],
   "redirects": [
     {
       "source": "/:path*",

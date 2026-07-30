@@ -157,10 +157,20 @@
             <div class="auth-logo-icon">☰</div>
             <h2 class="auth-title">Lập Quẻ Lục Hào</h2>
             <p class="auth-subtitle">Vui lòng đăng nhập để sử dụng ứng dụng</p>
-            <button id="google-signin-btn" class="google-signin-btn" onclick="signInWithGoogle()">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="google-icon">
-                Đăng nhập bằng Google
-            </button>
+            <div id="email-login-form" style="width: 100%; max-width: 320px; margin: 0 auto;">
+                <input 
+                    type="email" 
+                    id="email-login-input" 
+                    placeholder="Nhập email của bạn" 
+                    onkeypress="handleEmailKeypress(event)"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    style="width: 100%; padding: 12px 16px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(255,255,255,0.08); color: #fff; font-size: 15px; outline: none; box-sizing: border-box; margin-bottom: 12px; font-family: inherit;"
+                >
+                <button id="email-login-btn" class="google-signin-btn" onclick="loginWithEmail()" style="width: 100%; justify-content: center;">
+                    Đăng nhập
+                </button>
+            </div>
             <p class="auth-note">Tài khoản cần được Admin cấp quyền trước khi sử dụng</p>
         </div>
     </div>

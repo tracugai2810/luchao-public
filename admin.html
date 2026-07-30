@@ -549,10 +549,17 @@
                 return;
             }
             try {
+                // Cập nhật maxDevices trong whitelist
                 await db.collection('whitelist').doc(email).set({
                     maxDevices: newLimit
                 }, { merge: true });
-                alert(`Đã lưu giới hạn ${newLimit} thiết bị cho ${email}`);
+                
+                // Reset danh sách thiết bị để các máy truy cập lại khớp slot mới
+                await db.collection('user_devices').doc(email.toLowerCase()).set({
+                    devices: []
+                }, { merge: true });
+
+                alert(`Đã lưu giới hạn ${newLimit} thiết bị cho ${email}! các máy mở lại sẽ tự động nhận slot mới.`);
             } catch (error) {
                 alert("Lỗi khi lưu giới hạn thiết bị: " + error.message);
             }
@@ -594,18 +601,12 @@
         window.resetDevices = async (email) => {
             if (confirm(`Bạn có chắc chắn muốn reset thiết bị cho ${email}?`)) {
                 try {
-                    await db.collection('user_devices').doc(email).update({
+                    await db.collection('user_devices').doc(email.toLowerCase()).set({
                         devices: []
-                    });
+                    }, { merge: true });
+                    alert(`Đã reset toàn bộ thiết bị cho ${email}!`);
                 } catch (error) {
-                    // If doc doesn't exist, create it empty or ignore
-                    if (error.code === 'not-found') {
-                        await db.collection('user_devices').doc(email).set({
-                            devices: []
-                        });
-                    } else {
-                        alert("Lỗi khi reset: " + error.message);
-                    }
+                    alert("Lỗi khi reset: " + error.message);
                 }
             }
         };

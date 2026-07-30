@@ -179,10 +179,9 @@
     <div id="denied-overlay" class="auth-overlay" style="display:none">
         <div class="auth-card">
             <div class="auth-icon-warning">⚠️</div>
-            <h2 class="auth-title">Chưa Được Cấp Quyền</h2>
-            <p class="auth-subtitle">Tài khoản <strong id="denied-email"></strong> đã được lưu ở trạng thái chờ duyệt.</p>
+            <h2 class="auth-title">CHƯA ĐƯỢC CẤP QUYỀN</h2>
+            <p class="auth-subtitle">Tài khoản <strong id="denied-email" style="color: #f59e0b;"></strong> chưa được cấp quyền truy cập. Liên hệ Admin để được cấp quyền.</p>
             <div class="auth-contact-box">
-                <p>Liên hệ Admin để được duyệt tài khoản:</p>
                 <a href="https://zalo.me/0396154013" target="_blank" class="zalo-btn">💬 Chat Zalo với Admin</a>
             </div>
             <button class="auth-signout-btn" onclick="signOut()">Đăng xuất</button>
@@ -193,10 +192,9 @@
     <div id="device-limit-overlay" class="auth-overlay" style="display:none">
         <div class="auth-card">
             <div class="auth-icon-warning">🔒</div>
-            <h2 class="auth-title">Giới Hạn Thiết Bị</h2>
-            <p class="auth-subtitle">Tài khoản của bạn đã đăng nhập trên tối đa <strong>2 thiết bị</strong>.</p>
+            <h2 class="auth-title">GIỚI HẠN THIẾT BỊ</h2>
+            <p class="auth-subtitle">Tài khoản <strong id="limit-email" style="color: #f59e0b;"></strong> đã sử dụng tối đa <strong id="limit-max-count">2</strong> thiết bị. Vui lòng liên hệ Admin để được nâng cấp thêm.</p>
             <div class="auth-contact-box">
-                <p>Liên hệ Admin để được hỗ trợ:</p>
                 <a href="https://zalo.me/0396154013" target="_blank" class="zalo-btn">💬 Chat Zalo với Admin</a>
             </div>
             <button class="auth-signout-btn" onclick="signOut()">Đăng xuất</button>

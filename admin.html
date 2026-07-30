@@ -400,8 +400,9 @@
             try {
                 await db.collection('whitelist').doc(email).set({
                     addedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    addedBy: auth.currentUser.email
-                });
+                    addedBy: auth.currentUser.email,
+                    maxDevices: 2
+                }, { merge: true });
                 newEmailInput.value = '';
                 showMessage('Đã thêm thành công!', 'var(--accent)');
             } catch (error) {
@@ -508,6 +509,7 @@
                 const data = whitelistData[email];
                 const deviceData = devicesData[email] || {};
                 const deviceCount = deviceData.devices ? deviceData.devices.length : 0;
+                const maxDevices = (data && typeof data.maxDevices === 'number' && data.maxDevices > 0) ? data.maxDevices : 2;
                 
                 let dateStr = 'N/A';
                 if (data.addedAt && data.addedAt.toDate) {
@@ -516,13 +518,20 @@
 
                 const item = document.createElement('div');
                 item.className = 'list-item';
+                // Escape email for ID usage
+                const safeId = email.replace(/[^a-zA-Z0-9]/g, '_');
                 item.innerHTML = `
                     <div class="item-info">
                         <div class="item-email">${email}</div>
-                        <div class="item-meta">Thêm lúc: ${dateStr} | Thiết bị: ${deviceCount}</div>
+                        <div class="item-meta">Thêm lúc: ${dateStr} | Đang dùng: <span style="color: #38bdf8; font-weight: 600;">${deviceCount}</span> / <span style="color: #f59e0b; font-weight: 600;">${maxDevices}</span> thiết bị</div>
                     </div>
-                    <div class="item-actions">
-                        <button class="btn btn-sm" onclick="resetDevices('${email}')" title="Xóa toàn bộ session thiết bị">Reset Thiết Bị</button>
+                    <div class="item-actions" style="align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 0.3rem; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Hạn:</span>
+                            <input type="number" id="limit-input-${safeId}" value="${maxDevices}" min="1" max="99" style="width: 48px; padding: 0.2rem 0.4rem; font-size: 0.85rem; margin-bottom: 0; text-align: center; border-radius: 4px;">
+                            <button class="btn btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; background-color: #3b82f6;" onclick="saveMaxDevices('${email}', '${safeId}')">Lưu</button>
+                        </div>
+                        <button class="btn btn-sm" style="background-color: #d97706;" onclick="resetDevices('${email}')" title="Xóa toàn bộ session thiết bị">Reset Thiết Bị</button>
                         <button class="btn btn-sm btn-danger" onclick="deleteEmail('${email}')">Xóa</button>
                     </div>
                 `;
@@ -531,12 +540,31 @@
         }
 
         // Global functions for inline handlers
+        window.saveMaxDevices = async (email, safeId) => {
+            const input = document.getElementById(`limit-input-${safeId}`);
+            if (!input) return;
+            const newLimit = parseInt(input.value, 10);
+            if (isNaN(newLimit) || newLimit < 1) {
+                alert("Số lượng thiết bị phải lớn hơn 0");
+                return;
+            }
+            try {
+                await db.collection('whitelist').doc(email).set({
+                    maxDevices: newLimit
+                }, { merge: true });
+                alert(`Đã lưu giới hạn ${newLimit} thiết bị cho ${email}`);
+            } catch (error) {
+                alert("Lỗi khi lưu giới hạn thiết bị: " + error.message);
+            }
+        };
+
         window.approvePending = async (email) => {
             try {
                 await db.collection('whitelist').doc(email).set({
                     addedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    addedBy: auth.currentUser ? auth.currentUser.email : 'admin'
-                });
+                    addedBy: auth.currentUser ? auth.currentUser.email : 'admin',
+                    maxDevices: 2
+                }, { merge: true });
                 await db.collection('pending_requests').doc(email).delete();
             } catch (error) {
                 alert("Lỗi khi duyệt: " + error.message);

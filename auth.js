@@ -16,10 +16,10 @@ const db = firebase.firestore();
 // Key lưu email trong localStorage
 const EMAIL_STORAGE_KEY = 'luchao_user_email';
 
-// Hàm tạo mã định danh (fingerprint) cho thiết bị hiện tại dựa trên thông số máy
+// Hàm tạo mã định danh (fingerprint) cho thiết bị hiện tại
+// KHÔNG dùng navigator.userAgent vì nó khác nhau giữa Safari và PWA standalone trên cùng 1 máy
 function getDeviceFingerprint() {
     const data = [
-        navigator.userAgent,
         screen.height,
         screen.width,
         screen.colorDepth,
@@ -100,6 +100,8 @@ async function processLogin(email) {
     const adminDoc = await db.collection('admins').doc(email).get();
     const isAdmin = adminDoc.exists;
     
+    let maxDevices = 2; // Mặc định là 2 thiết bị
+    
     // Nếu không phải admin, kiểm tra whitelist
     if (!isAdmin) {
         const whitelistDoc = await db.collection('whitelist').doc(email).get();
@@ -120,31 +122,52 @@ async function processLogin(email) {
             showUI('denied-overlay');
             return false;
         }
+        
+        // Lấy giới hạn thiết bị tùy chỉnh nếu có
+        const wData = whitelistDoc.data();
+        if (wData && typeof wData.maxDevices === 'number' && wData.maxDevices > 0) {
+            maxDevices = wData.maxDevices;
+        }
     }
     
     // Kiểm tra giới hạn thiết bị
     const deviceId = getDeviceFingerprint();
     const deviceRef = db.collection('user_devices').doc(email);
     
-    await db.runTransaction(async (transaction) => {
-        const doc = await transaction.get(deviceRef);
-        let devices = [];
-        if (doc.exists) {
-            devices = doc.data().devices || [];
-        }
-        
-        if (!devices.includes(deviceId)) {
-            if (devices.length >= 2 && !isAdmin) {
-                throw new Error('DEVICE_LIMIT_EXCEEDED');
+    try {
+        await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(deviceRef);
+            let devices = [];
+            if (doc.exists) {
+                devices = doc.data().devices || [];
             }
-            devices.push(deviceId);
+            
+            if (!devices.includes(deviceId)) {
+                if (devices.length >= maxDevices && !isAdmin) {
+                    const err = new Error('DEVICE_LIMIT_EXCEEDED');
+                    err.maxLimit = maxDevices;
+                    err.userEmail = email;
+                    throw err;
+                }
+                devices.push(deviceId);
+            }
+            
+            transaction.set(deviceRef, {
+                devices: devices,
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+        });
+    } catch (err) {
+        if (err.message === 'DEVICE_LIMIT_EXCEEDED') {
+            const limitEmailEl = document.getElementById('limit-email');
+            const limitMaxEl = document.getElementById('limit-max-count');
+            if (limitEmailEl) limitEmailEl.innerText = err.userEmail || email;
+            if (limitMaxEl) limitMaxEl.innerText = err.maxLimit || maxDevices;
+            showUI('device-limit-overlay');
+            return false;
         }
-        
-        transaction.set(deviceRef, {
-            devices: devices,
-            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-    });
+        throw err;
+    }
     
     // Đăng nhập thành công! Lưu email vào localStorage
     localStorage.setItem(EMAIL_STORAGE_KEY, email);
@@ -179,6 +202,10 @@ async function loginWithEmail() {
     } catch (error) {
         console.error("Lỗi đăng nhập:", error);
         if (error.message === 'DEVICE_LIMIT_EXCEEDED') {
+            const limitEmailEl = document.getElementById('limit-email');
+            const limitMaxEl = document.getElementById('limit-max-count');
+            if (limitEmailEl) limitEmailEl.innerText = error.userEmail || email;
+            if (limitMaxEl) limitMaxEl.innerText = error.maxLimit || 2;
             showUI('device-limit-overlay');
         } else if (error.code === 'permission-denied' || (error.message && error.message.includes('permission'))) {
             showError("Lỗi quyền truy cập hệ thống. Liên hệ Admin.");
@@ -204,6 +231,24 @@ window.handleEmailKeypress = handleEmailKeypress;
 
 async function signOut() {
     try {
+        const email = localStorage.getItem(EMAIL_STORAGE_KEY);
+        
+        // Xóa thiết bị hiện tại khỏi Firestore → giải phóng slot cho thiết bị khác
+        if (email) {
+            try {
+                await ensureFirestoreAccess();
+                const deviceId = getDeviceFingerprint();
+                const deviceRef = db.collection('user_devices').doc(email.toLowerCase());
+                const doc = await deviceRef.get();
+                if (doc.exists) {
+                    const devices = (doc.data().devices || []).filter(d => d !== deviceId);
+                    await deviceRef.update({ devices: devices });
+                }
+            } catch (e) {
+                console.log("Không thể xóa thiết bị khi đăng xuất:", e);
+            }
+        }
+        
         localStorage.removeItem(EMAIL_STORAGE_KEY);
         await auth.signOut();
         showUI('login-overlay');
@@ -247,11 +292,14 @@ async function initAuth() {
             await processLogin(savedEmail);
         } catch (error) {
             console.error("Lỗi auto-login:", error);
-            // Email không còn hợp lệ hoặc lỗi → xóa và hiện login
-            localStorage.removeItem(EMAIL_STORAGE_KEY);
             if (error.message === 'DEVICE_LIMIT_EXCEEDED') {
+                const limitEmailEl = document.getElementById('limit-email');
+                const limitMaxEl = document.getElementById('limit-max-count');
+                if (limitEmailEl) limitEmailEl.innerText = error.userEmail || savedEmail;
+                if (limitMaxEl) limitMaxEl.innerText = error.maxLimit || 2;
                 showUI('device-limit-overlay');
             } else {
+                localStorage.removeItem(EMAIL_STORAGE_KEY);
                 showUI('login-overlay');
             }
         }

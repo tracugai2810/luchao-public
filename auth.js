@@ -58,6 +58,13 @@ function showUI(activeElementId) {
     });
 }
 
+// Hàm phát hiện app đang chạy ở chế độ PWA standalone (thêm vào màn hình chính)
+function isRunningStandalone() {
+    return (window.matchMedia('(display-mode: standalone)').matches) 
+        || (window.navigator.standalone === true) // iOS Safari
+        || document.referrer.includes('android-app://'); // Android TWA
+}
+
 // Hàm xử lý đăng nhập bằng Google
 async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -72,11 +79,27 @@ async function signInWithGoogle() {
         // Hiển thị loading
         document.getElementById('google-signin-btn').innerText = "Đang kết nối...";
         
-        // Sử dụng Popup trở lại vì Redirect bị chặn Cookie chéo (ITP) trên Mobile Safari
-        await auth.signInWithPopup(provider);
+        if (isRunningStandalone()) {
+            // Chế độ PWA standalone: popup bị chặn, dùng redirect thay thế
+            await auth.signInWithRedirect(provider);
+        } else {
+            // Chế độ trình duyệt bình thường: dùng popup
+            await auth.signInWithPopup(provider);
+        }
     } catch (error) {
         console.error("Lỗi đăng nhập Google:", error);
-        showError("Đăng nhập thất bại: " + error.message);
+        // Nếu popup bị chặn, tự động thử lại bằng redirect
+        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+            console.log("Popup bị chặn, chuyển sang Redirect...");
+            try {
+                await auth.signInWithRedirect(provider);
+            } catch (redirectError) {
+                console.error("Lỗi Redirect:", redirectError);
+                showError("Đăng nhập thất bại: " + redirectError.message);
+            }
+        } else {
+            showError("Đăng nhập thất bại: " + error.message);
+        }
     }
 }
 

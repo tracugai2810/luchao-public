@@ -102,28 +102,30 @@ async function processLogin(email) {
     
     let maxDevices = 2; // Mặc định là 2 thiết bị
     
-    // Nếu không phải admin, kiểm tra whitelist
-    if (!isAdmin) {
-        const whitelistDoc = await db.collection('whitelist').doc(email).get();
-        if (!whitelistDoc.exists) {
-            // Lưu vào danh sách chờ duyệt
-            try {
-                await db.collection('pending_requests').doc(email).set({
-                    email: email,
-                    requestedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-            } catch (e) {
-                console.log("Auto-save pending request failed:", e);
-            }
-            
-            // Hiển thị màn hình từ chối
-            const deniedEmailEl = document.getElementById('denied-email');
-            if (deniedEmailEl) deniedEmailEl.innerText = email;
-            showUI('denied-overlay');
-            return false;
+    // Lấy thông tin từ whitelist (áp dụng cho cả Admin nếu có cấu hình)
+    const whitelistDoc = await db.collection('whitelist').doc(email).get();
+    
+    // Nếu không phải admin và cũng không có trong whitelist
+    if (!isAdmin && !whitelistDoc.exists) {
+        // Lưu vào danh sách chờ duyệt
+        try {
+            await db.collection('pending_requests').doc(email).set({
+                email: email,
+                requestedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+        } catch (e) {
+            console.log("Auto-save pending request failed:", e);
         }
         
-        // Lấy giới hạn thiết bị tùy chỉnh nếu có
+        // Hiển thị màn hình từ chối
+        const deniedEmailEl = document.getElementById('denied-email');
+        if (deniedEmailEl) deniedEmailEl.innerText = email;
+        showUI('denied-overlay');
+        return false;
+    }
+    
+    // Lấy giới hạn thiết bị tùy chỉnh từ whitelist nếu có
+    if (whitelistDoc.exists) {
         const wData = whitelistDoc.data();
         if (wData && typeof wData.maxDevices === 'number' && wData.maxDevices > 0) {
             maxDevices = wData.maxDevices;

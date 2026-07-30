@@ -543,6 +543,12 @@ body {
     font-size: 17px;
 }
 
+#captureTarget .info-line.info-question {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+}
+
 #captureTarget .info-line:last-child {
     margin-bottom: 0;
 }

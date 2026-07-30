@@ -638,11 +638,13 @@ function renderCaptureHTML(data) {
 
     // Render to hidden capture target
     const target = document.getElementById('captureTarget');
+    const questionText = data.userQuestion || '';
     target.innerHTML = `
         <div class="info-header">
             <div class="info-content">
                 <div class="info-line"><strong>Ngày giờ:</strong> ${data.formattedDate} &nbsp;&nbsp;&nbsp;&nbsp; <strong>Phương pháp:</strong> ${methodText}</div>
                 <div class="info-line"><strong>Can chi:</strong> ${dateInfo.fullCanChi}</div>
+                <div class="info-line info-question"><strong>Việc cần xem:</strong> ${questionText}</div>
                 <div class="info-line"><strong>Hào tâm:</strong> <span class="highlight">${dateInfo.haoTam}</span> &nbsp;&nbsp;&nbsp;&nbsp; <strong>Tuần Không:</strong> <span class="highlight">${dateInfo.tuanKhong}</span></div>
                 <div class="info-line"><strong>Nhật Thần:</strong> <span class="highlight">${dateInfo.nhatThan}</span> &nbsp;&nbsp;&nbsp;&nbsp; <strong>Nguyệt Lệnh:</strong> <span class="highlight">${dateInfo.nguyetLenh}</span></div>
             </div>
@@ -997,6 +999,10 @@ function calculateHexagramData(lines, cal, methodText, formattedDate, isMaiHoa) 
         hoData: isMaiHoa ? calculateHoData(mBits) : null,
         formattedDate,
         methodText,
+        userQuestion: (() => {
+            const qEl = document.getElementById('inputQuestion');
+            return qEl ? qEl.value.trim() : '';
+        })(),
         dateInfo: {
             fullCanChi: `Giờ ${cal.gio.can} ${cal.gio.chi}, Ngày ${cal.ngay.can} ${cal.ngay.chi}`,
             tietKhi: cal.tietKhi,
@@ -1015,13 +1021,14 @@ function generateCopyText(data) {
     const {
         mainName, changedName,
         linesData, movingLines,
-        dateInfo, changedAttr, mainAttr
+        dateInfo, changedAttr, mainAttr,
+        userQuestion
     } = data;
 
     let text = "";
 
-    // 1. Intro (Removed as per user request)
-    // text += "Mời chuyên gia Chu Thần Bân luận giải quẻ này theo đúng kỹ pháp của ngài. Luận giải kèm tượng thần sát mà tôi cung cấp\n\n";
+    // 1. Việc cần xem
+    text += `- Việc cần xem: ${userQuestion || ''}\n`;
 
     // 2. Nhat/Nguyet Lenh
     text += `- Nhật lệnh: ${dateInfo.nhatLenhShort}; Nguyệt lệnh: ${dateInfo.nguyetLenhShort}\n`;

@@ -284,6 +284,48 @@ async function signOut() {
 }
 window.signOut = signOut;
 
+// Hàm sao chép số Zalo của Admin
+function copyAdminZalo(btn) {
+    const phone = '0396154013';
+    const showSuccess = () => {
+        if (!btn) return;
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ Đã chép';
+        btn.style.background = 'rgba(34, 197, 94, 0.25)';
+        btn.style.borderColor = '#22c55e';
+        btn.style.color = '#4ade80';
+        setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.style.color = '';
+        }, 2000);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(phone).then(showSuccess).catch(() => fallbackCopy(phone, showSuccess));
+    } else {
+        fallbackCopy(phone, showSuccess);
+    }
+}
+
+function fallbackCopy(text, cb) {
+    const input = document.createElement('input');
+    input.value = text;
+    input.style.position = 'fixed';
+    input.style.opacity = '0';
+    document.body.appendChild(input);
+    input.select();
+    try {
+        document.execCommand('copy');
+        if (cb) cb();
+    } catch (e) {
+        prompt('Sao chép SĐT Zalo Admin:', text);
+    }
+    document.body.removeChild(input);
+}
+window.copyAdminZalo = copyAdminZalo;
+
 // ========== KHỞI TẠO ==========
 
 // Chờ Firebase Auth khởi tạo xong, rồi quyết định hiển thị gì

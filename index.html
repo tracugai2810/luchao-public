@@ -183,6 +183,7 @@
                 </button>
             </div>
             <p class="auth-note">Tài khoản cần được Admin cấp quyền trước khi sử dụng</p>
+            <p class="auth-note" style="margin-top: 6px; color: #94a3b8;">Zalo Admin: <strong style="color: #fbbf24;">0396.154.013</strong></p>
         </div>
     </div>
 
@@ -191,9 +192,15 @@
         <div class="auth-card">
             <div class="auth-icon-warning">⚠️</div>
             <h2 class="auth-title">CHƯA ĐƯỢC CẤP QUYỀN</h2>
-            <p class="auth-subtitle">Tài khoản <strong id="denied-email" style="color: #f59e0b;"></strong> chưa được cấp quyền truy cập. Liên hệ Admin để được cấp quyền.</p>
+            <p class="auth-subtitle">Tài khoản <strong id="denied-email" style="color: #f59e0b;"></strong> chưa được cấp quyền truy cập.</p>
             <div class="auth-contact-box">
-                <a href="https://zalo.me/0396154013" target="_blank" class="zalo-btn">💬 Chat Zalo với Admin</a>
+                <p style="margin: 0 0 8px 0; font-size: 0.95rem; color: #cbd5e1;">Vui lòng liên hệ Admin để được cấp quyền:</p>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0 14px 0; flex-wrap: wrap;">
+                    <span style="color: #94a3b8; font-size: 0.95rem; font-weight: 500;">Admin - Zalo:</span>
+                    <strong style="color: #fbbf24; font-size: 1.35rem; font-weight: 800; letter-spacing: 1.5px; text-shadow: 0 0 12px rgba(251, 191, 36, 0.5);">0396.154.013</strong>
+                    <button type="button" class="copy-zalo-btn" onclick="copyAdminZalo(this)" title="Sao chép số Zalo">📋 Copy</button>
+                </div>
+                <a href="https://zalo.me/0396154013" target="_blank" rel="noopener noreferrer" class="zalo-btn" style="width: 100%; box-sizing: border-box; justify-content: center;">💬 Chat Zalo với Admin</a>
             </div>
             <button class="auth-signout-btn" onclick="signOut()">Đăng xuất</button>
         </div>
@@ -204,9 +211,15 @@
         <div class="auth-card">
             <div class="auth-icon-warning">🔒</div>
             <h2 class="auth-title">GIỚI HẠN THIẾT BỊ</h2>
-            <p class="auth-subtitle">Tài khoản <strong id="limit-email" style="color: #f59e0b;"></strong> đã sử dụng tối đa <strong id="limit-max-count">2</strong> thiết bị. Vui lòng liên hệ Admin để được nâng cấp thêm.</p>
+            <p class="auth-subtitle">Tài khoản <strong id="limit-email" style="color: #f59e0b;"></strong> đã sử dụng tối đa <strong id="limit-max-count">2</strong> thiết bị.</p>
             <div class="auth-contact-box">
-                <a href="https://zalo.me/0396154013" target="_blank" class="zalo-btn">💬 Chat Zalo với Admin</a>
+                <p style="margin: 0 0 8px 0; font-size: 0.95rem; color: #cbd5e1;">Liên hệ Admin để được nâng cấp thêm thiết bị:</p>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0 14px 0; flex-wrap: wrap;">
+                    <span style="color: #94a3b8; font-size: 0.95rem; font-weight: 500;">Admin - Zalo:</span>
+                    <strong style="color: #fbbf24; font-size: 1.35rem; font-weight: 800; letter-spacing: 1.5px; text-shadow: 0 0 12px rgba(251, 191, 36, 0.5);">0396.154.013</strong>
+                    <button type="button" class="copy-zalo-btn" onclick="copyAdminZalo(this)" title="Sao chép số Zalo">📋 Copy</button>
+                </div>
+                <a href="https://zalo.me/0396154013" target="_blank" rel="noopener noreferrer" class="zalo-btn" style="width: 100%; box-sizing: border-box; justify-content: center;">💬 Chat Zalo với Admin</a>
             </div>
             <button class="auth-signout-btn" onclick="signOut()">Đăng xuất</button>
         </div>

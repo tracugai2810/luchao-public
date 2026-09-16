@@ -1835,6 +1835,24 @@ img:not(#generatedImage) {
     transform: scale(1.05);
 }
 
+.copy-zalo-btn {
+    background: rgba(251, 191, 36, 0.15);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: #fbbf24;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-zalo-btn:hover {
+    background: rgba(251, 191, 36, 0.3);
+    border-color: #fbbf24;
+    transform: translateY(-1px);
+}
+
 /* --- Sign Out Button --- */
 .auth-signout-btn {
     display: inline-flex;

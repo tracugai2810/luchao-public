@@ -272,46 +272,51 @@ function calculateSolarTermDate(year, termIndex) {
     return new Date(Date.UTC(yy, month - 1, Math.floor(day), Math.floor(totalSec / 3600), Math.floor((totalSec % 3600) / 60)));
 }
 
-function calculateCanChi(dateInput) {
-    let d = new Date(dateInput);
-    if (d.getHours() >= 23) d.setDate(d.getDate() + 1);
+const GAN_MAP = { '甲': 'Giáp', '乙': 'Ất', '丙': 'Bính', '丁': 'Đinh', '戊': 'Mậu', '己': 'Kỷ', '庚': 'Canh', '辛': 'Tân', '壬': 'Nhâm', '癸': 'Quý' };
+const ZHI_MAP = { '子': 'Tý', '丑': 'Sửu', '寅': 'Dần', '卯': 'Mão', '辰': 'Thìn', '巳': 'Tỵ', '午': 'Ngọ', '未': 'Mùi', '申': 'Thân', '酉': 'Dậu', '戌': 'Tuất', '亥': 'Hợi' };
+const SOLAR_TERM_NAMES_VI = {
+    '立春': 'Lập Xuân', '雨水': 'Vũ Thủy', '惊蛰': 'Kinh Trập', '春分': 'Xuân Phân',
+    '清明': 'Thanh Minh', '谷雨': 'Cốc Vũ', '立夏': 'Lập Hạ', '小满': 'Tiểu Mãn',
+    '芒种': 'Mang Chủng', '夏至': 'Hạ Chí', '小暑': 'Tiểu Thử', '大暑': 'Đại Thử',
+    '立秋': 'Lập Thu', '处暑': 'Xử Thử', '白露': 'Bạch Lộ', '秋分': 'Thu Phân',
+    '寒露': 'Hàn Lộ', '霜降': 'Sương Giáng', '立冬': 'Lập Đông', '小雪': 'Tiểu Tuyết',
+    '大雪': 'Đại Tuyết', '冬至': 'Đông Chí', '小寒': 'Tiểu Hàn', '大寒': 'Đại Hàn'
+};
 
-    const y = d.getFullYear();
-    const a = Math.floor((14 - (d.getMonth() + 1)) / 12);
-    const yJD = d.getFullYear() + 4800 - a;
-    const mJD = (d.getMonth() + 1) + 12 * a - 3;
-    const jd = d.getDate() + Math.floor((153 * mJD + 2) / 5) + 365 * yJD + Math.floor(yJD / 4) - Math.floor(yJD / 100) + Math.floor(yJD / 400) - 32045;
+function getExactSolarTermName(actualDate, y, terms, termsPrev) {
+    const termNames = ['Tiểu Hàn', 'Đại Hàn', 'Lập Xuân', 'Vũ Thủy', 'Kinh Trập', 'Xuân Phân', 'Thanh Minh', 'Cốc Vũ', 'Lập Hạ', 'Tiểu Mãn', 'Mang Chủng', 'Hạ Chí', 'Tiểu Thử', 'Đại Thử', 'Lập Thu', 'Xử Thử', 'Bạch Lộ', 'Thu Phân', 'Hàn Lộ', 'Sương Giáng', 'Lập Đông', 'Tiểu Tuyết', 'Đại Tuyết', 'Đông Chí'];
+    if (actualDate < terms[0]) {
+        if (actualDate >= termsPrev[23]) return termNames[23];
+        if (actualDate >= termsPrev[22]) return termNames[22];
+        return termNames[23];
+    }
+    for (let i = 23; i >= 0; i--) {
+        if (actualDate >= terms[i]) {
+            return termNames[i];
+        }
+    }
+    return termNames[0];
+}
+
+function calculateCanChi(dateInput) {
+    const actualDate = new Date(dateInput);
+
+    // Tính Can Chi Ngày và Giờ theo giờ địa phương của nơi gieo quẻ
+    let dayCalc = new Date(actualDate.getTime());
+    if (dayCalc.getHours() >= 23) {
+        dayCalc.setDate(dayCalc.getDate() + 1);
+    }
+
+    const y = dayCalc.getFullYear();
+    const a = Math.floor((14 - (dayCalc.getMonth() + 1)) / 12);
+    const yJD = dayCalc.getFullYear() + 4800 - a;
+    const mJD = (dayCalc.getMonth() + 1) + 12 * a - 3;
+    const jd = dayCalc.getDate() + Math.floor((153 * mJD + 2) / 5) + 365 * yJD + Math.floor(yJD / 4) - Math.floor(yJD / 100) + Math.floor(yJD / 400) - 32045;
 
     const canNgayIdx = (jd + 9) % 10;
     const chiNgayIdx = (jd + 1) % 12;
 
-    const terms = getSolarTerm(y);
-    const termsPrev = getSolarTerm(y - 1);
-    const lapXuan = terms[2];
-
-    let solarYear = d < lapXuan ? y - 1 : y;
-    let canNamIdx = (solarYear - 4) % 10;
-    if (canNamIdx < 0) canNamIdx += 10;
-    let chiNamIdx = (solarYear - 4) % 12;
-    if (chiNamIdx < 0) chiNamIdx += 12;
-
-    let chiThangIdx = 1;
-    if (d >= termsPrev[22] && d < terms[0]) {
-        chiThangIdx = 0;
-    } else {
-        const checkOrder = [22, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
-        const mapping = { 2: 2, 4: 3, 6: 4, 8: 5, 10: 6, 12: 7, 14: 8, 16: 9, 18: 10, 20: 11, 22: 0, 0: 1 };
-        for (let tIdx of checkOrder) {
-            if (d >= terms[tIdx]) {
-                chiThangIdx = mapping[tIdx];
-                break;
-            }
-        }
-    }
-
-    const canThangIdx = ((canNamIdx * 2 + 2) + (chiThangIdx - 2 + 12)) % 10;
-
-    let h = d.getHours();
+    let h = actualDate.getHours();
     const chiGioIdx = (h >= 23 || h < 1) ? 0 : Math.floor((h + 1) / 2) % 12;
     const canGioIdx = (((canNgayIdx % 5) * 2) + chiGioIdx) % 10;
 
@@ -319,10 +324,70 @@ function calculateCanChi(dateInput) {
     const tk1 = CHI[(diff - 2 + 12) % 12];
     const tk2 = CHI[(diff - 1 + 12) % 12];
 
-    let dayOfYear = Math.floor((d - new Date(y, 0, 0)) / 86400000);
-    const termNames = ['Tiểu Hàn', 'Đại Hàn', 'Lập Xuân', 'Vũ Thủy', 'Kinh Trập', 'Xuân Phân', 'Thanh Minh', 'Cốc Vũ', 'Lập Hạ', 'Tiểu Mãn', 'Mang Chủng', 'Hạ Chí', 'Tiểu Thử', 'Đại Thử', 'Lập Thu', 'Xử Thử', 'Bạch Lộ', 'Thu Phân', 'Hàn Lộ', 'Sương Giáng', 'Lập Đông', 'Tiểu Tuyết', 'Đại Tuyết', 'Đông Chí'];
-    let tIdx = Math.floor(dayOfYear / 15.22);
-    if (tIdx > 23) tIdx = 23;
+    // Ưu tiên sử dụng thư viện Lunar (độ chính xác thiên văn cao nhất theo chuẩn Tử Kim Sơn / VSOP87)
+    if (typeof Solar !== 'undefined' && typeof Lunar !== 'undefined') {
+        const msBeijing = actualDate.getTime() + 8 * 3600 * 1000 + 59 * 1000;
+        const bDate = new Date(msBeijing);
+        const solar = Solar.fromYmdHms(
+            bDate.getUTCFullYear(),
+            bDate.getUTCMonth() + 1,
+            bDate.getUTCDate(),
+            bDate.getUTCHours(),
+            bDate.getUTCMinutes(),
+            bDate.getUTCSeconds()
+        );
+        const lunar = solar.getLunar();
+
+        const yGz = lunar.getYearInGanZhiExact();
+        const canNam = GAN_MAP[yGz[0]] || yGz[0];
+        const chiNam = ZHI_MAP[yGz[1]] || yGz[1];
+
+        const mGz = lunar.getMonthInGanZhiExact();
+        const canThang = GAN_MAP[mGz[0]] || mGz[0];
+        const chiThang = ZHI_MAP[mGz[1]] || mGz[1];
+
+        const prevJq = lunar.getPrevJieQi(false);
+        const rawJqName = prevJq ? prevJq.getName() : '';
+        const tietKhi = SOLAR_TERM_NAMES_VI[rawJqName] || rawJqName;
+
+        return {
+            nam: { can: canNam, chi: chiNam },
+            thang: { can: canThang, chi: chiThang, hanh: NGU_HANH_CHI[chiThang] },
+            ngay: { can: CAN[canNgayIdx], chi: CHI[chiNgayIdx], hanh: NGU_HANH_CHI[CHI[chiNgayIdx]] },
+            gio: { can: CAN[canGioIdx], chi: CHI[chiGioIdx] },
+            tuanKhong: [tk1, tk2],
+            tietKhi: tietKhi
+        };
+    }
+
+    // Thuật toán dự phòng Jean Meeus (đã tách mốc actualDate không bị nhảy ngày ở 23h)
+    const actualYear = actualDate.getFullYear();
+    const terms = getSolarTerm(actualYear);
+    const termsPrev = getSolarTerm(actualYear - 1);
+    const lapXuan = terms[2];
+
+    let solarYear = actualDate < lapXuan ? actualYear - 1 : actualYear;
+    let canNamIdx = (solarYear - 4) % 10;
+    if (canNamIdx < 0) canNamIdx += 10;
+    let chiNamIdx = (solarYear - 4) % 12;
+    if (chiNamIdx < 0) chiNamIdx += 12;
+
+    let chiThangIdx = 1;
+    if (actualDate >= termsPrev[22] && actualDate < terms[0]) {
+        chiThangIdx = 0;
+    } else {
+        const checkOrder = [22, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
+        const mapping = { 2: 2, 4: 3, 6: 4, 8: 5, 10: 6, 12: 7, 14: 8, 16: 9, 18: 10, 20: 11, 22: 0, 0: 1 };
+        for (let tIdx of checkOrder) {
+            if (actualDate >= terms[tIdx]) {
+                chiThangIdx = mapping[tIdx];
+                break;
+            }
+        }
+    }
+
+    const canThangIdx = ((canNamIdx * 2 + 2) + (chiThangIdx - 2 + 12)) % 10;
+    const exactTermName = getExactSolarTermName(actualDate, actualYear, terms, termsPrev);
 
     return {
         nam: { can: CAN[canNamIdx], chi: CHI[chiNamIdx] },
@@ -330,7 +395,7 @@ function calculateCanChi(dateInput) {
         ngay: { can: CAN[canNgayIdx], chi: CHI[chiNgayIdx], hanh: NGU_HANH_CHI[CHI[chiNgayIdx]] },
         gio: { can: CAN[canGioIdx], chi: CHI[chiGioIdx] },
         tuanKhong: [tk1, tk2],
-        tietKhi: termNames[tIdx]
+        tietKhi: exactTermName
     };
 }
 

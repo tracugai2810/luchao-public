@@ -467,6 +467,42 @@ function init() {
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     document.getElementById('inputDate').value = now.toISOString().slice(0, 16);
+
+    const tzEl = document.getElementById('inputTimezone');
+    if (tzEl) {
+        autoDetectTimezone(tzEl);
+    }
+}
+
+function autoDetectTimezone(selectEl) {
+    if (!selectEl) return;
+    try {
+        const offsetMin = -new Date().getTimezoneOffset();
+        const sign = offsetMin >= 0 ? '+' : '-';
+        const absMin = Math.abs(offsetMin);
+        const hours = String(Math.floor(absMin / 60)).padStart(2, '0');
+        const mins = String(absMin % 60).padStart(2, '0');
+        const tzString = `${sign}${hours}:${mins}`;
+
+        let found = false;
+        for (let i = 0; i < selectEl.options.length; i++) {
+            if (selectEl.options[i].value === tzString) {
+                selectEl.selectedIndex = i;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            const opt = document.createElement('option');
+            opt.value = tzString;
+            opt.textContent = `Vị trí hiện tại (${tzString})`;
+            selectEl.insertBefore(opt, selectEl.firstChild);
+            selectEl.selectedIndex = 0;
+        }
+    } catch (e) {
+        console.warn('Auto-detect timezone error:', e);
+    }
 }
 
 function switchTab(tab) {

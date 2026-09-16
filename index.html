@@ -235,7 +235,21 @@
                 <!-- Date Time Input -->
                 <div class="form-group">
                     <label for="inputDate">Thời gian gieo quẻ (Dương lịch)</label>
-                    <input type="datetime-local" id="inputDate" class="form-input">
+                    <div style="display: flex; gap: 8px;">
+                        <input type="datetime-local" id="inputDate" class="form-input" style="flex: 1;">
+                        <select id="inputTimezone" class="form-input" style="width: auto; min-width: 120px;">
+                            <option value="+07:00" selected>VN (+7)</option>
+                            <option value="-08:00">Mỹ Tây (-8)</option>
+                            <option value="-05:00">Mỹ Đông (-5)</option>
+                            <option value="-06:00">Mỹ Trung (-6)</option>
+                            <option value="-07:00">Mỹ Núi (-7)</option>
+                            <option value="+09:00">Nhật/Hàn (+9)</option>
+                            <option value="+08:00">Đài/TQ (+8)</option>
+                            <option value="+10:00">Úc (+10)</option>
+                            <option value="+01:00">Châu Âu (+1)</option>
+                            <option value="+00:00">Anh (UTC 0)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Question / Matter Input -->

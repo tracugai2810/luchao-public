@@ -298,25 +298,56 @@ function getExactSolarTermName(actualDate, y, terms, termsPrev) {
     return termNames[0];
 }
 
+function parseDatePartsWithTimezone(dateInput) {
+    let input = String(dateInput).trim();
+    if (!input.includes('Z') && !input.includes('+') && !input.match(/-\d{2}:\d{2}$/)) {
+        const tzEl = typeof document !== 'undefined' ? document.getElementById('inputTimezone') : null;
+        input = input + (tzEl ? tzEl.value : (window.customTimezone || '+07:00'));
+    }
+    const actualDate = new Date(input);
+    let targetYear, targetMonth, targetDay, targetHour, targetMinute;
+
+    const tzMatch = input.match(/([+-]\d{2}):?(\d{2})$/);
+    if (tzMatch) {
+        const sign = tzMatch[1].startsWith('-') ? -1 : 1;
+        const tzHours = parseInt(tzMatch[1].replace('+', '').replace('-', ''), 10);
+        const tzMins = parseInt(tzMatch[2], 10);
+        const offsetTotalMinutes = sign * (tzHours * 60 + tzMins);
+        
+        const targetLocalMs = actualDate.getTime() + offsetTotalMinutes * 60000;
+        const targetDateObj = new Date(targetLocalMs);
+        targetYear = targetDateObj.getUTCFullYear();
+        targetMonth = targetDateObj.getUTCMonth() + 1;
+        targetDay = targetDateObj.getUTCDate();
+        targetHour = targetDateObj.getUTCHours();
+        targetMinute = targetDateObj.getUTCMinutes();
+    } else {
+        targetYear = actualDate.getFullYear();
+        targetMonth = actualDate.getMonth() + 1;
+        targetDay = actualDate.getDate();
+        targetHour = actualDate.getHours();
+        targetMinute = actualDate.getMinutes();
+    }
+    return { actualDate, targetYear, targetMonth, targetDay, targetHour, targetMinute };
+}
+
 function calculateCanChi(dateInput) {
-    const actualDate = new Date(dateInput);
+    const { actualDate, targetYear, targetMonth, targetDay, targetHour, targetMinute } = parseDatePartsWithTimezone(dateInput);
 
     // Tính Can Chi Ngày và Giờ theo giờ địa phương của nơi gieo quẻ
-    let dayCalc = new Date(actualDate.getTime());
-    if (dayCalc.getHours() >= 23) {
-        dayCalc.setDate(dayCalc.getDate() + 1);
+    let dayCalc = new Date(Date.UTC(targetYear, targetMonth - 1, targetDay, targetHour, targetMinute));
+    if (targetHour >= 23) {
+        dayCalc.setUTCDate(dayCalc.getUTCDate() + 1);
     }
 
-    const y = dayCalc.getFullYear();
-    const a = Math.floor((14 - (dayCalc.getMonth() + 1)) / 12);
-    const yJD = dayCalc.getFullYear() + 4800 - a;
-    const mJD = (dayCalc.getMonth() + 1) + 12 * a - 3;
-    const jd = dayCalc.getDate() + Math.floor((153 * mJD + 2) / 5) + 365 * yJD + Math.floor(yJD / 4) - Math.floor(yJD / 100) + Math.floor(yJD / 400) - 32045;
+    const yJD = dayCalc.getUTCFullYear() + 4800 - Math.floor((14 - (dayCalc.getUTCMonth() + 1)) / 12);
+    const mJD = (dayCalc.getUTCMonth() + 1) + 12 * Math.floor((14 - (dayCalc.getUTCMonth() + 1)) / 12) - 3;
+    const jd = dayCalc.getUTCDate() + Math.floor((153 * mJD + 2) / 5) + 365 * yJD + Math.floor(yJD / 4) - Math.floor(yJD / 100) + Math.floor(yJD / 400) - 32045;
 
     const canNgayIdx = (jd + 9) % 10;
     const chiNgayIdx = (jd + 1) % 12;
 
-    let h = actualDate.getHours();
+    let h = targetHour;
     const chiGioIdx = (h >= 23 || h < 1) ? 0 : Math.floor((h + 1) / 2) % 12;
     const canGioIdx = (((canNgayIdx % 5) * 2) + chiGioIdx) % 10;
 
@@ -489,9 +520,14 @@ function cleanSerialInput(el) {
 
 function formatDate(isoStr) {
     if (!isoStr) return "";
-    const d = new Date(isoStr);
+    let input = isoStr;
+    if (typeof input === 'string' && !input.includes('Z') && !input.includes('+') && !input.match(/-\d{2}:\d{2}$/)) {
+        const tzEl = typeof document !== 'undefined' ? document.getElementById('inputTimezone') : null;
+        input = input + (tzEl ? tzEl.value : (window.customTimezone || '+07:00'));
+    }
+    const { targetYear, targetMonth, targetDay, targetHour, targetMinute } = parseDatePartsWithTimezone(input);
     const p = n => n < 10 ? '0' + n : n;
-    return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} - ${p(d.getHours())}:${p(d.getMinutes())}`;
+    return `${p(targetDay)}/${p(targetMonth)}/${targetYear} - ${p(targetHour)}:${p(targetMinute)}`;
 }
 
 // ============================================
@@ -507,9 +543,11 @@ function processDivination() {
         alert("Vui lòng chọn ngày giờ gieo quẻ!");
         return;
     }
+    const tzEl = document.getElementById('inputTimezone');
+    const fullDateInput = (tzEl && tzEl.value) ? `${dVal}:00${tzEl.value}` : dVal;
 
-    const calendar = calculateCanChi(dVal);
-    const formattedDate = formatDate(dVal);
+    const calendar = calculateCanChi(fullDateInput);
+    const formattedDate = formatDate(fullDateInput);
 
     let lines = [];
     let methodText = "";

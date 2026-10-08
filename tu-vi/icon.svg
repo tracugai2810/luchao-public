@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a82824"/>
+      <stop offset="70%" stop-color="#671110"/>
+      <stop offset="100%" stop-color="#3b0505"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff2c2"/>
+      <stop offset="30%" stop-color="#f5d061"/>
+      <stop offset="70%" stop-color="#d49b28"/>
+      <stop offset="100%" stop-color="#91620c"/>
+    </linearGradient>
+    <linearGradient id="darkGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a1202"/>
+      <stop offset="100%" stop-color="#140600"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Nền tròn phong thủy -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  
+  <!-- Viền vàng kim ngoài -->
+  <circle cx="256" cy="256" r="226" fill="none" stroke="url(#goldGrad)" stroke-width="12" filter="url(#glow)"/>
+  <circle cx="256" cy="256" r="212" fill="none" stroke="url(#goldGrad)" stroke-width="3" stroke-dasharray="8 6"/>
+
+  <!-- Vòng tròn Thái Cực Lương Nghi -->
+  <g transform="translate(256, 256)">
+    <!-- Vòng ngoài bảo hộ -->
+    <circle cx="0" cy="0" r="140" fill="url(#darkGold)" stroke="url(#goldGrad)" stroke-width="8"/>
+    
+    <!-- Nửa Dương (Vàng Kim) -->
+    <path d="M 0,-140 A 140,140 0 0,1 0,140 A 70,70 0 0,1 0,0 A 70,70 0 0,0 0,-140 Z" fill="url(#goldGrad)"/>
+    
+    <!-- Mắt Âm trong Dương -->
+    <circle cx="0" cy="-70" r="22" fill="#140600"/>
+    
+    <!-- Mắt Dương trong Âm -->
+    <circle cx="0" cy="70" r="22" fill="url(#goldGrad)"/>
+
+    <!-- Ngôi sao Bắc Đẩu / Tử Vi Tinh tỏa sáng đỉnh đầu -->
+    <g transform="translate(0, -180)" filter="url(#glow)">
+      <path d="M 0,-24 L 6,-6 L 24,0 L 6,6 L 0,24 L -6,6 L -24,0 L -6,-6 Z" fill="url(#goldGrad)"/>
+      <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+    </g>
+    <g transform="translate(0, 180)" filter="url(#glow)">
+      <path d="M 0,-14 L 3,-3 L 14,0 L 3,3 L 0,14 L -3,3 L -14,0 L -3,-3 Z" fill="url(#goldGrad)"/>
+    </g>
+    <g transform="translate(-180, 0)" filter="url(#glow)">
+      <path d="M 0,-14 L 3,-3 L 14,0 L 3,3 L 0,14 L -3,3 L -14,0 L -3,-3 Z" fill="url(#goldGrad)"/>
+    </g>
+    <g transform="translate(180, 0)" filter="url(#glow)">
+      <path d="M 0,-14 L 3,-3 L 14,0 L 3,3 L 0,14 L -3,3 L -14,0 L -3,-3 Z" fill="url(#goldGrad)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,29 @@
+# Robots.txt for http://simphongthuy.io.vn - Optimized for SEO Top 1-4 & AI Overviews / GEO
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+# Allow Search Engines & AI Crawlers (Google AI Overviews, ChatGPT, Claude, Gemini, Perplexity)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap URL
+Sitemap: http://simphongthuy.io.vn/sitemap.xml

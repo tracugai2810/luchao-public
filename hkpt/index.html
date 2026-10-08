@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <base href="/hkpt/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Huyền Không Phi Tinh - Lập Tinh Bàn Phong Thủy</title>
+  <meta name="description" content="Ứng dụng lập tinh bàn Huyền Không Phi Tinh phong thủy, hỗ trợ Hạ Quái và Thế Quái (Kiêm Hướng)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <h1 class="header-title">Huyền Không Phi Tinh</h1>
+      <p class="header-subtitle">Lập Tinh Bàn Phong Thủy</p>
+    </header>
+
+    <!-- Input Form -->
+    <section class="input-section">
+      <div class="form-sections-wrapper">
+        <!-- Section 1: Hướng & Năm Nhà -->
+        <div class="form-block">
+          <div class="form-block-title">
+            <span class="block-num">1</span>
+            <span>Tọa Hướng & Vận Trạch</span>
+          </div>
+          <div class="input-grid grid-house">
+            <div class="input-group">
+              <label for="inputDegree">Số Độ Hướng (°)</label>
+              <input type="text" id="inputDegree" value="189" placeholder="0 - 360" class="input-field" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off">
+              <span class="input-hint">VD: 180.5</span>
+            </div>
+            <div class="input-group">
+              <label for="inputYear">Năm Nhập Trạch</label>
+              <input type="text" id="inputYear" value="2010" placeholder="Năm nhập trạch" class="input-field" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+              <span class="input-hint">Năm xây / vào ở</span>
+            </div>
+            <div class="input-group">
+              <label for="inputVan">Vận</label>
+              <input type="text" id="inputVan" value="8" readonly class="input-field input-readonly">
+              <span class="input-hint">Tự động tính</span>
+            </div>
+          </div>
+          <div class="sat-trigger-wrapper">
+            <button type="button" id="btnOpenSatellite" class="btn-sat-standalone" title="Đo hướng nhà chuẩn từng 0.1° từ ảnh vệ tinh Google Maps">
+              <span class="btn-sat-icon">🛰️</span>
+              <span>Đo Hướng Nhà Từ Ảnh Vệ Tinh</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 2: Gia Chủ (Tùy chọn) -->
+        <div class="form-block">
+          <div class="form-block-title">
+            <span class="block-num">2</span>
+            <span>Gia Chủ (Tùy chọn)</span>
+          </div>
+          <div class="input-grid grid-owner">
+            <div class="input-group">
+              <label for="inputOwnerYear">Năm Sinh Gia Chủ</label>
+              <input type="text" id="inputOwnerYear" class="input-field" placeholder="VD: 1985" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+            </div>
+            <div class="input-group">
+              <label for="inputOwnerGender">Giới Tính</label>
+              <select id="inputOwnerGender" class="input-field">
+                <option value="1">Nam</option>
+                <option value="0">Nữ</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Thời Điểm Khảo Sát (Dương Lịch) -->
+        <div class="form-block">
+          <div class="form-block-title">
+            <span class="block-num">3</span>
+            <span>Thời Điểm Khảo Sát (Dương Lịch)</span>
+          </div>
+          <div class="survey-datetime-wrap">
+            <div class="input-group">
+              <label for="inputCurrentDateTime">Thời gian khảo sát (Dương lịch)</label>
+              <div class="datetime-picker-row">
+                <input type="datetime-local" id="inputCurrentDateTime" class="input-field input-datetime-local" step="60">
+                <select id="inputTimezone" class="input-field select-timezone">
+                  <option value="+07:00" selected>VN (+7)</option>
+                  <option value="-08:00">Mỹ Tây (-8)</option>
+                  <option value="-05:00">Mỹ Đông (-5)</option>
+                  <option value="-06:00">Mỹ Trung (-6)</option>
+                  <option value="-07:00">Mỹ Núi (-7)</option>
+                  <option value="+09:00">Nhật/Hàn (+9)</option>
+                  <option value="+08:00">Đài/TQ (+8)</option>
+                  <option value="+10:00">Úc (+10)</option>
+                  <option value="+01:00">Châu Âu (+1)</option>
+                  <option value="+00:00">Anh (UTC 0)</option>
+                </select>
+              </div>
+            </div>
+            <div class="datetime-meta-info" id="datetimeMetaInfo">
+              <span class="meta-badge badge-canh" id="badgeCanhGio" title="Canh Giờ Âm Dương">🕒 Giờ Thìn (07:00 - 08:59)</span>
+              <span class="meta-badge badge-tiet" id="badgeTietKhi" title="Tiết Khí & Tháng Phong Thủy">🌿 Tiết Khí: Đang tính...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button id="btnCalculate" class="btn-calculate" type="button">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+        <span>Lập Tinh Bàn</span>
+      </button>
+    </section>
+
+    <!-- Export Area for Image Snapshot -->
+    <div id="exportArea" class="export-area hidden">
+      <!-- Image Overlay for Right-Click Copy Image & Save Image -->
+      <img id="exportAreaImgOverlay" class="export-area-img-overlay" alt="Tinh Bàn Phong Thủy" style="display: none;">
+
+      <!-- Warning - Không Vong -->
+      <div id="warningKhongVong" class="warning-box hidden">
+        <div class="warning-icon">⚠️</div>
+        <div class="warning-text">
+          <strong>Cảnh Báo: Phạm Không Vong!</strong>
+          <p>Độ nhập vào rơi vào tuyến Không Vong (đại hung). Khí hỗn loạn, không nên dùng hướng này.</p>
+        </div>
+      </div>
+
+      <!-- Owner Info -->
+      <div id="ownerInfo" class="owner-info hidden"></div>
+
+      <!-- Chart Info -->
+      <div id="chartInfo" class="chart-info">
+        <div class="info-main" id="infoMain"></div>
+      </div>
+
+      <!-- Flying Star Chart Grid with Compass -->
+      <div id="chartContainer" class="chart-container">
+        <div id="compassWrapper" class="compass-wrapper">
+          <canvas id="compassCanvas" class="compass-canvas"></canvas>
+          <div class="compass-grid-overlay">
+            <div class="chart-grid" id="chartGrid">
+              <!-- 9 cells will be rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Panel Below Chart -->
+      <div id="infoPanel" class="info-panel">
+        <div class="info-row info-row-main">
+          <div class="info-item item-van">
+            <span class="info-label">VẬN</span>
+            <span class="info-value" id="infoVan">-</span>
+          </div>
+          <div class="info-item item-degree">
+            <span class="info-label">ĐỘ HƯỚNG</span>
+            <span class="info-value" id="infoDegree">-</span>
+          </div>
+        </div>
+        <div class="info-row info-row-sub">
+          <div class="info-item">
+            <span class="info-label">NĂM</span>
+            <span class="info-value" id="infoYear">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">THÁNG</span>
+            <span class="info-value" id="infoMonth">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">NGÀY</span>
+            <span class="info-value" id="infoDay">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">GIỜ</span>
+            <span class="info-value" id="infoHour">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signature / Watermark -->
+      <div id="exportSignature" class="export-signature">
+        <div class="sig-badge">
+          <svg class="sig-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          <span class="sig-name">Nguyễn Khôi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div id="actionContainer" class="action-container hidden">
+      <button id="btnDownload" class="btn-action btn-action-download" type="button">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>
+        <span>Lưu Ảnh</span>
+      </button>
+      <label for="floorplanFileInput" id="btnUploadPlan" class="btn-action btn-action-plan" role="button" tabindex="0">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+        <span>Chồng Bản Vẽ</span>
+      </label>
+      <input type="file" id="floorplanFileInput" accept="image/*" style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;">
+    </div>
+
+    <!-- Floor Plan Overlay Section -->
+    <div id="floorplanSection" class="floorplan-section hidden">
+      <div class="floorplan-header">
+        <h3 class="floorplan-title">Chồng Tinh Bàn Lên Bản Vẽ</h3>
+        <div class="floorplan-header-actions">
+          <button id="btnToggleFullscreen" class="fp-header-btn" title="Toàn màn hình / Mở rộng">
+            <svg class="icon-expand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18" height="18"><path d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7M3 9V3m0 0h6m-6 0l7 7m11 5v6m0 0h-6m6 0l-7-7"></path></svg>
+            <svg class="icon-compress hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18" height="18"><path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M4 10h6m0 0V4m0 6L3 3m17 7h-6m0 0V4m0 6l7-7"></path></svg>
+            <span class="btn-text">Toàn màn hình</span>
+          </button>
+        </div>
+      </div>
+      
+      <div id="floorplanContainer" class="floorplan-container">
+        <div id="floorplanWrapper" class="floorplan-wrapper">
+          <img id="floorplanImage" class="floorplan-image" alt="Bản vẽ nhà" />
+          <canvas id="floorplanHelperCanvas" class="floorplan-helper-canvas"></canvas>
+          <div id="floorplanOverlay" class="floorplan-overlay">
+            <canvas id="floorplanCompass" class="floorplan-compass"></canvas>
+          </div>
+          <div id="centerMarker" class="center-marker"></div>
+        </div>
+      </div>
+
+      <!-- Specialized Center Tools Panel -->
+      <div id="centerToolsPanel" class="center-tools-panel hidden">
+        <div class="center-tools-header">
+          <span class="center-tools-title">🎯 Chọn Phương Pháp Lập Cực:</span>
+          <div class="center-mode-buttons">
+            <button type="button" class="center-mode-btn active" data-mode="free" id="btnModeFree">
+              🎯 Tự Do / Kéo Tâm
+            </button>
+            <button type="button" class="center-mode-btn" data-mode="box" id="btnModeBox">
+              📐 2 Góc Chéo (Nhà Chữ Nhật)
+            </button>
+            <button type="button" class="center-mode-btn" data-mode="polygon" id="btnModePolygon">
+              ⬡ Đa Giác (Nhà Chữ L / Khuyết Góc)
+            </button>
+            <button type="button" class="center-mode-btn" data-mode="auto" id="btnModeAuto">
+              ⚡ Tự Động Quét
+            </button>
+          </div>
+        </div>
+        <div class="center-tool-desc" id="centerToolDesc">
+          💡 <strong>Kéo / Chấm Tâm:</strong> Click hoặc kéo điểm tâm đỏ đến vị trí trung tâm mong muốn.
+        </div>
+        
+        <!-- Action Buttons for Box Mode -->
+        <div class="center-mode-actions hidden" id="centerBoxActions">
+          <button type="button" class="fp-btn fp-btn-sm fp-btn-primary" id="btnBoxDone">✓ Xác Nhận & Khóa Tâm</button>
+          <button type="button" class="fp-btn fp-btn-sm" id="btnBoxClear">✕ Chọn Lại 2 Góc</button>
+        </div>
+
+        <!-- Action Buttons for Polygon Mode -->
+        <div class="center-mode-actions hidden" id="centerPolyActions">
+          <button type="button" class="fp-btn fp-btn-sm fp-btn-primary" id="btnPolyDone">✓ Xác Nhận & Khóa Tâm</button>
+          <button type="button" class="fp-btn fp-btn-sm" id="btnPolyUndo">↩ Xóa Điểm Cuối</button>
+          <button type="button" class="fp-btn fp-btn-sm" id="btnPolyClear">✕ Làm Lại</button>
+        </div>
+
+        <!-- Action Buttons for Free/Auto Mode -->
+        <div class="center-mode-actions" id="centerFreeActions">
+          <button type="button" class="fp-btn fp-btn-sm fp-btn-primary" id="btnFreeDone">✓ Xác Nhận & Khóa Tâm</button>
+        </div>
+      </div>
+
+      <div class="floorplan-controls">
+        <div class="fp-control-row">
+          <div class="fp-control-group">
+            <label>Cỡ Tinh Bàn</label>
+            <input type="range" id="sizeSlider" min="60" max="800" value="240" class="fp-slider">
+          </div>
+          <div class="fp-control-group">
+            <div class="fp-label-row">
+              <label>Zoom Bản Vẽ</label>
+              <button type="button" id="btnFitView" class="fp-mini-btn" title="Thu phóng vừa khít khung nhìn">🔍 Vừa Khung</button>
+            </div>
+            <input type="range" id="imageZoomSlider" min="100" max="350" value="100" class="fp-slider">
+          </div>
+          <div class="fp-control-group">
+            <label>Độ mờ</label>
+            <input type="range" id="opacitySlider" min="10" max="100" value="70" class="fp-slider">
+          </div>
+        </div>
+        <div class="fp-control-row fp-toggles-row">
+          <label class="fp-toggle-label"><input type="checkbox" id="minimalModeCheckbox"> 📐 Tối Giản</label>
+          <label class="fp-toggle-label"><input type="checkbox" id="guideLinesCheckbox" checked> Trục Tọa - Hướng</label>
+          <label class="fp-toggle-label"><input type="checkbox" id="centerPalaceCheckbox" checked> 🔲 Trung Cung (1/9)</label>
+          <span class="fp-rotation-display">Góc: <strong id="rotationDisplay">0°</strong></span>
+        </div>
+        <div class="fp-control-row fp-buttons">
+          <button id="btnAdjustCenter" class="fp-btn">📍 Chỉnh Tâm</button>
+          <button id="btnResetFloorplan" class="fp-btn">↺ Reset</button>
+          <button id="btnExportFloorplan" class="fp-btn fp-btn-primary">💾 Tải Ảnh</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loan Dau Exterior Recommendation Section -->
+    <div id="loanDauSection" class="loan-dau-section hidden">
+      <!-- Dynamically rendered via loan-dau-rules.js -->
+    </div>
+
+    <!-- Thanh Mon Quyet (Castle Gate) Recommendation Section -->
+    <div id="thanhMonSection" class="thanh-mon-container hidden">
+      <!-- Dynamically rendered via thanh-mon-rules.js -->
+    </div>
+
+    <!-- Feng Shui Interpretation & Layout Recommendation Section (Always at the bottom) -->
+    <div id="interpretationSection" class="interpretation-section hidden">
+      <!-- Dynamically rendered via fengshui-rules.js -->
+    </div>
+  </div>
+
+  <!-- Satellite Compass Measurement Modal -->
+  <div id="satelliteModal" class="sat-modal hidden">
+    <div class="sat-modal-backdrop"></div>
+    <div class="sat-modal-container">
+      <div class="sat-modal-header">
+        <div class="sat-header-title">
+          <span class="sat-header-icon">🛰️</span>
+          <div>
+            <h3>Đo Hướng Nhà Từ Ảnh Vệ Tinh</h3>
+            <p>Độ chính xác chuẩn từng 0.1° theo trắc địa vệ tinh toàn cầu</p>
+          </div>
+        </div>
+        <button type="button" id="btnCloseSatModal" class="sat-close-btn" title="Đóng">✕</button>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="sat-search-bar">
+        <div class="sat-search-input-wrap">
+          <input type="text" id="satSearchInput" class="sat-search-input" placeholder="Dán tọa độ (VD: 21.0285, 105.8542) hoặc link Google Maps...">
+          <button type="button" id="btnSatSearch" class="sat-search-btn">Tìm Vị Trí</button>
+        </div>
+        <div class="sat-quick-tools">
+          <button type="button" id="btnSatCurrentLocation" class="sat-tool-btn" title="Lấy vị trí GPS hiện tại">📍 Vị Trí Của Tôi</button>
+          <div class="sat-layer-toggle">
+            <button type="button" id="btnLayerGoogleHybrid" class="sat-layer-btn active" title="Ảnh vệ tinh Google kèm tên đường">Google Vệ Tinh</button>
+            <button type="button" id="btnLayerEsri" class="sat-layer-btn" title="Ảnh vệ tinh ESRI độ nét cao">ESRI Vệ Tinh</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instruction banner -->
+      <div class="sat-instruction" id="satInstruction">
+        👉 <strong>Bước 1:</strong> Zoom vào nóc nhà, click <strong>Điểm 1</strong> rồi click <strong>Điểm 2</strong> dọc theo mép tường mặt tiền nhà.
+      </div>
+
+      <!-- Map Container -->
+      <div class="sat-map-wrapper">
+        <div id="satMap" class="sat-map"></div>
+      </div>
+
+      <!-- Result & Adjustment Bar -->
+      <div class="sat-result-bar">
+        <div class="sat-result-info">
+          <div class="sat-result-main">
+            <span class="sat-res-label">HƯỚNG ĐO ĐƯỢC:</span>
+            <strong class="sat-res-degree" id="satResultDegree">0.0°</strong>
+            <span class="sat-res-name" id="satResultName">-</span>
+          </div>
+          <div class="sat-result-sub" id="satResultSub">
+            Nhấp 2 điểm trên nóc nhà để bắt đầu đo
+          </div>
+        </div>
+
+        <div class="sat-actions-row">
+          <div class="sat-fine-tune">
+            <button type="button" id="btnSatMinusHalf" class="sat-mini-btn" title="Giảm 0.5 độ">- 0.5°</button>
+            <button type="button" id="btnSatPlusHalf" class="sat-mini-btn" title="Tăng 0.5 độ">+ 0.5°</button>
+            <button type="button" id="btnSatFlipNormal" class="sat-mini-btn sat-btn-flip" title="Đảo ngược 180 độ hướng mũi tên">⇄ Đảo Hướng (180°)</button>
+            <button type="button" id="btnSatResetPoints" class="sat-mini-btn sat-btn-reset" title="Đo lại từ đầu">↺ Đo Lại</button>
+          </div>
+          <button type="button" id="btnSatApplyDegree" class="sat-btn-apply" disabled>
+            ✓ Áp Dụng Số Độ Này
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="flyingstar.js"></script>
+  <script src="loan-dau-rules.js"></script>
+  <script src="thanh-mon-rules.js"></script>
+  <script src="fengshui-rules.js"></script>
+  <script src="compass.js"></script>
+  <script src="floorplan.js"></script>
+  <script src="satellite-compass.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

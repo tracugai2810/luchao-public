@@ -338,7 +338,19 @@ function waitForAuthInit() {
     });
 }
 
+// =========================================================================
+// CẤU HÌNH BẢO MẬT / PUBLIC FREE
+// Đặt true: Chế độ Miễn phí công khai (Ai vào cũng dùng được luôn, không cần duyệt mail)
+// Đặt false: Bật lại cơ chế kiểm duyệt email qua Admin (thu phí / giới hạn thiết bị)
+// =========================================================================
+const IS_PUBLIC_FREE_MODE = true;
+
 async function initAuth() {
+    if (IS_PUBLIC_FREE_MODE) {
+        showUI('app-main-content');
+        return;
+    }
+
     const savedEmail = localStorage.getItem(EMAIL_STORAGE_KEY);
     const currentUser = await waitForAuthInit();
     const targetEmail = (currentUser && currentUser.email) ? currentUser.email : savedEmail;
@@ -359,3 +371,4 @@ async function initAuth() {
 
 // Bắt đầu
 initAuth();
+

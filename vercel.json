@@ -11,6 +11,11 @@
       ],
       "destination": "https://luchao.io.vn/:path*",
       "permanent": true
+    },
+    {
+      "source": "/admin(.*)",
+      "destination": "/",
+      "permanent": false
     }
   ],
   "headers": [

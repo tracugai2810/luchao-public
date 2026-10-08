@@ -158,7 +158,7 @@ function executeEvalCurrentSim() {
 
     const currentSimArea = document.getElementById('currentSimResultArea') || document.getElementById('currentSimResultBox');
     const formattedSim = formatSimNumber(rawSim);
-    currentSimEvalItem = { sim: rawSim, hexData, evaluation, purpose, purposeText: getPurposeText(purpose) };
+    currentSimEvalItem = { sim: rawSim, hexData, evaluation, purpose, purposeText: getPurposeText(purpose), birthDateVal };
 
     if (currentSimArea) {
         currentSimArea.style.display = 'block';
@@ -350,6 +350,22 @@ function handleCurrentSimDetail() {
     openHexModalDesktopObject(currentSimEvalItem);
 }
 
+function formatDateTimeVN(dateStr) {
+    if (!dateStr) return '';
+    try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr;
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mi = String(d.getMinutes()).padStart(2, '0');
+        return `${dd}/${mm}/${yyyy} - ${hh}:${mi}`;
+    } catch (e) {
+        return dateStr;
+    }
+}
+
 function buildHexCardHTML(item) {
     const { hexData, sim, evaluation } = item;
 
@@ -390,8 +406,10 @@ function buildHexCardHTML(item) {
         `;
     }
 
-    const { purpose, purposeText: pText } = getFormInputs();
+    const { purpose, purposeText: pText, birthDateVal } = getFormInputs();
     const purposeDisplay = item.purposeText || getPurposeText(item.purpose || purpose) || pText;
+    const rawBirthDate = item.birthDateVal || birthDateVal;
+    const formattedBirthDate = formatDateTimeVN(rawBirthDate);
 
     return `
         <div id="hexCardCapture" class="hex-card-view">
@@ -399,11 +417,16 @@ function buildHexCardHTML(item) {
             <div class="info-header">
                 <div class="info-content">
                     <div class="info-line"><strong>SIM Chọn:</strong> <span class="highlight" style="font-size:18px;">${formatSimNumber(sim)}</span></div>
+                    ${formattedBirthDate ? `
+                    <div class="info-line"><strong>Ngày giờ:</strong> <span class="highlight">${formattedBirthDate}</span></div>
+                    <div class="info-line"><strong>Can chi:</strong> <span class="highlight">${hexData.dateInfo.fullCanChi}</span></div>
+                    ` : ''}
                     <div class="info-line"><strong>Mục đích cầu:</strong> <span class="highlight">${purposeDisplay}</span></div>
                     <div class="info-line"><strong>Tuần Không:</strong> <span class="highlight">${hexData.dateInfo.tuanKhong}</span></div>
                     <div class="info-line">
                         <strong>Nhật Thần:</strong> <span class="highlight">${hexData.dateInfo.nhatThan}</span> &nbsp;&nbsp;&nbsp;&nbsp; 
                         <strong>Nguyệt Lệnh:</strong> <span class="highlight">${hexData.dateInfo.nguyetLenh}</span>
+                        ${hexData.dateInfo.tietKhi ? ` &nbsp;&nbsp;&nbsp;&nbsp; <strong>Tiết khí:</strong> <span class="highlight">${hexData.dateInfo.tietKhi}</span>` : ''}
                     </div>
                 </div>
             </div>
@@ -460,6 +483,11 @@ function buildHexCardHTML(item) {
                 <ul>
                     ${evaluation.reasons.map(r => `<li>${r}</li>`).join('')}
                 </ul>
+            </div>
+
+            <!-- Watermark Chú Thích Bản Quyền -->
+            <div class="hex-watermark-note">
+                Quẻ SĐT được lập tại: <strong>luchao.io.vn</strong>
             </div>
         </div>
     `;

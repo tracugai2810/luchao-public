@@ -247,15 +247,98 @@ function calculateSolarTermDate(year, termIndex) {
     return new Date(Date.UTC(yy, month - 1, Math.floor(day), Math.floor(totalSec / 3600), Math.floor((totalSec % 3600) / 60)));
 }
 
+const GAN_MAP_SIM = {
+    '甲': 'Giáp', '乙': 'Ất', '丙': 'Bính', '丁': 'Đinh', '戊': 'Mậu',
+    '己': 'Kỷ', '庚': 'Canh', '辛': 'Tân', '壬': 'Nhâm', '癸': 'Quý'
+};
+
+const ZHI_MAP_SIM = {
+    '子': 'Tý', '丑': 'Sửu', '寅': 'Dần', '卯': 'Mão', '辰': 'Thìn', '巳': 'Tỵ',
+    '午': 'Ngọ', '未': 'Mùi', '申': 'Thân', '酉': 'Dậu', '戌': 'Tuất', '亥': 'Hợi'
+};
+
+const SOLAR_TERM_NAMES_VI_SIM = {
+    'DA_XUE': 'Đại Tuyết', 'DONG_ZHI': 'Đông Chí', 'XIAO_HAN': 'Tiểu Hàn', 'DA_HAN': 'Đại Hàn',
+    'LI_CHUN': 'Lập Xuân', 'YU_SHUI': 'Vũ Thủy', 'JING_ZHE': 'Kinh Trập', 'CHUN_FEN': 'Xuân Phân',
+    'QING_MING': 'Thanh Minh', 'GU_YU': 'Cốc Vũ', 'LI_XIA': 'Lập Hạ', 'XIAO_MAN': 'Tiểu Mãn',
+    'MANG_ZHONG': 'Mang Chủng', 'XIA_ZHI': 'Hạ Chí', 'XIAO_SHU': 'Tiểu Thử', 'DA_SHU': 'Đại Thử',
+    'LI_QIU': 'Lập Thu', 'CHU_SHU': 'Xử Thử', 'BAI_LU': 'Bạch Lộ', 'QIU_FEN': 'Thu Phân',
+    'HAN_LU': 'Hàn Lộ', 'SHUANG_JIANG': 'Sương Giáng', 'LI_DONG': 'Lập Đông', 'XIAO_XUE': 'Tiểu Tuyết'
+};
+
 function calculateCanChi(dateInput) {
     let d = new Date(dateInput);
-    if (d.getHours() >= 23) d.setDate(d.getDate() + 1);
+    if (isNaN(d.getTime())) {
+        d = new Date();
+    }
 
-    const y = d.getFullYear();
-    const a = Math.floor((14 - (d.getMonth() + 1)) / 12);
-    const yJD = d.getFullYear() + 4800 - a;
-    const mJD = (d.getMonth() + 1) + 12 * a - 3;
-    const jd = d.getDate() + Math.floor((153 * mJD + 2) / 5) + 365 * yJD + Math.floor(yJD / 4) - Math.floor(yJD / 100) + Math.floor(yJD / 400) - 32045;
+    // Ưu tiên sử dụng thư viện Lunar (độ chính xác thiên văn Tử Kim Sơn chuẩn từng phút)
+    if (typeof Solar !== 'undefined' && typeof Lunar !== 'undefined') {
+        const msBeijing = d.getTime() + 8 * 3600 * 1000 + 59 * 1000;
+        const bDate = new Date(msBeijing);
+        const solar = Solar.fromYmdHms(
+            bDate.getUTCFullYear(),
+            bDate.getUTCMonth() + 1,
+            bDate.getUTCDate(),
+            bDate.getUTCHours(),
+            bDate.getUTCMinutes(),
+            bDate.getUTCSeconds()
+        );
+        const lunar = solar.getLunar();
+
+        const yGz = lunar.getYearInGanZhiExact();
+        const canNam = GAN_MAP_SIM[yGz[0]] || yGz[0];
+        const chiNam = ZHI_MAP_SIM[yGz[1]] || yGz[1];
+
+        const mGz = lunar.getMonthInGanZhiExact();
+        const canThang = GAN_MAP_SIM[mGz[0]] || mGz[0];
+        const chiThang = ZHI_MAP_SIM[mGz[1]] || mGz[1];
+
+        const prevJq = lunar.getPrevJieQi(false);
+        const rawJqName = prevJq ? prevJq.getName() : '';
+        const tietKhi = SOLAR_TERM_NAMES_VI_SIM[rawJqName] || rawJqName;
+
+        let dayCalc = new Date(d);
+        if (dayCalc.getHours() >= 23) {
+            dayCalc.setDate(dayCalc.getDate() + 1);
+        }
+
+        const y = dayCalc.getFullYear();
+        const a = Math.floor((14 - (dayCalc.getMonth() + 1)) / 12);
+        const yJD = y + 4800 - a;
+        const mJD = (dayCalc.getMonth() + 1) + 12 * a - 3;
+        const jd = dayCalc.getDate() + Math.floor((153 * mJD + 2) / 5) + 365 * yJD + Math.floor(yJD / 4) - Math.floor(yJD / 100) + Math.floor(yJD / 400) - 32045;
+
+        const canNgayIdx = (jd + 9) % 10;
+        const chiNgayIdx = (jd + 1) % 12;
+
+        let h = d.getHours();
+        const chiGioIdx = (h >= 23 || h < 1) ? 0 : Math.floor((h + 1) / 2) % 12;
+        const canGioIdx = (((canNgayIdx % 5) * 2) + chiGioIdx) % 10;
+
+        const diff = (chiNgayIdx - canNgayIdx + 12) % 12;
+        const tk1 = CHI[(diff - 2 + 12) % 12];
+        const tk2 = CHI[(diff - 1 + 12) % 12];
+
+        return {
+            nam: { can: canNam, chi: chiNam },
+            thang: { can: canThang, chi: chiThang, hanh: NGU_HANH_CHI[chiThang] },
+            ngay: { can: CAN[canNgayIdx], chi: CHI[chiNgayIdx], hanh: NGU_HANH_CHI[CHI[chiNgayIdx]] },
+            gio: { can: CAN[canGioIdx], chi: CHI[chiGioIdx] },
+            tuanKhong: [tk1, tk2],
+            tietKhi: tietKhi
+        };
+    }
+
+    // Dự phòng thuật toán Jean Meeus
+    let dayCalc = new Date(d);
+    if (dayCalc.getHours() >= 23) dayCalc.setDate(dayCalc.getDate() + 1);
+
+    const y = dayCalc.getFullYear();
+    const a = Math.floor((14 - (dayCalc.getMonth() + 1)) / 12);
+    const yJD = y + 4800 - a;
+    const mJD = (dayCalc.getMonth() + 1) + 12 * a - 3;
+    const jd = dayCalc.getDate() + Math.floor((153 * mJD + 2) / 5) + 365 * yJD + Math.floor(yJD / 4) - Math.floor(yJD / 100) + Math.floor(yJD / 400) - 32045;
 
     const canNgayIdx = (jd + 9) % 10;
     const chiNgayIdx = (jd + 1) % 12;

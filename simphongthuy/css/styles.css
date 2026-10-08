@@ -692,6 +692,22 @@ button.modal-close:active, .modal-close:active {
     font-weight: 700;
 }
 
+.hex-card-view .hex-watermark-note {
+    text-align: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    font-size: 14px;
+    color: #475569;
+    font-style: italic;
+    border-top: 1px dashed rgba(0, 0, 0, 0.25);
+}
+
+.hex-card-view .hex-watermark-note strong {
+    color: #b91c1c;
+    font-style: normal;
+    font-weight: 700;
+}
+
 .hex-card-view .hex-visual-section {
     display: flex;
     justify-content: center;

@@ -692,7 +692,8 @@ function generateMatchingSims(pattern, dateInput, gender, purpose, maxCount = 15
             results.push({
                 sim: candidate,
                 hexData,
-                evaluation: evalResult
+                evaluation: evalResult,
+                birthDateVal: dateInput
             });
         }
     }

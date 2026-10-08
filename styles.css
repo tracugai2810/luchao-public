@@ -789,22 +789,24 @@ body {
     color: #1a1a1a;
 }
 
-/* Capture Footer - Link lập quẻ */
+/* Capture Footer - Link lập quẻ (In nghiêng, viền nét đứt cân đối như Sim Phong Thủy) */
 #captureTarget .capture-footer {
     margin-top: 16px;
     padding-top: 12px;
-    border-top: 2px solid #888;
+    border-top: 1px dashed rgba(0, 0, 0, 0.25);
     text-align: center;
-    font-size: 21px;
-    font-weight: 700;
-    color: #000000;
-    letter-spacing: 0.5px;
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+    color: #475569;
+    letter-spacing: 0.3px;
 }
 
 #captureTarget .capture-footer strong {
-    color: #e60000;
-    font-weight: 800;
-    font-size: 22px;
+    color: #b91c1c;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
 }
 
 /* Zalo Contact Button */

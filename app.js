@@ -873,7 +873,7 @@ function renderCaptureHTML(data) {
         </div>
 
         <div class="capture-footer">
-            <span>Quẻ được lập tại: <strong>luchao.io.vn</strong></span>
+            Quẻ được lập tại: <strong>luchao.io.vn</strong>
         </div>
     `;
 }

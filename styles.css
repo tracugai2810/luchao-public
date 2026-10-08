@@ -789,13 +789,13 @@ body {
     color: #1a1a1a;
 }
 
-/* Capture Footer - Link lập quẻ (In nghiêng, viền nét đứt cân đối như Sim Phong Thủy) */
+/* Capture Footer - Link lập quẻ (In nghiêng, viền nét đứt cân đối bằng font trong lá quẻ 17px) */
 #captureTarget .capture-footer {
     margin-top: 16px;
     padding-top: 12px;
     border-top: 1px dashed rgba(0, 0, 0, 0.25);
     text-align: center;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 400;
     font-style: italic;
     color: #475569;
@@ -806,7 +806,7 @@ body {
     color: #b91c1c;
     font-weight: 700;
     font-style: normal;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 /* Zalo Contact Button */

@@ -257,12 +257,12 @@
 
                     <div class="form-group">
                         <label>👤 Giới tính:</label>
-                        <div style="display: flex; gap: 16px; align-items: center; height: 42px; padding-left: 4px;">
-                            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #f1f5f9; font-weight: 600;">
-                                <input type="radio" name="genderRadio" value="male" checked style="accent-color: #d97706; width: 16px; height: 16px;"> Nam
+                        <div class="gender-radio-group">
+                            <label class="gender-radio-label">
+                                <input type="radio" name="genderRadio" value="male" checked> Nam
                             </label>
-                            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #f1f5f9; font-weight: 600;">
-                                <input type="radio" name="genderRadio" value="female" style="accent-color: #d97706; width: 16px; height: 16px;"> Nữ
+                            <label class="gender-radio-label">
+                                <input type="radio" name="genderRadio" value="female"> Nữ
                             </label>
                         </div>
                     </div>
@@ -278,7 +278,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group" style="grid-column: span 3;">
+                    <div class="form-group full-width">
                         <label for="limitSelect">🔢 Số lượng SIM cần tìm:</label>
                         <select id="limitSelect" class="form-control" style="max-width: 380px;">
                             <option value="5" selected>Top 5 SIM Đại Cát</option>

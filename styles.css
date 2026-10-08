@@ -1559,6 +1559,30 @@ img:not(#generatedImage) {
     color: #ffffff;
 }
 
+/* ---- Unified Brand Footer ---- */
+.main-site-footer {
+    margin-top: 36px;
+    padding: 24px 16px;
+    text-align: center;
+    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+    color: var(--text-secondary, #94a3b8);
+    font-size: 0.85rem;
+}
+
+.main-site-footer p {
+    margin: 4px 0;
+}
+
+.main-site-footer a {
+    color: var(--accent-light, #fbbf24);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.main-site-footer a:hover {
+    text-decoration: underline;
+}
+
 /* ========================================
    MOBILE-FIRST OPTIMIZATION
    Touch Targets, Fast Tap Feedback & Responsive Layout

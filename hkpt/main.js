@@ -690,6 +690,7 @@
           files: [cachedChartFile],
           title: 'Tinh Bàn Phong Thủy'
         });
+        showToast('Đã chia sẻ / lưu ảnh thành công!');
         return;
       } catch (err) {
         if (err.name === 'AbortError') return; // User closed share sheet
@@ -758,6 +759,7 @@
             files: [file],
             title: title || 'Tinh Bàn Phong Thủy',
           });
+          showToast('Đã chia sẻ / lưu ảnh thành công!');
           return;
         }
       } catch (err) {
@@ -774,6 +776,7 @@
     link.rel = 'noopener';
     document.body.appendChild(link);
     link.click();
+    showToast('Đã tải ảnh về máy thành công!');
     setTimeout(() => {
       if (document.body.contains(link)) document.body.removeChild(link);
       if (blob) URL.revokeObjectURL(downloadUrl);
@@ -851,6 +854,7 @@
     }
   }
 
+  let toastTimer = null;
   function showToast(message) {
     let toast = document.querySelector('.toast');
     if (!toast) {
@@ -861,10 +865,12 @@
     toast.textContent = message;
     toast.classList.add('show');
     
-    setTimeout(() => {
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
       toast.classList.remove('show');
-    }, 2000);
+    }, 2500);
   }
+  window.showToast = showToast;
 
   function fallbackCopyText(text) {
     const textArea = document.createElement("textarea");

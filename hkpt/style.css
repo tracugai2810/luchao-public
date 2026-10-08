@@ -906,12 +906,13 @@ select.input-field {
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 600;
-  z-index: 9999;
+  z-index: 999999;
   opacity: 0;
   transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   white-space: nowrap;
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
 

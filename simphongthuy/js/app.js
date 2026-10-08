@@ -552,7 +552,7 @@ function openHexModalDesktopObject(item) {
                 const shareBtn = document.getElementById('btnMobileShareTrigger');
                 if (shareBtn) {
                     shareBtn.addEventListener('click', () => {
-                        triggerDirectShareOnUserGesture(canvas, formatSimNumber(item.sim));
+                        triggerDirectShareOnUserGesture(canvas, formatSimNumber(item.sim), dataUrl);
                     });
                 }
             }
@@ -564,41 +564,94 @@ function openHexModalDesktopObject(item) {
     }, 100);
 }
 
-function triggerDirectShareOnUserGesture(canvas, simNumber) {
-    const filename = `la-que-sim-${simNumber.replace(/[^0-9]/g, '')}-${Date.now()}.png`;
-
-    canvas.toBlob(blob => {
-        if (!blob) {
-            showToast("Không thể khởi tạo file ảnh.");
-            return;
+function dataURItoBlob(dataURI) {
+    try {
+        const parts = dataURI.split(',');
+        const byteString = atob(parts[1]);
+        const mimeString = parts[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
         }
-
-        const file = new File([blob], filename, { type: 'image/png' });
-
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            navigator.share({
-                files: [file],
-                title: `Lá Quẻ SIM Phong Thủy - ${simNumber}`,
-                text: `Lá quẻ Dịch Học SIM Phong Thủy SĐT: ${simNumber}`
-            }).then(() => {
-                showToast("Đã chia sẻ / lưu ảnh thành công!");
-            }).catch(err => {
-                if (err.name !== 'AbortError') {
-                    fallbackDownloadBlob(blob, filename);
-                }
-            });
-        } else {
-            fallbackDownloadBlob(blob, filename);
-        }
-    }, 'image/png');
+        return new Blob([ab], { type: mimeString });
+    } catch (e) {
+        console.warn('dataURItoBlob error:', e);
+        return null;
+    }
 }
 
-function fallbackDownloadBlob(blob, filename) {
+function triggerDirectShareOnUserGesture(canvas, simNumber, dataUrl) {
+    const filename = `la-que-sim-${simNumber.replace(/[^0-9]/g, '')}-${Date.now()}.png`;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    // 1. Dành riêng cho iPhone / iPad (iOS): Giữ nguyên 100% logic cũ (Share sheet -> Lưu hình ảnh vào Photos)
+    if (isIOS) {
+        canvas.toBlob(blob => {
+            if (!blob) {
+                showToast("Không thể khởi tạo file ảnh.");
+                return;
+            }
+
+            const file = new File([blob], filename, { type: 'image/png' });
+
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    files: [file],
+                    title: `Lá Quẻ SIM Phong Thủy - ${simNumber}`,
+                    text: `Lá quẻ Dịch Học SIM Phong Thủy SĐT: ${simNumber}`
+                }).then(() => {
+                    showToast("Đã chia sẻ / lưu ảnh thành công!");
+                }).catch(err => {
+                    if (err.name !== 'AbortError') {
+                        fallbackDownloadBlob(blob, filename, dataUrl);
+                    }
+                });
+            } else {
+                fallbackDownloadBlob(blob, filename, dataUrl);
+            }
+        }, 'image/png');
+        return;
+    }
+
+    // 2. Dành riêng cho Android (áp dụng Direct Download tương tự tab HKPT & Lục Hào): Tải trực tiếp file về máy
+    let blob = null;
+    if (dataUrl) {
+        blob = dataURItoBlob(dataUrl);
+    }
+
+    if (blob) {
+        fallbackDownloadBlob(blob, filename, dataUrl);
+    } else if (canvas && canvas.toBlob) {
+        canvas.toBlob(b => {
+            fallbackDownloadBlob(b, filename, dataUrl);
+        }, 'image/png');
+    } else {
+        fallbackDownloadBlob(null, filename, dataUrl);
+    }
+}
+
+function fallbackDownloadBlob(blob, filename, dataUrl) {
+    const downloadUrl = blob ? URL.createObjectURL(blob) : (dataUrl || '');
+    if (!downloadUrl) {
+        showToast("Không thể tải ảnh. Vui lòng thử lại!");
+        return;
+    }
     const link = document.createElement('a');
     link.download = filename;
-    link.href = URL.createObjectURL(blob);
+    link.href = downloadUrl;
+    link.rel = 'noopener';
+    document.body.appendChild(link);
     link.click();
-    setTimeout(() => URL.revokeObjectURL(link.href), 2500);
+    setTimeout(() => {
+        if (document.body.contains(link)) {
+            document.body.removeChild(link);
+        }
+        if (blob) {
+            URL.revokeObjectURL(downloadUrl);
+        }
+    }, 500);
     showToast(`Đã tải ảnh về máy thành công!`);
 }
 

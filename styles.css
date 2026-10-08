@@ -832,17 +832,11 @@ body {
     transform: translateY(-1px);
 }
 
-/* --- Security Optimizations --- */
+/* --- Thao tác tự nhiên (Cho phép copy, chọn văn bản tự nhiên) --- */
 body {
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
-}
-
-input, textarea {
-    -webkit-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
+    -webkit-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
 }
 
 img:not(#generatedImage) {
@@ -1906,9 +1900,9 @@ img:not(#generatedImage) {
    - Mobile: Nút Hamburger mở Drawer danh mục 4 môn mượt mà
    ======================================================= */
 .portal-nav {
-    position: sticky;
-    top: 0;
-    z-index: 10000;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10000 !important;
     background: linear-gradient(180deg, #18223c 0%, #0d1527 100%);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);

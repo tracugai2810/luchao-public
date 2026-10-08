@@ -30,7 +30,7 @@
 }
 
 html, body {
-    overflow-x: hidden !important;
+    overflow-x: clip !important;
     width: 100% !important;
     max-width: 100vw !important;
     position: relative;
@@ -1086,9 +1086,9 @@ button.modal-close:active, .modal-close:active {
    - Mobile: Nút Hamburger mở Drawer danh mục 4 môn mượt mà
    ======================================================= */
 .portal-nav {
-    position: sticky;
-    top: 0;
-    z-index: 10000;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10000 !important;
     background: linear-gradient(180deg, #18223c 0%, #0d1527 100%);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);

@@ -1078,3 +1078,95 @@ button.modal-close:active, .modal-close:active {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+/* =======================================================
+   PORTAL MULTI-TAB NAVIGATION BAR (Đồng nhất toàn web)
+   ======================================================= */
+.portal-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    padding: 8px 12px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+}
+
+.portal-nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.portal-nav-inner::-webkit-scrollbar {
+    display: none;
+}
+
+.portal-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    font-family: inherit;
+    text-decoration: none;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.portal-tab-btn:hover {
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.portal-tab-btn.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+    border-color: #ef4444;
+    box-shadow: 0 4px 14px rgba(185, 28, 28, 0.45);
+}
+
+.portal-tab-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+@media (max-width: 640px) {
+    .portal-nav {
+        padding: 6px 8px;
+        padding-left: max(8px, env(safe-area-inset-left));
+        padding-right: max(8px, env(safe-area-inset-right));
+    }
+    .portal-nav-inner {
+        justify-content: flex-start;
+        gap: 6px;
+    }
+    .portal-tab-btn {
+        padding: 7px 13px;
+        font-size: 0.85rem;
+        gap: 6px;
+    }
+    .portal-tab-icon {
+        font-size: 1.05rem;
+    }
+}

@@ -1093,7 +1093,7 @@
       const margin = Math.round(20 * scale);
 
       ctx.font = `700 ${fontSize}px "Inter", "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
-      const text = 'luchao.io.vn';
+      const text = 'luchao.io.vn/hkpt';
       const textMetrics = ctx.measureText(text);
       const textW = textMetrics.width;
 

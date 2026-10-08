@@ -9,6 +9,12 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-TDNVB7D6');</script>
     <!-- End Google Tag Manager -->
+    <script>
+        // Bảo vệ chống nhúng đúp trang chủ bên trong iframe
+        if (window.top !== window.self) {
+            window.top.location.href = window.location.href;
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Lập Quẻ Kinh Dịch Lục Hào, Tử Vi Lương Phái & Phong Thủy Online | luchao.io.vn</title>
@@ -260,22 +266,22 @@
         <!-- Top Portal Multi-Tab Navigation (4 Môn Huyền Học) -->
         <nav id="portal-nav" class="portal-nav" aria-label="Menu Huyền Học">
             <div class="portal-nav-inner">
-                <button type="button" class="portal-tab-btn active" data-tab="luchao" onclick="switchPortalTab('luchao')">
+                <a href="/" class="portal-tab-btn active" title="Lập Quẻ Kinh Dịch Lục Hào">
                     <span class="portal-tab-icon">🔮</span>
                     <span class="portal-tab-text">Lục Hào</span>
-                </button>
-                <button type="button" class="portal-tab-btn" data-tab="tuvi" onclick="switchPortalTab('tuvi')">
+                </a>
+                <a href="/tu-vi/" class="portal-tab-btn" title="Lập Lá Số Tử Vi Lương Phái">
                     <span class="portal-tab-icon">📜</span>
                     <span class="portal-tab-text">Tử Vi</span>
-                </button>
-                <button type="button" class="portal-tab-btn" data-tab="hkpt" onclick="switchPortalTab('hkpt')">
+                </a>
+                <a href="/hkpt/" class="portal-tab-btn" title="Lập Tinh Bàn Phong Thủy Huyền Không Phi Tinh">
                     <span class="portal-tab-icon">🧭</span>
                     <span class="portal-tab-text">Phong Thủy HKPT</span>
-                </button>
-                <button type="button" class="portal-tab-btn" data-tab="sim" onclick="switchPortalTab('sim')">
+                </a>
+                <a href="/simphongthuy/" class="portal-tab-btn" title="Tra Cứu & Gợi Ý Sim Phong Thủy">
                     <span class="portal-tab-icon">📱</span>
                     <span class="portal-tab-text">Sim Phong Thủy</span>
-                </button>
+                </a>
             </div>
         </nav>
 
@@ -524,65 +530,7 @@
     </div> <!-- end app-container -->
     </div> <!-- end portal-tab-luchao -->
 
-    <!-- TAB 2: TỬ VI (Isolated Iframe Container) -->
-    <div id="portal-tab-tuvi" class="portal-tab-panel" style="display: none;">
-        <iframe id="iframe-tuvi" class="portal-iframe" data-src="/tu-vi/" title="Tử Vi Đẩu Số Lương Phái"></iframe>
-    </div>
-
-    <!-- TAB 3: PHONG THỦY HKPT (Isolated Iframe Container) -->
-    <div id="portal-tab-hkpt" class="portal-tab-panel" style="display: none;">
-        <iframe id="iframe-hkpt" class="portal-iframe" data-src="/hkpt/" title="Huyền Không Phi Tinh"></iframe>
-    </div>
-
-    <!-- TAB 4: SIM PHONG THỦY (Isolated Iframe Container) -->
-    <div id="portal-tab-sim" class="portal-tab-panel" style="display: none;">
-        <iframe id="iframe-sim" class="portal-iframe" data-src="/simphongthuy/" title="Sim Phong Thủy"></iframe>
-    </div>
-
     </div> <!-- end app-main-content -->
-
-    <!-- Portal Tab Controller Script -->
-    <script>
-    function switchPortalTab(tabKey) {
-        var tabs = ['luchao', 'tuvi', 'hkpt', 'sim'];
-        if (tabs.indexOf(tabKey) === -1) return;
-
-        // 1. Cập nhật nút active
-        document.querySelectorAll('.portal-tab-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.tab === tabKey);
-        });
-
-        // 2. Chuyển đổi hiển thị panel
-        tabs.forEach(function(key) {
-            var panel = document.getElementById('portal-tab-' + key);
-            if (!panel) return;
-            if (key === tabKey) {
-                panel.style.display = 'block';
-                // Lazy load iframe nếu chưa nạp src
-                var iframe = panel.querySelector('iframe');
-                if (iframe && iframe.dataset.src && (!iframe.getAttribute('src') || iframe.getAttribute('src') === '')) {
-                    iframe.src = iframe.dataset.src;
-                }
-            } else {
-                panel.style.display = 'none';
-            }
-        });
-
-        try {
-            sessionStorage.setItem('portal_active_tab', tabKey);
-        } catch (e) {}
-    }
-
-    // Khôi phục tab khi reload
-    document.addEventListener('DOMContentLoaded', function() {
-        try {
-            var savedTab = sessionStorage.getItem('portal_active_tab');
-            if (savedTab && savedTab !== 'luchao') {
-                switchPortalTab(savedTab);
-            }
-        } catch (e) {}
-    });
-    </script>
 
     <!-- Auth Module (Deferred) -->
     <script src="auth.js?v=2.0"></script>

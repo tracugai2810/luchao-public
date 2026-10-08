@@ -419,7 +419,6 @@ function buildHexCardHTML(item) {
                     <div class="info-line"><strong>SIM Chọn:</strong> <span class="highlight" style="font-size:18px;">${formatSimNumber(sim)}</span></div>
                     ${formattedBirthDate ? `
                     <div class="info-line"><strong>Ngày giờ:</strong> <span class="highlight">${formattedBirthDate}</span></div>
-                    <div class="info-line"><strong>Can chi:</strong> <span class="highlight">${hexData.dateInfo.fullCanChi}</span></div>
                     ` : ''}
                     <div class="info-line"><strong>Mục đích cầu:</strong> <span class="highlight">${purposeDisplay}</span></div>
                     <div class="info-line"><strong>Tuần Không:</strong> <span class="highlight">${hexData.dateInfo.tuanKhong}</span></div>
@@ -487,7 +486,7 @@ function buildHexCardHTML(item) {
 
             <!-- Watermark Chú Thích Bản Quyền -->
             <div class="hex-watermark-note">
-                Quẻ SĐT được lập tại: <strong>luchao.io.vn</strong>
+                Quẻ SĐT được lập tại: <strong>luchao.io.vn/simphongthuy</strong>
             </div>
         </div>
     `;

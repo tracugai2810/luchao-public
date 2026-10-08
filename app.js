@@ -662,17 +662,30 @@ function processDivination() {
     const isMaiHoa = (currentTab === 'serial' || currentTab === 'number');
     currentHexData = calculateHexagramData(lines, calendar, methodText, formattedDate, isMaiHoa);
 
-    // Show loading
-    document.getElementById('loading-overlay').classList.add('visible');
-
     // Render HTML for capture
     renderCaptureHTML(currentHexData);
 
-    // Capture image after a short delay to ensure rendering
-    // Capture image after a short delay to ensure rendering
-    setTimeout(() => {
+    // Hiển thị ngay khung kết quả tức thì (0ms) và cuộn nhẹ tới kết quả
+    const resultSec = document.getElementById('resultSection');
+    if (resultSec) {
+        resultSec.classList.add('visible');
+        resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const imageDisplay = document.getElementById('imageDisplay');
+    if (imageDisplay) {
+        imageDisplay.innerHTML = `
+            <div style="text-align:center; padding: 36px 20px;">
+                <div class="spinner" style="width:38px; height:38px; border-width:3px; margin: 0 auto 12px;"></div>
+                <div style="color: var(--gold-glow); font-size: 15px; font-weight: 600;">Đang tạo hình ảnh lá quẻ...</div>
+            </div>
+        `;
+    }
+
+    // Capture image với độ trễ tối thiểu
+    requestAnimationFrame(() => {
         captureAndDisplayImage();
-    }, 100);
+    });
 }
 
 
@@ -782,7 +795,7 @@ function renderCaptureHTML(data) {
         <div class="info-header">
             <div class="info-content">
                 <div class="info-line"><strong>Ngày giờ:</strong> ${data.formattedDate} &nbsp;&nbsp;&nbsp;&nbsp; <strong>Phương pháp:</strong> ${methodText}</div>
-                <div class="info-line"><strong>Can chi:</strong> ${dateInfo.fullCanChi}</div>
+                <div class="info-line"><strong>Can chi:</strong> ${dateInfo.fullCanChi}${dateInfo.tietKhi ? ` &nbsp;&nbsp;&nbsp;&nbsp; <strong>Tiết khí:</strong> <span style="font-weight: normal;">${dateInfo.tietKhi}</span>` : ''}</div>
                 <div class="info-line info-question"><strong>Việc cần xem:</strong> ${questionText}</div>
                 <div class="info-line"><strong>Hào tâm:</strong> <span class="highlight">${dateInfo.haoTam}</span> &nbsp;&nbsp;&nbsp;&nbsp; <strong>Tuần Không:</strong> <span class="highlight">${dateInfo.tuanKhong}</span></div>
                 <div class="info-line"><strong>Nhật Thần:</strong> <span class="highlight">${dateInfo.nhatThan}</span> &nbsp;&nbsp;&nbsp;&nbsp; <strong>Nguyệt Lệnh:</strong> <span class="highlight">${dateInfo.nguyetLenh}</span></div>
@@ -878,9 +891,11 @@ function captureAndDisplayImage() {
     captureArea.style.opacity = '0.01';
 
     html2canvas(target, {
-        scale: 1.5,
-        useCORS: true,
-        logging: false
+        scale: 1.25,
+        useCORS: false,
+        logging: false,
+        imageTimeout: 0,
+        removeContainer: true
     }).then(canvas => {
         // Hide capture area again
         captureArea.style.position = 'absolute';
@@ -892,19 +907,19 @@ function captureAndDisplayImage() {
 
         // Display image
         const imageDisplay = document.getElementById('imageDisplay');
-        imageDisplay.innerHTML = '';
+        if (imageDisplay) {
+            imageDisplay.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = currentImageDataUrl;
+            img.alt = 'Kết quả quẻ Lục Hào';
+            imageDisplay.appendChild(img);
+        }
 
-        const img = document.createElement('img');
-        img.src = currentImageDataUrl;
-        img.alt = 'Kết quả quẻ Lục Hào';
-        imageDisplay.appendChild(img);
+        const loadingOverlay = document.getElementById('loading-overlay');
+        if (loadingOverlay) loadingOverlay.classList.remove('visible');
 
-        // Hide loading, show result
-        document.getElementById('loading-overlay').classList.remove('visible');
-        document.getElementById('resultSection').classList.add('visible');
-
-        // Scroll to result
-        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const resultSec = document.getElementById('resultSection');
+        if (resultSec) resultSec.classList.add('visible');
 
     }).catch(err => {
         console.error('html2canvas error:', err);
@@ -914,10 +929,13 @@ function captureAndDisplayImage() {
         captureArea.style.left = '-9999px';
         captureArea.style.opacity = '1';
 
-        // Hide loading
-        document.getElementById('loading-overlay').classList.remove('visible');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        if (loadingOverlay) loadingOverlay.classList.remove('visible');
 
-        alert('Có lỗi khi tạo ảnh. Vui lòng thử lại!');
+        const imageDisplay = document.getElementById('imageDisplay');
+        if (imageDisplay) {
+            imageDisplay.innerHTML = `<p style="color:#ef4444; text-align:center; padding:20px;">Có lỗi khi tạo ảnh. Vui lòng bấm Lập Quẻ lại!</p>`;
+        }
     });
 }
 

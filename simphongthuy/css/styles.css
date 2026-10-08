@@ -45,7 +45,7 @@ body {
     line-height: 1.5;
     min-height: 100vh;
     /* BASE: Mobile */
-    padding-top: 10px;
+    padding-top: 0;
     padding-bottom: 40px;
 }
 
@@ -64,7 +64,7 @@ input, select, textarea {
     max-width: 980px;
     margin: 0 auto;
     /* BASE: Mobile */
-    padding: 0 10px;
+    padding: 14px 10px 0;
     width: 100%;
     box-sizing: border-box;
 }
@@ -1080,70 +1080,80 @@ button.modal-close:active, .modal-close:active {
 }
 
 /* =======================================================
-   PORTAL MULTI-TAB NAVIGATION BAR (Đồng nhất toàn web)
+   PORTAL MULTI-TAB NAVIGATION & MOBILE OFF-CANVAS DRAWER
+   Tích hợp đồng nhất 4 môn: Lục Hào - Tử Vi - HKPT - Sim Phong Thủy
+   - PC: 4 Tab căn giữa sang trọng, nền gradient huyền học, viền vàng kim, không thuần đen
+   - Mobile: Nút Hamburger mở Drawer danh mục 4 môn mượt mà
    ======================================================= */
 .portal-nav {
     position: sticky;
     top: 0;
     z-index: 10000;
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    padding: 8px 12px;
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
+    background: linear-gradient(180deg, #18223c 0%, #0d1527 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(245, 158, 11, 0.28);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    padding: 8px 16px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
 }
 
-.portal-nav-inner {
-    max-width: 1200px;
-    margin: 0 auto;
+/* --- Desktop Navigation (>= 769px) --- */
+.portal-desktop-nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.portal-nav-inner::-webkit-scrollbar {
-    display: none;
+.portal-tabs-track {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(10, 16, 30, 0.65);
+    padding: 5px 8px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 .portal-tab-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 9px 18px;
+    padding: 7px 18px;
     font-size: 0.92rem;
     font-weight: 600;
     font-family: inherit;
-    text-decoration: none;
-    color: #94a3b8;
-    background: rgba(255, 255, 255, 0.05);
+    text-decoration: none !important;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 9999px;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
     user-select: none;
     flex-shrink: 0;
 }
 
 .portal-tab-btn:hover {
-    color: #f8fafc;
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(217, 119, 6, 0.22) 0%, rgba(180, 83, 9, 0.12) 100%);
+    border-color: rgba(245, 158, 11, 0.5);
     transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.2);
 }
 
 .portal-tab-btn.active {
     color: #ffffff;
-    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-    border-color: #ef4444;
-    box-shadow: 0 4px 14px rgba(185, 28, 28, 0.45);
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    border: 1px solid #ef4444;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    font-weight: 700;
 }
 
 .portal-tab-icon {
@@ -1151,22 +1161,308 @@ button.modal-close:active, .modal-close:active {
     line-height: 1;
 }
 
-@media (max-width: 640px) {
+.portal-tab-text {
+    letter-spacing: 0.2px;
+}
+
+/* --- Mobile Bar (< 769px) --- */
+.portal-mobile-bar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.portal-mobile-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none !important;
+    color: #f8fafc;
+    font-weight: 800;
+    font-size: 1.02rem;
+    letter-spacing: 0.3px;
+    min-height: 38px;
+}
+
+.mobile-brand-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.mobile-brand-title {
+    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 60%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    font-size: 1.02rem;
+}
+
+.portal-hamburger-btn {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4.5px;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 9px;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.portal-hamburger-btn:active {
+    background: rgba(255, 255, 255, 0.16);
+    transform: scale(0.95);
+}
+
+.hamburger-bar {
+    display: block;
+    width: 19px;
+    height: 2px;
+    background: #f8fafc;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+}
+
+.portal-hamburger-btn.open .hamburger-bar:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+}
+
+.portal-hamburger-btn.open .hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.portal-hamburger-btn.open .hamburger-bar:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* --- Mobile Drawer Backdrop --- */
+.portal-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 100000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.portal-drawer-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- Mobile Slide-in Drawer --- */
+.portal-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 86vw);
+    background: linear-gradient(180deg, #141c2f 0%, #0c1220 100%);
+    border-left: 1px solid rgba(245, 158, 11, 0.3);
+    box-shadow: -8px 0 35px rgba(0, 0, 0, 0.75);
+    z-index: 100001;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.portal-drawer.open {
+    transform: translateX(0);
+}
+
+.portal-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(20, 28, 48, 0.95);
+}
+
+.drawer-header-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fbbf24;
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+.drawer-header-icon {
+    font-size: 1.25rem;
+}
+
+.drawer-close-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.drawer-close-btn:hover,
+.drawer-close-btn:active {
+    color: #ffffff;
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.portal-drawer-body {
+    padding: 16px 14px;
+    flex: 1;
+}
+
+.drawer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.drawer-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    text-decoration: none !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #e2e8f0;
+}
+
+.drawer-item:hover,
+.drawer-item:active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(245, 158, 11, 0.35);
+    transform: translateX(2px);
+}
+
+.drawer-item.active {
+    background: linear-gradient(135deg, rgba(185, 28, 28, 0.35) 0%, rgba(153, 27, 27, 0.18) 100%);
+    border: 1.5px solid #ef4444;
+    box-shadow: 0 4px 14px rgba(185, 28, 28, 0.35);
+}
+
+.drawer-item-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.drawer-item-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.drawer-item-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.drawer-item.active .drawer-item-title {
+    color: #ffffff;
+}
+
+.drawer-item-desc {
+    font-size: 0.76rem;
+    color: #94a3b8;
+    line-height: 1.3;
+}
+
+.drawer-item-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 6px;
+    padding: 2px 7px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.drawer-item-arrow {
+    color: #64748b;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.portal-drawer-footer {
+    padding: 14px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(20, 28, 48, 0.95);
+}
+
+.drawer-contact-card {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawer-contact-card a {
+    color: #fbbf24;
+    font-size: 0.92rem;
+    text-decoration: none !important;
+}
+
+/* --- Responsive Breakpoints --- */
+@media (max-width: 768px) {
+    .portal-desktop-nav {
+        display: none !important;
+    }
+    .portal-mobile-bar {
+        display: flex !important;
+    }
     .portal-nav {
-        padding: 6px 8px;
-        padding-left: max(8px, env(safe-area-inset-left));
-        padding-right: max(8px, env(safe-area-inset-right));
+        padding: 7px 12px;
     }
-    .portal-nav-inner {
-        justify-content: flex-start;
-        gap: 6px;
+}
+
+@media (min-width: 769px) {
+    .portal-desktop-nav {
+        display: flex !important;
     }
-    .portal-tab-btn {
-        padding: 7px 13px;
-        font-size: 0.85rem;
-        gap: 6px;
+    .portal-mobile-bar {
+        display: none !important;
     }
-    .portal-tab-icon {
-        font-size: 1.05rem;
+    .portal-drawer,
+    .portal-drawer-backdrop {
+        display: none !important;
     }
 }

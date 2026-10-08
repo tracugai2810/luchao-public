@@ -265,36 +265,99 @@
 
         <!-- Top Portal Multi-Tab Navigation (4 Môn Huyền Học) -->
         <nav id="portal-nav" class="portal-nav" aria-label="Menu Huyền Học">
-            <div class="portal-nav-inner">
-                <a href="/" class="portal-tab-btn active" title="Lập Quẻ Kinh Dịch Lục Hào">
-                    <span class="portal-tab-icon">🔮</span>
-                    <span class="portal-tab-text">Lục Hào</span>
+            <!-- Desktop: 4 tabs căn giữa sang trọng -->
+            <div class="portal-desktop-nav">
+                <div class="portal-tabs-track">
+                    <a href="/" class="portal-tab-btn active" title="Lập Quẻ Kinh Dịch Lục Hào">
+                        <span class="portal-tab-icon">🔮</span>
+                        <span class="portal-tab-text">Lục Hào</span>
+                    </a>
+                    <a href="/tu-vi/" class="portal-tab-btn" title="Lập Lá Số Tử Vi Lương Phái">
+                        <span class="portal-tab-icon">📜</span>
+                        <span class="portal-tab-text">Tử Vi</span>
+                    </a>
+                    <a href="/hkpt/" class="portal-tab-btn" title="Lập Tinh Bàn Phong Thủy Huyền Không Phi Tinh">
+                        <span class="portal-tab-icon">🧭</span>
+                        <span class="portal-tab-text">Phong Thủy HKPT</span>
+                    </a>
+                    <a href="/simphongthuy/" class="portal-tab-btn" title="Tra Cứu & Gợi Ý Sim Phong Thủy">
+                        <span class="portal-tab-icon">📱</span>
+                        <span class="portal-tab-text">Sim Phong Thủy</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile: Tiêu đề môn bên trái + Nút Hamburger bên phải -->
+            <div class="portal-mobile-bar">
+                <a href="/" class="portal-mobile-brand" title="Trang chủ Lục Hào">
+                    <span class="mobile-brand-icon">🔮</span>
+                    <span class="mobile-brand-title">Lục Hào Online</span>
                 </a>
-                <a href="/tu-vi/" class="portal-tab-btn" title="Lập Lá Số Tử Vi Lương Phái">
-                    <span class="portal-tab-icon">📜</span>
-                    <span class="portal-tab-text">Tử Vi</span>
-                </a>
-                <a href="/hkpt/" class="portal-tab-btn" title="Lập Tinh Bàn Phong Thủy Huyền Không Phi Tinh">
-                    <span class="portal-tab-icon">🧭</span>
-                    <span class="portal-tab-text">Phong Thủy HKPT</span>
-                </a>
-                <a href="/simphongthuy/" class="portal-tab-btn" title="Tra Cứu & Gợi Ý Sim Phong Thủy">
-                    <span class="portal-tab-icon">📱</span>
-                    <span class="portal-tab-text">Sim Phong Thủy</span>
-                </a>
+                <button type="button" class="portal-hamburger-btn" id="portal-hamburger-btn" aria-label="Menu chuyển môn" aria-expanded="false">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
             </div>
         </nav>
+
+        <!-- Mobile Off-Canvas Drawer (Trượt mở từ bên phải) -->
+        <div id="portal-drawer-backdrop" class="portal-drawer-backdrop"></div>
+        <div id="portal-drawer" class="portal-drawer" aria-label="Danh mục môn Huyền Học">
+            <div class="portal-drawer-header">
+                <div class="drawer-header-brand">
+                    <span class="drawer-header-icon">☯</span>
+                    <span class="drawer-header-title">CHỌN MÔN HUYỀN HỌC</span>
+                </div>
+                <button type="button" class="drawer-close-btn" id="portal-drawer-close" aria-label="Đóng menu">✕</button>
+            </div>
+            <div class="portal-drawer-body">
+                <div class="drawer-list">
+                    <a href="/" class="drawer-item active">
+                        <div class="drawer-item-icon">🔮</div>
+                        <div class="drawer-item-info">
+                            <div class="drawer-item-title">Lục Hào Kinh Dịch</div>
+                            <div class="drawer-item-desc">Gieo quẻ 3 đồng xu &amp; Seri tiền</div>
+                        </div>
+                        <span class="drawer-item-badge">Đang xem</span>
+                    </a>
+                    <a href="/tu-vi/" class="drawer-item">
+                        <div class="drawer-item-icon">📜</div>
+                        <div class="drawer-item-info">
+                            <div class="drawer-item-title">Tử Vi Lương Phái</div>
+                            <div class="drawer-item-desc">Phi tinh tứ hóa 12 cung chức</div>
+                        </div>
+                        <span class="drawer-item-arrow">›</span>
+                    </a>
+                    <a href="/hkpt/" class="drawer-item">
+                        <div class="drawer-item-icon">🧭</div>
+                        <div class="drawer-item-info">
+                            <div class="drawer-item-title">Phong Thủy HKPT</div>
+                            <div class="drawer-item-desc">Huyền Không Phi Tinh &amp; Tinh bàn</div>
+                        </div>
+                        <span class="drawer-item-arrow">›</span>
+                    </a>
+                    <a href="/simphongthuy/" class="drawer-item">
+                        <div class="drawer-item-icon">📱</div>
+                        <div class="drawer-item-info">
+                            <div class="drawer-item-title">Sim Phong Thủy</div>
+                            <div class="drawer-item-desc">Tra cứu SĐT theo giờ sinh</div>
+                        </div>
+                        <span class="drawer-item-arrow">›</span>
+                    </a>
+                </div>
+            </div>
+            <div class="portal-drawer-footer">
+                <div class="drawer-contact-card">
+                    <span>Admin hỗ trợ &amp; tư vấn:</span>
+                    <a href="https://zalo.me/0396154013" target="_blank" rel="noopener noreferrer">💬 Zalo: <strong>0396.154.013</strong></a>
+                </div>
+            </div>
+        </div>
 
         <!-- TAB 1: LỤC HÀO -->
         <div id="portal-tab-luchao" class="portal-tab-panel">
             <div class="app-container">
-                <!-- Header -->
-                <header class="app-header">
-            <div class="header-content">
-                <div class="logo">☰</div>
-                <h1>Lập Quẻ Lục Hào</h1>
-            </div>
-        </header>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -540,6 +603,9 @@
 
     <!-- Main JavaScript App (Deferred for zero render-blocking) -->
     <script src="app.js?v=2.0" defer></script>
+
+    <!-- Portal Navigation & Mobile Drawer Controller -->
+    <script src="portal-nav.js" defer></script>
 </body>
 
 </html>

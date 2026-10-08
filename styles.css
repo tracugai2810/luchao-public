@@ -1462,12 +1462,14 @@ img:not(#generatedImage) {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     padding: 14px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor: default;
 }
 
 .seo-card:hover {
     border-color: var(--accent);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 14px rgba(217, 119, 6, 0.2);
 }
 
 .seo-card h3 {
@@ -1534,12 +1536,14 @@ img:not(#generatedImage) {
     border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
     border-radius: var(--radius-sm, 8px);
     padding: 14px 16px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor: default;
 }
 
 .authority-card:hover {
     border-color: var(--accent-color, #d97706);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 14px rgba(217, 119, 6, 0.2);
 }
 
 .authority-card h4 {
@@ -1567,10 +1571,17 @@ img:not(#generatedImage) {
     border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
     color: var(--text-secondary, #94a3b8);
     font-size: 0.85rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
 }
 
 .main-site-footer p {
     margin: 4px 0;
+}
+
+.main-site-footer strong {
+    color: #e2e8f0;
+    font-weight: 700;
 }
 
 .main-site-footer a {

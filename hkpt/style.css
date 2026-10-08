@@ -4554,6 +4554,14 @@ select.input-field {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 16px;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  cursor: default;
+}
+
+.hkpt-seo-card:hover {
+  border-color: #d97706;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 14px rgba(217, 119, 6, 0.2);
 }
 
 .hkpt-seo-card h4 {
@@ -4575,11 +4583,27 @@ select.input-field {
   padding: 24px 16px;
   text-align: center;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  color: #64748b;
-  font-size: 0.84rem;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+.hkpt-footer p {
+  margin: 4px 0;
+}
+
+.hkpt-footer strong {
+  color: #e2e8f0;
+  font-weight: 700;
 }
 
 .hkpt-footer a {
   color: #fbbf24;
   text-decoration: none;
+  font-weight: 600;
+}
+
+.hkpt-footer a:hover {
+  text-decoration: underline;
 }

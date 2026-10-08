@@ -1376,15 +1376,16 @@ function downloadImage() {
     const timestamp = new Date().toISOString().slice(0, 10);
     const filename = `luchao_${timestamp}.png`;
 
-    // Detect if mobile device
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    // Only iPhone / iPad uses Web Share API so user can save directly to Photos
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     // Convert base64 to blob
     fetch(currentImageDataUrl)
         .then(res => res.blob())
         .then(blob => {
-            if (isMobile && navigator.share && navigator.canShare) {
-                // Mobile: Try Web Share API first
+            if (isIOS && navigator.share && navigator.canShare) {
+                // iOS: Try Web Share API first
                 const file = new File([blob], filename, { type: 'image/png' });
                 const shareData = { files: [file] };
 
@@ -1399,7 +1400,7 @@ function downloadImage() {
                 }
             }
 
-            // Desktop and fallback: Direct download
+            // Android, Desktop and fallback: Direct download
             fallbackDownload(blob, filename);
             showToast('Đã tải ảnh thành công!');
         })

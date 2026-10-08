@@ -93,10 +93,33 @@ html, body {
     }
     initDrawer();
   }
+
   ensureNav();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', ensureNav);
   }
   window.addEventListener('load', ensureNav);
+
+  // Bảo vệ menu vĩnh viễn chống lại việc React Client Re-render / Hydration xóa DOM
+  try {
+    var navObserver = new MutationObserver(function() {
+      if (!document.getElementById('portal-nav')) {
+        ensureNav();
+      }
+    });
+    if (document.body) {
+      navObserver.observe(document.body, { childList: true });
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        if (document.body) navObserver.observe(document.body, { childList: true });
+      });
+    }
+  } catch (e) {}
+
+  document.addEventListener('click', function() {
+    setTimeout(ensureNav, 50);
+  });
+  window.addEventListener('popstate', ensureNav);
+  setInterval(ensureNav, 500);
 })();
 </script></body></html>

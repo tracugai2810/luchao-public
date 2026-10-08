@@ -1510,6 +1510,55 @@ img:not(#generatedImage) {
     color: var(--text-secondary);
 }
 
+/* ---- SEO E-E-A-T Academic Heritage Section ---- */
+.seo-authority {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.seo-authority h3 {
+    font-size: 1.1rem;
+    color: var(--accent-light, #fbbf24);
+    margin-bottom: 14px;
+}
+
+.authority-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+
+.authority-card {
+    background: var(--bg-main, #0f172a);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: var(--radius-sm, 8px);
+    padding: 14px 16px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.authority-card:hover {
+    border-color: var(--accent-color, #d97706);
+    transform: translateY(-2px);
+}
+
+.authority-card h4 {
+    font-size: 0.95rem;
+    color: #fef08a;
+    margin: 0 0 8px 0;
+}
+
+.authority-card p {
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--text-secondary, #94a3b8);
+    margin: 0;
+}
+
+.authority-card strong {
+    color: #ffffff;
+}
+
 /* ========================================
    MOBILE-FIRST OPTIMIZATION
    Touch Targets, Fast Tap Feedback & Responsive Layout

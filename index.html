@@ -35,6 +35,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Lục Hào">
 
     <!-- Image link for search engines & Schema -->
     <link rel="image_src" href="https://luchao.io.vn/banner.jpg">
@@ -114,16 +119,36 @@
           "operatingSystem": "All",
           "browserRequirements": "Requires JavaScript",
           "featureList": [
-            "Lập quẻ Kinh Dịch Lục Hào (Gieo xu, Seri tiền, Chọn số ngẫu nhiên)",
-            "Lập lá số Tử Vi Bắc Phái (Phi Tinh Tứ Hóa 12 Cung, Song Lộc, Chuyển Kỵ)",
-            "Phong Thủy Huyền Không Phi Tinh (Hạ Quái, Thế Quái, Thước La Bàn Vệ Tinh)",
-            "Tra cứu & Đãi lọc SIM Phong Thủy Lục Hào theo giờ sinh chuẩn thiên văn"
+            "Lập quẻ Kinh Dịch Lục Hào (Hệ thống Chu Thần Bân Dịch Bốc)",
+            "Lập lá số Tử Vi Bắc Phái Phi Tinh (Hệ thống Lương Nhược Du Lương Phái)",
+            "Phong Thủy Huyền Không Phi Tinh Vận 9 (Thẩm Thị Huyền Không Học)",
+            "Tra cứu & Đãi lọc SIM Phong Thủy Bát Tự Dụng Thần (Chu Thần Bân)"
           ],
           "author": {
             "@type": "Organization",
             "name": "Lục Hào Kinh Dịch - luchao.io.vn",
             "url": "https://luchao.io.vn/"
           },
+          "isBasedOn": [
+            {
+              "@type": "CreativeWork",
+              "name": "Chu Thần Bân Dịch Học & Lục Hào Dự Đoán Học",
+              "author": "Chu Thần Bân",
+              "description": "Nền tảng phương pháp luận an quẻ Lục Hào, Thần Dụng và thẩm định SIM Phong Thủy Bát Tự"
+            },
+            {
+              "@type": "CreativeWork",
+              "name": "Tử Vi Đẩu Số Bắc Phái Phi Tinh (Lương Phái)",
+              "author": "Lương Nhược Du",
+              "description": "Nền tảng Khí hóa Tứ Hóa, phi tinh chuyển Kỵ 12 cung chức năng và nhân quả đại vận"
+            },
+            {
+              "@type": "CreativeWork",
+              "name": "Thẩm Thị Huyền Không Học",
+              "author": "Thẩm Trúc Nhưng",
+              "description": "Nền tảng khởi vận tinh, phi tinh Sơn - Hướng thuận nghịch 24 Sơn Hướng Vận 9 (2024 - 2043)"
+            }
+          ],
           "image": "https://luchao.io.vn/banner.jpg"
         }
       ]
@@ -137,26 +162,34 @@
       "mainEntity": [
         {
           "@type": "Question",
+          "name": "Lập quẻ Kinh Dịch Lục Hào và SIM Phong Thủy trên website dựa trên phương pháp luận nào?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Công cụ Lục Hào và SIM Phong Thủy kế thừa hệ thống Dịch Bốc học thuật của Chu Thần Bân, kết hợp nạp Giáp chính tông, Âm Dương Ngũ Hành, Thần Dụng và Bát Tự Dụng Thần để đưa ra kết quả dự đoán chuẩn xác."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Lá số Tử Vi trên luchao.io.vn an sao và phi tinh theo trường phái nào?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Lá số Tử Vi được xây dựng chuẩn xác theo Bắc Phái Phi Tinh của Đại sư Lương Nhược Du (Lương Phái), chú trọng cơ chế Khí hóa Tứ Hóa (Lộc, Quyền, Khoa, Kỵ), phi cung chuyển Kỵ 12 cung và tương tác Tiên Thiên - Đại Hạn - Lưu Niên."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Tinh bàn Phong Thủy Huyền Không trên website áp dụng quy tắc nào?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hệ thống lập tinh bàn Huyền Không Phi Tinh kế thừa tác phẩm kinh điển Thẩm Thị Huyền Không Học của Thẩm Trúc Nhưng, chuyên sâu Vận 9 (2024 - 2043), phân định Hạ Quái và Thế Quái (Kiêm Hướng) chuẩn xác 24 Sơn Hướng."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Lập quẻ Kinh Dịch Lục Hào trên luchao.io.vn có chính xác không?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Hoàn toàn chính xác. Ứng dụng tự động quy đổi thời gian Dương lịch sang Can Chi Ngày, Tháng, Năm, Giờ và Tiết khí mặt trời chuẩn xác theo lịch thiên văn. Hệ thống an quẻ 100% theo đúng quy luật cổ thư Lục Hào Dự Đoán Học, Nạp Giáp 64 quẻ, an Thế Ứng, Lục Thân, Lục Thú, Phản Ngâm và Phục Ngâm linh ứng."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Các phương pháp gieo quẻ trên luchao.io.vn gồm những gì?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Website hỗ trợ 3 phương pháp gieo quẻ chính: 1. Gieo 3 đồng xu thủ công 6 lần. 2. Nhập số Seri tờ tiền để tính quẻ theo Mai Hoa Dịch Số. 3. Chọn 3 số ngẫu nhiên (Thượng quái, Hạ quái, Hào động)."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Gieo quẻ bằng Seri tiền có chính xác không?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Phương pháp gieo quẻ bằng Seri tiền là ứng dụng của triết lý Vạn Vật Hữu Tượng trong Mai Hoa Dịch Số. Con số Seri trên tờ tiền tại thời điểm tâm niệm mang năng lượng thông tin linh ứng cho sự việc cần hỏi."
+            "text": "Hoàn toàn chính xác. Ứng dụng tự động quy đổi thời gian Dương lịch sang Can Chi và Tiết khí thiên văn chuẩn mặt trời. Hệ thống an quẻ 100% theo đúng quy luật Nạp Giáp 64 quẻ, an Thế Ứng, Lục Thân, Lục Thú, Phản Ngâm và Phục Ngâm."
           }
         }
       ]
@@ -515,13 +548,39 @@
                     <div class="seo-faq">
                         <h3>Hỏi Đáp Phổ Biến (FAQ)</h3>
                         <details class="faq-item">
-                            <summary>Lập quẻ Kinh Dịch Lục Hào trên luchao.io.vn có chính xác không?</summary>
-                            <p>Hoàn toàn chính xác. Ứng dụng tự động quy đổi thời gian Dương lịch sang Can Chi Ngày, Tháng, Năm, Giờ và Tiết khí mặt trời chuẩn xác theo lịch thiên văn. Hệ thống an quẻ 100% theo đúng quy luật cổ thư Lục Hào Dự Đoán Học, Nạp Giáp 64 quẻ, an Thế Ứng, Lục Thân, Lục Thú, Phản Ngâm và Phục Ngâm linh ứng.</p>
+                            <summary>Lập quẻ Kinh Dịch Lục Hào và SIM Phong Thủy dựa trên phương pháp luận nào?</summary>
+                            <p>Ứng dụng Lục Hào và SIM Phong Thủy kế thừa hệ thống học thuật Dịch Bốc của Chu Thần Bân. Hệ thống kết hợp nạp Giáp chính tông, Âm Dương Ngũ Hành, phân định Thần Dụng và Bát Tự Dụng Thần để đưa ra luận giải chuẩn xác.</p>
                         </details>
                         <details class="faq-item">
-                            <summary>Làm thế nào để tải ảnh bảng quẻ kết quả?</summary>
-                            <p>Sau khi bấm "Lập Quẻ", bảng an quẻ sẽ được tự động xuất thành hình ảnh sắc nét. Bạn chỉ cần nhấn nút "Tải Ảnh" hoặc nhấn giữ vào hình ảnh để lưu về điện thoại/máy tính.</p>
+                            <summary>Lá số Tử Vi an sao và phi tinh theo trường phái nào?</summary>
+                            <p>Hệ thống Tử Vi được xây dựng chuẩn xác theo Bắc Phái Phi Tinh của Đại sư Lương Nhược Du (Lương Phái), chú trọng cơ chế Khí hóa Tứ Hóa (Lộc, Quyền, Khoa, Kỵ), phi cung chuyển Kỵ 12 cung chức năng và nhân quả đại vận.</p>
                         </details>
+                        <details class="faq-item">
+                            <summary>Tinh bàn Phong Thủy Huyền Không áp dụng quy tắc nào?</summary>
+                            <p>Công cụ lập tinh bàn Huyền Không Phi Tinh kế thừa tác phẩm kinh điển Thẩm Thị Huyền Không Học của Thẩm Trúc Nhưng, chuyên sâu Vận 9 (2024 - 2043), phân định Hạ Quái và Thế Quái (Kiêm Hướng) chuẩn xác theo 24 Sơn Hướng.</p>
+                        </details>
+                        <details class="faq-item">
+                            <summary>Lập quẻ Kinh Dịch Lục Hào trên luchao.io.vn có chính xác không?</summary>
+                            <p>Hoàn toàn chính xác. Ứng dụng tự động quy đổi thời gian Dương lịch sang Can Chi Ngày, Tháng, Năm, Giờ và Tiết khí mặt trời chuẩn xác theo lịch thiên văn. Hệ thống an quẻ 100% theo đúng quy luật Nạp Giáp 64 quẻ, an Thế Ứng, Lục Thân, Lục Thú, Phản Ngâm và Phục Ngâm linh ứng.</p>
+                        </details>
+                    </div>
+
+                    <div class="seo-authority">
+                        <h3>🏛️ Nền Tảng Phương Pháp Luận & Nguồn Cổ Thư Kinh Điển</h3>
+                        <div class="authority-grid">
+                            <div class="authority-card">
+                                <h4>☯️ Kinh Dịch Lục Hào & SIM Phong Thủy</h4>
+                                <p><strong>Kế thừa: Chu Thần Bân</strong> (Hệ thống Dịch Bốc Lục Hào hiện đại & <em>Chu Thần Bân Dịch Học</em>). Luận đoán dựa trên ngũ hành sinh khắc, Thần Dụng, Hào Động, Lục Thân, Lục Thú và Bát Tự Dụng Thần.</p>
+                            </div>
+                            <div class="authority-card">
+                                <h4>⭐ Tử Vi Đẩu Số Bắc Phái Phi Tinh</h4>
+                                <p><strong>Kế thừa: Lương Nhược Du</strong> (Đại sư khai sáng Lương Phái Bắc Phái Phi Tinh). Chú trọng Khí hóa Tứ Hóa (Lộc - Quyền - Khoa - Kỵ), phi cung chuyển Kỵ 12 cung chức năng, xem xét nghiệp duyên và thời vận tuần hoàn.</p>
+                            </div>
+                            <div class="authority-card">
+                                <h4>🧭 Phong Thủy Huyền Không Phi Tinh</h4>
+                                <p><strong>Kế thừa: Thẩm Thị Huyền Không Học</strong> (Thẩm Trúc Nhưng). Ứng dụng trọn vẹn quy luật phi tinh Sơn - Hướng thuận nghịch cho 24 Sơn Hướng Vận 9 (2024 - 2043), phân định Hạ Quái và Thế Quái chuẩn thiên văn.</p>
+                            </div>
+                        </div>
                     </div>
                 </article>
             </section>
@@ -606,6 +665,17 @@
 
     <!-- Portal Navigation & Mobile Drawer Controller -->
     <script src="portal-nav.js" defer></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => {
+                    console.log('PWA ServiceWorker not registered:', err);
+                });
+            });
+        }
+    </script>
 </body>
 
 </html>

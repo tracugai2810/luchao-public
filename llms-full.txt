@@ -1,18 +1,18 @@
 # Kiến Thức Đầy Đủ & Hướng Dẫn Nền Tảng Huyền Học luchao.io.vn
 
 Cổng thông tin tra cứu và ứng dụng Huyền Học Á Đông chuẩn xác: https://luchao.io.vn
-Tập hợp 4 môn học thuật cổ điển:
-1. Kinh Dịch Lục Hào Dự Đoán Học
-2. Tử Vi Đẩu Số Bắc Phái Phi Tinh
-3. Phong Thủy Huyền Không Phi Tinh (Vận 9)
-4. SIM Phong Thủy Bát Tự Dụng Thần
+Kế thừa trực tiếp từ các trường phái học thuật kinh điển:
+1. Kinh Dịch Lục Hào Dự Đoán Học (Trường phái Chu Thần Bân Dịch Bốc)
+2. Tử Vi Đẩu Số Bắc Phái Phi Tinh (Trường phái Lương Nhược Du - Lương Phái)
+3. Phong Thủy Huyền Không Phi Tinh (Kinh điển Thẩm Thị Huyền Không Học - Thẩm Trúc Nhưng)
+4. SIM Phong Thủy Bát Tự Dụng Thần (Ứng dụng phối quẻ Dịch Bốc Chu Thần Bân)
 
 ---
 
-## PHẦN 1: KINH DỊCH LỤC HÀO DỰ ĐOÁN HỌC (https://luchao.io.vn)
+## PHẦN 1: KINH DỊCH LỤC HÀO DỰ ĐOÁN HỌC (https://luchao.io.vn) - CHU THẦN BÂN
 
-### 1.1. Giới thiệu môn Lục Hào
-Lục Hào Dự Đoán Học (còn gọi là Dịch Bốc, Hỏa Châu Lâm, Nạp Giáp Lục Hào) là thuật bói quẻ phát triển từ Kinh Dịch, hoàn thiện qua các thời đại Tiên Tần, Hán triều (Kinh Phòng) và Minh - Thanh. Phương pháp dựa trên Âm Dương, Ngũ Hành, 8 Quái (Càn, Đoài, Ly, Chấn, Tốn, Khảm, Cấn, Khôn) biến hóa thành 64 quẻ, kết hợp Nạp Giáp Can Chi, Lục Thân và Lục Thú để suy đoán sự phát triển của vạn sự.
+### 1.1. Giới thiệu môn Lục Hào & Học Thuyết Chu Thần Bân
+Lục Hào Dự Đoán Học (còn gọi là Dịch Bốc, Hỏa Châu Lâm, Nạp Giáp Lục Hào) là thuật bói quẻ phát triển từ Kinh Dịch, hoàn thiện qua các thời đại Tiên Tần, Hán triều (Kinh Phòng) và Minh - Thanh. Nền tảng trên website kế thừa trực tiếp phương pháp luận Dịch Bốc của Chu Thần Bân (tác giả hệ thống nghiên cứu Lục Hào hiện đại & *Chu Thần Bân Dịch Học*), chú trọng tính thực chứng, phân định Dụng Thần - Thế Ứng, cấu trúc Hào Động sinh khắc và thời điểm ứng kỳ chuẩn xác.
 
 ### 1.2. Quy tắc An Quẻ & Luận Trị
 - **Bát Quái & Ngũ Hành**:
@@ -45,10 +45,10 @@ Lục Hào Dự Đoán Học (còn gọi là Dịch Bốc, Hỏa Châu Lâm, N�
 
 ---
 
-## PHẦN 2: TỬ VI ĐẨU SỐ BẮC PHÁI PHI TINH (https://luchao.io.vn/tu-vi)
+## PHẦN 2: TỬ VI ĐẨU SỐ BẮC PHÁI PHI TINH (https://luchao.io.vn/tu-vi) - LƯƠNG NHƯỢC DU
 
-### 2.1. Giới thiệu Bắc Phái Phi Tinh
-Khác với Nam Phái (Tam Hợp Phái) chú trọng nhiều vào số lượng phụ tinh và cấu trúc sao cố định, **Bắc Phái Phi Tinh** xem Tứ Hóa (Hóa Lộc, Hóa Quyền, Hóa Khoa, Hóa Kỵ) là linh hồn và chìa khóa vận hành của toàn bộ lá số. Hệ thống tập trung vào cơ chế Khí hóa, Phi Tinh qua lại giữa 12 cung chức năng để luận đoán nghiệp duyên, thời vận, cát hung và sự biến dịch nhân sinh.
+### 2.1. Giới thiệu Bắc Phái Phi Tinh (Hệ Thống Lương Phái - Lương Nhược Du)
+Khác với Nam Phái (Tam Hợp Phái) chú trọng nhiều vào số lượng phụ tinh và cấu trúc sao cố định, **Bắc Phái Phi Tinh** kế thừa trực tiếp hệ thống Đại sư Lương Nhược Du (Lương Phái), xem Tứ Hóa (Hóa Lộc, Hóa Quyền, Hóa Khoa, Hóa Kỵ) là linh hồn và chìa khóa vận hành của toàn bộ lá số. Hệ thống tập trung vào cơ chế Khí hóa, Phi Tinh qua lại giữa 12 cung chức năng để luận đoán nghiệp duyên, thời vận, cát hung và sự biến dịch nhân sinh.
 
 ### 2.2. Bảng Tứ Hóa Năm Sinh (Thiên Can Tứ Hóa)
 - Can **Giáp**: Liêm Trinh (Lộc) - Phá Quân (Quyền) - Vũ Khúc (Khoa) - Thái Dương (Kỵ)
@@ -68,19 +68,19 @@ Khác với Nam Phái (Tam Hợp Phái) chú trọng nhiều vào số lượng 
 - **Hóa Khoa (Mùa Thu / Kim)**: Điềm đạm, danh tiếng, lý trí, giải hạn, bình ổn, tri thức, quý nhân.
 - **Hóa Kỵ (Mùa Đông / Thủy)**: Kết thúc, thu liễm, chấp niệm, ràng buộc, nợ nần, lo âu, biến cố.
 
-### 2.4. Quy Tắc Phi Cung & Tự Hóa
+### 2.4. Quy Tắc Phi Cung & Tự Hóa (Lương Phái)
 - **Phi Cung (Hóa Nhập / Hóa Xuất)**: Mỗi cung mang một Thiên Can bản cung. Khi Can này an Tứ Hóa vào cung khác, tạo thành luồng nhân - quả (Ví dụ: Mệnh can Giáp hóa Kỵ nhập Thiên Di = Mệnh phi Kỵ nhập Di, biểu thị đương số ra ngoài lo toan, khó khăn hoặc tâm hướng ngoại).
 - **Tự Hóa**: Khi Can của một cung bay Tứ Hóa vào chính sao ngự tại cung đó (Tự Hóa Lộc, Tự Hóa Quyền, Tự Hóa Khoa, Tự Hóa Kỵ), biểu thị sự tiêu tán năng lượng, tự phát tự sinh tự diệt tại cung đó.
-- **Chuyển Kỵ**: Cung nhận Hóa Kỵ (từ Năm sinh hoặc từ Cung khác) sẽ lấy Thiên Can của cung mình để phi tiếp Kỵ đến cung tiếp theo, tạo thành đường dẫn nhân quả sâu kín của vận mệnh.
+- **Chuyển Kỵ**: Cung nhận Hóa Kỵ (từ Năm sinh hoặc từ Cung khác) sẽ lấy Thiên Can của cung mình để phi tiếp Kỵ đến cung tiếp theo, tạo thành đường dẫn nhân quả sâu kín của vận mệnh theo đúng phép bí truyền của Lương Nhược Du.
 
 ---
 
-## PHẦN 3: PHONG THỦY HUYỀN KHÔNG PHI TINH (https://luchao.io.vn/hkpt)
+## PHẦN 3: PHONG THỦY HUYỀN KHÔNG PHI TINH (https://luchao.io.vn/hkpt) - THẨM THỊ HUYỀN KHÔNG HỌC
 
-### 3.1. Giới thiệu Huyền Không Phi Tinh & Vận 9
-Huyền Không Phi Tinh là trường phái phong thủy lý khí đỉnh cao, kết hợp chặt chẽ giữa Thời gian (Tam Nguyên Cửu Vận), Không gian (24 Sơn Hướng) và Địa hình môi trường thực tế (Loan Đầu).
+### 3.1. Giới thiệu Thẩm Thị Huyền Không Học & Vận 9 (Thẩm Trúc Nhưng)
+Huyền Không Phi Tinh là trường phái phong thủy lý khí đỉnh cao, kế thừa tác phẩm kinh điển *Thẩm Thị Huyền Không Học* của Đại sư Thẩm Trúc Nhưng, kết hợp chặt chẽ giữa Thời gian (Tam Nguyên Cửu Vận), Không gian (24 Sơn Hướng) và Địa hình môi trường thực tế (Loan Đầu).
 - Giai đoạn hiện tại là **Hạ Nguyên Vận 9 (2024 - 2043)**, do sao **Cửu Tử Hỏa Tinh** quản vận.
-- Vận Tinh cai quản: Số 9 nhập trung cung trong Vận 9.
+- Vận Tinh cai quản: Số 9 nhập trung cung trong Vận 9. Chuẩn hóa phân định Chính Hướng (Hạ Quái) và Kiêm Hướng (Thế Quái) khi lệch trên 3 độ.
 
 ### 3.2. Cấu Trúc Tinh Bàn 24 Sơn Hướng
 - **Cung Vị (Địa Bàn)**: 8 hướng chia làm 24 sơn (mỗi sơn 15 độ). Mỗi hướng quái quản 3 sơn:
@@ -105,12 +105,12 @@ Huyền Không Phi Tinh là trường phái phong thủy lý khí đỉnh cao, k
 
 ---
 
-## PHẦN 4: GỢI Ý & ĐÁNH GIÁ SIM PHONG THỦY BÁT TỰ (https://luchao.io.vn/simphongthuy)
+## PHẦN 4: GỢI Ý & ĐÁNH GIÁ SIM PHONG THỦY BÁT TỰ (https://luchao.io.vn/simphongthuy) - CHU THẦN BÂN
 
 ### 4.1. Bản Chất Khoa Học Của SIM Phong Thủy
-Số điện thoại là một chuỗi tần số năng lượng số học đi liền với đương số hàng ngày. Phân tích SIM phong thủy chuẩn mực không thể dựa vào cảm tính đuôi "lộc phát (68)" hay "thần tài (79)" dân gian đơn thuần, mà bắt buộc phải đối chiếu trên 4 trụ cột học thuật:
+Số điện thoại là một chuỗi tần số năng lượng số học đi liền với đương số hàng ngày. Phân tích SIM phong thủy chuẩn mực theo trường phái Chu Thần Bân không dựa vào cảm tính đuôi "lộc phát (68)" hay "thần tài (79)" dân gian đơn thuần, mà bắt buộc phải đối chiếu trên 4 trụ cột học thuật:
 1. Bản mệnh Tứ Trụ Bát Tự (Dụng Thần & Hỷ Thần).
-2. Kinh Dịch Quẻ Học (Quẻ Chủ - Quẻ Hỗ - Quẻ Biến của dãy số).
+2. Kinh Dịch Quẻ Học (Quẻ Chủ - Quẻ Hỗ - Quẻ Biến của dãy số theo Dịch Bốc Chu Thần Bân).
 3. Cửu Tinh Đồ Pháp Hạ Nguyên Vận 9.
 4. Cân bằng Âm Dương & Quan niệm Ngũ Hành sinh khắc.
 

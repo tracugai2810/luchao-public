@@ -536,6 +536,30 @@ function cleanSerialInput(el) {
     el.value = el.value.replace(/[^0-9]/g, '');
 }
 
+function getTimezoneDisplayTag(tzEl) {
+    if (!tzEl) {
+        if (typeof document !== 'undefined') {
+            tzEl = document.getElementById('inputTimezone');
+        }
+    }
+    if (!tzEl) return '';
+
+    const selectedOpt = tzEl.selectedOptions ? tzEl.selectedOptions[0] : (tzEl.selectedIndex >= 0 ? tzEl.options[tzEl.selectedIndex] : null);
+    if (!selectedOpt) return '';
+
+    const val = (selectedOpt.value || tzEl.value || '').trim();
+    const rawText = (selectedOpt.textContent || selectedOpt.text || '').trim();
+
+    // Mặc định ở VN (+07:00 hoặc nhãn bắt đầu bằng "VN") -> không hiển thị gì cả
+    if (val === '+07:00' || rawText.startsWith('VN')) {
+        return '';
+    }
+
+    // Với khu vực khác: loại bỏ ngoặc đơn lồng bên trong nếu có rồi bọc ngoặc ngoài
+    let clean = rawText.replace(/\(([^)]+)\)/g, '$1').replace(/\s+/g, ' ').trim();
+    return clean ? ` (${clean})` : '';
+}
+
 function formatDate(isoStr) {
     if (!isoStr) return "";
     let input = isoStr;
@@ -565,7 +589,8 @@ function processDivination() {
     const fullDateInput = (tzEl && tzEl.value) ? `${dVal}:00${tzEl.value}` : dVal;
 
     const calendar = calculateCanChi(fullDateInput);
-    const formattedDate = formatDate(fullDateInput);
+    const tzTag = getTimezoneDisplayTag(tzEl);
+    const formattedDate = formatDate(fullDateInput) + tzTag;
 
     let lines = [];
     let methodText = "";

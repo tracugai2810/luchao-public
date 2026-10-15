@@ -830,7 +830,8 @@
       }
     }
 
-    // 4.B: ĐIỂM TỤ LỰC TỪ TỔ HỢP SINH KHẮC (Cơ chế 2 - tr. 163-164)
+    // 4.B: ĐIỂM TỤ LỰC & ĐIỂM TẬP TRUNG TỪ TỔ HỢP SINH KHẮC (Cơ chế 2 - Chu Thần Bân tr. 163-164)
+    // Nhánh 1: Tương sinh (A sinh B -> B tụ lực Cường thế phóng lực khắc thương can C)
     let tuLucStem = null;
     for (let i = 0; i < clientIndices.length; i++) {
       for (let j = 0; j < clientIndices.length; j++) {
@@ -853,6 +854,43 @@
           const oppTarget = (cTarget % 2 === 0) ? cTarget + 1 : cTarget - 1;
           if (res[oppTarget] === null) {
             res[oppTarget] = { status: 'Vượng', source: 'Bập bênh giải phóng' };
+          }
+        }
+      }
+    }
+
+    // Nhánh 2: Tương khắc (A khắc B -> B bị khắc Yếu thế [Suy] - tr. 163 Chu Thần Bân)
+    // Điểm tập trung của ẩn tính là định tính mạnh yếu của Thập thần bị sinh khắc:
+    // B yếu thế -> Không thể khắc C (C thoát khắc vươn lên CƯỜNG THẾ [Vượng])
+    //           -> Không thể sinh D (D mất nguồn sinh rơi vào YẾU THẾ [Suy])
+    for (let i = 0; i < clientIndices.length; i++) {
+      for (let j = 0; j < clientIndices.length; j++) {
+        if (i === j) continue;
+        const cA = clientIndices[i];
+        const cB = clientIndices[j];
+        if (isHoaSonKhac(cA, cB) && !clientStrength[j]) {
+          // cB là can bị khắc suy yếu
+          // 1. cB không khắc được can C (theo KHAC_PAIRS) -> C thoát khắc vươn lên Vượng
+          const khacPair = KHAC_PAIRS.find(p => p[0] === cB);
+          if (khacPair) {
+            const cNotKhac = khacPair[1];
+            if (res[cNotKhac] === null) {
+              res[cNotKhac] = { status: 'Vượng', source: 'Ẩn tình thoát khắc vượng' };
+              // Bập bênh âm dương cùng hành: Can đối lập rơi vào Suy
+              const oppNotKhac = (cNotKhac % 2 === 0) ? cNotKhac + 1 : cNotKhac - 1;
+              if (res[oppNotKhac] === null) {
+                res[oppNotKhac] = { status: 'Suy', source: 'Bập bênh đè nén' };
+              }
+            }
+          }
+
+          // 2. cB không sinh được can D (theo SINH_PAIRS) -> D mất nguồn sinh rơi vào Suy
+          const sinhPair = SINH_PAIRS.find(p => p[0] === cB);
+          if (sinhPair) {
+            const cNotSinh = sinhPair[1];
+            if (res[cNotSinh] === null) {
+              res[cNotSinh] = { status: 'Suy', source: 'Ẩn tình mất nguồn sinh' };
+            }
           }
         }
       }

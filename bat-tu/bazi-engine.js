@@ -617,12 +617,48 @@
     }
 
     // Phase 4: Ẩn tình từ Điểm Tụ Lực / Sinh Khắc / Trùng điệp / Đồng tài
+    // Phase 4: Ẩn tình chỉ hướng
     const strongStems = [];
     clientIndices.forEach((c, idx) => {
       if (clientStrength[idx] && !strongStems.includes(c)) strongStems.push(c);
     });
 
-    // Tìm chữ nhận sinh (Điểm tụ lực nhận năng lượng)
+    // 4.A: ĐỒNG TÀI ƯU TIÊN (Cơ chế 4 - tr. 156, 166-167)
+    // Cùng thấu xuất 2 can cùng ngũ hành khác âm dương -> Phóng bao trùm theo CẢ NGŨ HÀNH
+    const dongTaiElements = [];
+    for (let i = 0; i < clientIndices.length; i++) {
+      for (let j = i + 1; j < clientIndices.length; j++) {
+        if (NGU_HANH_CAN[clientIndices[i]] === NGU_HANH_CAN[clientIndices[j]] && clientIndices[i] !== clientIndices[j]) {
+          if (clientStrength[i] && clientStrength[j]) {
+            dongTaiElements.push(NGU_HANH_CAN[clientIndices[i]]);
+          }
+        }
+      }
+    }
+
+    if (dongTaiElements.length > 0) {
+      for (const dtElem of dongTaiElements) {
+        const sinhMap = { 1: 3, 3: 4, 4: 0, 0: 2, 2: 1 };
+        const khacMap = { 1: 4, 4: 2, 2: 3, 3: 0, 0: 1 };
+        const elemDuocSinh = sinhMap[dtElem];
+        const elemBiKhac = khacMap[dtElem];
+
+        // Sinh vượng CẢ ngũ hành được sinh
+        for (let c = 0; c < 10; c++) {
+          if (res[c] === null && NGU_HANH_CAN[c] === elemDuocSinh) {
+            res[c] = { status: 'Vượng', source: 'Đồng tài sinh vượng' };
+          }
+        }
+        // Khắc yếu CẢ ngũ hành bị khắc
+        for (let c = 0; c < 10; c++) {
+          if (res[c] === null && NGU_HANH_CAN[c] === elemBiKhac) {
+            res[c] = { status: 'Suy', source: 'Đồng tài khắc yếu' };
+          }
+        }
+      }
+    }
+
+    // 4.B: ĐIỂM TỤ LỰC TỪ TỔ HỢP SINH KHẮC (Cơ chế 2 - tr. 163-164)
     let tuLucStem = null;
     for (let i = 0; i < clientIndices.length; i++) {
       for (let j = 0; j < clientIndices.length; j++) {
@@ -644,10 +680,8 @@
       }
     }
 
-    const activeAttackers = tuLucStem !== null ? [tuLucStem, ...strongStems.filter(s => s !== tuLucStem)] : strongStems;
-
-    for (const att of activeAttackers) {
-      const pair = KHAC_PAIRS.find(p => p[0] === att);
+    if (tuLucStem !== null) {
+      const pair = KHAC_PAIRS.find(p => p[0] === tuLucStem);
       if (pair) {
         const cTarget = pair[1]; // Chữ cùng giới bị khắc
         if (res[cTarget] === null) {
@@ -661,7 +695,7 @@
       }
     }
 
-    // Trùng điệp 4 hướng nếu còn can null
+    // 4.C: TRÙNG ĐIỆP (Cơ chế 3 - tr. 155, 165)
     const counts = {};
     clientIndices.forEach(c => { counts[c] = (counts[c] || 0) + 1; });
     const trungDiepStems = Object.keys(counts).filter(c => counts[c] >= 2).map(Number);

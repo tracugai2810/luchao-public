@@ -67,14 +67,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=5.8">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=6.1">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=5.8"></script>
+  <script src="/bat-tu/bazi-engine.js?v=6.1"></script>
+
+  <script>
+    // Tự động kiểm tra và cập nhật Service Worker, xóa cache cũ ngay tức thì
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(reg => {
+          reg.update();
+        });
+      });
+    }
+  </script>
 </head>
 <body>
 
@@ -771,6 +782,12 @@
       }
 
       if (window.location.search.includes("demo=1")) {
+        const u = new URLSearchParams(window.location.search);
+        if (u.get("d")) document.getElementById("bazi-day").value = u.get("d");
+        if (u.get("m")) document.getElementById("bazi-month").value = u.get("m");
+        if (u.get("y")) document.getElementById("bazi-year").value = u.get("y");
+        if (u.get("time")) document.getElementById("bazi-time").value = u.get("time");
+        if (u.get("g")) document.getElementById("bazi-gender").value = u.get("g");
         setTimeout(() => runBaziCalculation(new Event("submit")), 150);
       }
 

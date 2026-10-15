@@ -778,13 +778,42 @@
     }
 
     // Phase 3: Nguyệt lệnh đề thăng (Tầng 3 - Chốt chặn 2)
-    const nguyetElem = NGU_HANH_CHI[chiThang];
-    for (let c = 0; c < 10; c++) {
-      if (res[c] !== null) continue;
-      if (NGU_HANH_CAN[c] === nguyetElem) {
-        res[c] = {
-          status: 'Vượng',
-          source: 'Nguyệt lệnh đề thăng'
+    // Bản khí của Chi tháng được đề thăng thành Vượng, can đối lập cùng hành chịu áp lực rơi vào Suy (Bập bênh Âm Dương)
+    const CHI_BAN_KHI = [
+      9, // 0: Tý -> Quý (9)
+      5, // 1: Sửu -> Kỷ (5)
+      0, // 2: Dần -> Giáp (0)
+      1, // 3: Mão -> Ất (1)
+      4, // 4: Thìn -> Mậu (4)
+      2, // 5: Tỵ -> Bính (2)
+      3, // 6: Ngọ -> Đinh (3)
+      5, // 7: Mùi -> Kỷ (5)
+      6, // 8: Thân -> Canh (6)
+      7, // 9: Dậu -> Tân (7)
+      4, // 10: Tuất -> Mậu (4)
+      8  // 11: Hợi -> Nhâm (8)
+    ];
+
+    const stemBanKhi = CHI_BAN_KHI[chiThang];
+    if (res[stemBanKhi] === null) {
+      res[stemBanKhi] = {
+        status: 'Vượng',
+        source: 'Nguyệt lệnh đề thăng'
+      };
+      const oppBanKhi = (stemBanKhi % 2 === 0) ? stemBanKhi + 1 : stemBanKhi - 1;
+      if (res[oppBanKhi] === null) {
+        res[oppBanKhi] = {
+          status: 'Suy',
+          source: 'Bập bênh Âm Dương'
+        };
+      }
+    } else {
+      // Nếu can bản khí đã có trạng thái rồi (từ lộ tính), nhưng can đối lập chưa có
+      const oppBanKhi = (stemBanKhi % 2 === 0) ? stemBanKhi + 1 : stemBanKhi - 1;
+      if (res[oppBanKhi] === null) {
+        res[oppBanKhi] = {
+          status: res[stemBanKhi].status === 'Vượng' ? 'Suy' : 'Vượng',
+          source: 'Bập bênh Âm Dương'
         };
       }
     }
@@ -831,7 +860,7 @@
     }
 
     // 4.B: ĐIỂM TỤ LỰC & ĐIỂM TẬP TRUNG TỪ TỔ HỢP SINH KHẮC (Cơ chế 2 - Chu Thần Bân tr. 163-164)
-    // Nhánh 1: Tương sinh (A sinh B -> B tụ lực Cường thế phóng lực khắc thương can C)
+    // Nhánh 1: Tương sinh (A sinh B -> B tụ lực Cường thế phóng lực khắc thương can C, sinh vượng can D)
     let tuLucStem = null;
     for (let i = 0; i < clientIndices.length; i++) {
       for (let j = 0; j < clientIndices.length; j++) {
@@ -845,6 +874,7 @@
     }
 
     if (tuLucStem !== null) {
+      // 1. Phóng lực khắc thương can C (C suy, can đối lập của C vươn lên Vượng)
       const pair = KHAC_PAIRS.find(p => p[0] === tuLucStem);
       if (pair) {
         const cTarget = pair[1]; // Chữ cùng giới bị khắc
@@ -857,12 +887,24 @@
           }
         }
       }
+      // 2. Phóng lực sinh vượng can D (D vượng, can đối lập của D rơi vào Suy)
+      const sinhP = SINH_PAIRS.find(p => p[0] === tuLucStem);
+      if (sinhP) {
+        const cSinh = sinhP[1];
+        if (res[cSinh] === null) {
+          res[cSinh] = { status: 'Vượng', source: 'Ẩn tình được sinh' };
+          const oppSinh = (cSinh % 2 === 0) ? cSinh + 1 : cSinh - 1;
+          if (res[oppSinh] === null) {
+            res[oppSinh] = { status: 'Suy', source: 'Bập bênh đè nén' };
+          }
+        }
+      }
     }
 
     // Nhánh 2: Tương khắc (A khắc B -> B bị khắc Yếu thế [Suy] - tr. 163 Chu Thần Bân)
     // Điểm tập trung của ẩn tính là định tính mạnh yếu của Thập thần bị sinh khắc:
-    // B yếu thế -> Không thể khắc C (C thoát khắc vươn lên CƯỜNG THẾ [Vượng])
-    //           -> Không thể sinh D (D mất nguồn sinh rơi vào YẾU THẾ [Suy])
+    // B yếu thế -> Không thể khắc C (C thoát khắc vươn lên CƯỜNG THẾ [Vượng], can đối lập C rơi vào Suy)
+    //           -> Không thể sinh D (D mất nguồn sinh rơi vào YẾU THẾ [Suy], can đối lập D vươn lên Vượng)
     for (let i = 0; i < clientIndices.length; i++) {
       for (let j = 0; j < clientIndices.length; j++) {
         if (i === j) continue;
@@ -890,6 +932,11 @@
             const cNotSinh = sinhPair[1];
             if (res[cNotSinh] === null) {
               res[cNotSinh] = { status: 'Suy', source: 'Ẩn tình mất nguồn sinh' };
+              // Bập bênh âm dương cùng hành: Can đối lập vươn lên CƯỜNG THẾ (Vượng)
+              const oppNotSinh = (cNotSinh % 2 === 0) ? cNotSinh + 1 : cNotSinh - 1;
+              if (res[oppNotSinh] === null) {
+                res[oppNotSinh] = { status: 'Vượng', source: 'Bập bênh giải phóng' };
+              }
             }
           }
         }
@@ -906,6 +953,8 @@
       const sinhP = SINH_PAIRS.find(p => p[0] === td);
       if (sinhP && res[sinhP[1]] === null) {
         res[sinhP[1]] = { status: 'Vượng', source: 'Trùng điệp sinh vượng' };
+        const opp = (sinhP[1] % 2 === 0) ? sinhP[1] + 1 : sinhP[1] - 1;
+        if (res[opp] === null) res[opp] = { status: 'Suy', source: 'Bập bênh đè nén' };
       }
       // Hợp vượng
       const hopP = HOP_PAIRS.find(p => p[0] === td || p[1] === td);
@@ -913,6 +962,8 @@
         const other = hopP[0] === td ? hopP[1] : hopP[0];
         if (res[other] === null) {
           res[other] = { status: 'Vượng', source: 'Trùng điệp hợp vượng' };
+          const opp = (other % 2 === 0) ? other + 1 : other - 1;
+          if (res[opp] === null) res[opp] = { status: 'Suy', source: 'Bập bênh đè nén' };
         }
       }
       // Khắc yếu
@@ -941,6 +992,10 @@
       for (const sc of strongStems) {
         if (isHoaSonSinh(sc, c)) {
           res[c] = { status: 'Vượng', source: 'Nguyên Thần thay thế' };
+          const opp = (c % 2 === 0) ? c + 1 : c - 1;
+          if (res[opp] === null) {
+            res[opp] = { status: 'Suy', source: 'Bập bênh đè nén' };
+          }
           ntFound = true;
           break;
         }

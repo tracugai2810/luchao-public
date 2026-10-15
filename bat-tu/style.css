@@ -871,80 +871,73 @@ body {
 }
 
 /* Sheet Header */
+/* Sheet Header Trải Ngang Cân Đối */
 .bazi-sheet-header {
   position: relative;
   z-index: 1;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   border-bottom: 1.5px solid #CBD5E1;
-  padding-bottom: 16px;
+  padding-bottom: 14px;
   margin-bottom: 14px;
-  flex-wrap: wrap;
-  gap: 16px;
+  width: 100%;
 }
 
-.header-brand-side {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.brand-badge-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.7rem;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-  flex-shrink: 0;
+.sheet-title-center {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .sheet-main-title {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 800;
-  color: #111827;
+  color: #0F172A;
   margin: 0;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .sheet-sub-brand {
   font-size: 0.8rem;
-  font-weight: 600;
-  color: #64748B;
-  letter-spacing: 0.5px;
-  margin-top: 3px;
+  font-weight: 700;
+  color: #1E3A8A;
+  letter-spacing: 1px;
+  margin-top: 4px;
 }
 
-.header-meta-table {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 0.92rem;
-  color: #1E293B;
+.header-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  row-gap: 6px;
+  column-gap: 16px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.header-meta-table .meta-item {
+.header-meta-grid .meta-item {
   display: flex;
   align-items: baseline;
+  gap: 6px;
+  font-size: 0.92rem;
+  color: #1E293B;
+  white-space: nowrap;
+  grid-column: span 2;
+}
+
+.header-meta-grid .meta-item.meta-item-wide {
+  grid-column: span 3;
 }
 
 .meta-label {
-  width: 155px;
-  font-weight: 500;
-  color: #334155;
-}
-
-.meta-sep {
-  width: 14px;
-  text-align: center;
-  color: #64748B;
-  font-weight: 700;
+  font-weight: 600;
+  color: #475569;
 }
 
 .meta-val {
@@ -1083,29 +1076,44 @@ body {
 .dv-char-stack {
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
-  font-size: 1.08rem;
-  font-weight: 700;
+  line-height: 1.15;
+  font-size: 1.12rem;
+  font-weight: 800;
+  padding: 3px 0;
+  white-space: nowrap;
 }
 
 .dv-thap-than {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #475569;
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+  line-height: 1.2;
+  padding: 2px 0;
 }
 
 .dv-age-range {
+  display: block;
   font-size: 0.82rem;
-  color: #64748B;
+  color: #475569;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1.2;
+  padding: 2px 0;
 }
 
 .dv-year-start {
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: #1E293B;
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0F172A;
+  white-space: nowrap;
+  line-height: 1.2;
+  padding: 2px 0;
 }
 
-/* Bảng Lưu Niên (20 Năm) */
+/* BẢNG LƯU NIÊN (20 NĂM - ĐỀU TĂM TẮP, 4 DÒNG CỐ ĐỊNH) */
 .table-luunien-box {
   margin-bottom: 14px;
 }
@@ -1121,12 +1129,18 @@ body {
 
 .luu-nien-table td {
   border: 1px solid #CBD5E1;
-  padding: 6px 2px;
+  padding: 3px 1px;
   vertical-align: middle;
 }
 
 .luu-nien-table td.ln-cell {
   width: 9%;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.luu-nien-table td.ln-cell:hover {
+  background: #FEF3C7;
 }
 
 .luu-nien-table td.ln-cell.target-year {
@@ -1139,128 +1153,46 @@ body {
   border: 1.5px solid #FCD34D !important;
 }
 
+.ln-cell-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 78px;
+  box-sizing: border-box;
+  padding: 2px 0;
+}
+
 .ln-char {
-  font-size: 0.96rem;
-  font-weight: 700;
-  margin-bottom: 2px;
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .ln-year {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.86rem;
+  font-weight: 700;
   color: #1E293B;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .ln-age {
-  font-size: 0.75rem;
-  color: #64748B;
-}
-
-/* Khối Bảng Phụ & Thần Sát Nguyên Cục */
-.bazi-bottom-section {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  width: 100%;
-  border: 1px solid #CBD5E1;
-  margin-bottom: 14px;
-}
-
-.bazi-extra-panel {
-  width: 28%;
-  border-right: 1px solid #CBD5E1;
-}
-
-.bazi-extra-table {
-  width: 100%;
-  border-collapse: collapse;
-  height: 100%;
-}
-
-.bazi-extra-table td {
-  border-bottom: 1px solid #CBD5E1;
-  padding: 8px 10px;
-  font-size: 0.86rem;
-}
-
-.bazi-extra-table tr:last-child td {
-  border-bottom: none;
-}
-
-.col-title-extra {
-  width: 48%;
-  font-weight: 800;
-  color: #1E3A8A;
-  background: #F8FAFC;
-  text-align: center;
-  border-right: 1px solid #CBD5E1;
-  letter-spacing: 0.3px;
-}
-
-.col-val-extra {
+  font-size: 0.78rem;
   font-weight: 600;
-  color: #1E293B;
-  text-align: center;
+  color: #475569;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
-.bazi-thansat-panel {
-  flex: 1;
-}
-
-.bazi-thansat-table {
-  width: 100%;
-  border-collapse: collapse;
-  height: 100%;
-  text-align: center;
-}
-
-.bazi-thansat-table th, .bazi-thansat-table td {
-  border: 1px solid #CBD5E1;
-  padding: 6px 8px;
-}
-
-.bazi-thansat-table th:first-child, .bazi-thansat-table td:first-child {
-  border-left: none;
-}
-
-.bazi-thansat-table th:last-child, .bazi-thansat-table td:last-child {
-  border-right: none;
-}
-
-.thansat-main-title {
-  font-weight: 800;
-  color: #1E3A8A;
-  background: #F8FAFC;
-  font-size: 0.92rem;
-  padding: 8px !important;
-  letter-spacing: 0.5px;
-  border-top: none !important;
-}
-
-.thansat-col-header {
-  font-weight: 700;
-  color: #1E3A8A;
-  background: #F8FAFC;
-  font-size: 0.84rem;
-  width: 25%;
-}
-
-.thansat-col-cell {
-  vertical-align: top;
-  padding: 8px 6px;
-  min-height: 85px;
-  border-bottom: none !important;
-}
-
-.thansat-name-item {
-  font-size: 0.86rem;
-  color: #1E293B;
-  line-height: 1.5;
-  margin-bottom: 2px;
-}
-
-.ts-empty {
-  color: #94A3B8;
+.ln-tt {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #64748B;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 /* Chân bảng Lá Số / Footer Sheet */
@@ -1268,52 +1200,24 @@ body {
   position: relative;
   z-index: 1;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding-top: 10px;
-  font-size: 0.85rem;
+  padding-top: 12px;
+  font-size: 0.88rem;
   color: #64748B;
-  flex-wrap: wrap;
-  gap: 12px;
-  border-top: 1px solid #CBD5E1;
+  border-top: 1.5px solid #CBD5E1;
+  text-align: center;
 }
 
-.footer-left-link {
-  font-size: 0.86rem;
+.footer-center-link span {
+  font-size: 0.9rem;
+  color: #475569;
 }
 
-.footer-left-link strong {
-  color: #334155;
-  font-weight: 600;
+.footer-center-link strong {
+  color: #1E3A8A;
+  font-weight: 700;
 }
-
-.footer-elements-legend {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #334155;
-}
-
-.footer-elements-legend .leg-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.leg-bar {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-}
-
-.bar-kim { background-color: #64748B; }
-.bar-moc { background-color: #15803D; }
-.bar-thuy { background-color: #0F172A; }
-.bar-hoa { background-color: #DC2626; }
-.bar-tho { background-color: #D97706; }
 
 /* Nút Action Footer */
 .bazi-actions-row {

@@ -23,14 +23,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=2.7">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=2.8">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=2.7"></script>
+  <script src="/bat-tu/bazi-engine.js?v=2.8"></script>
 </head>
 <body>
 
@@ -253,22 +253,6 @@
       <!-- Container hiển thị kết quả chính: Ảnh lá số chất lượng cao -->
       <div class="bazi-rendered-card-container">
         
-        <!-- Thanh chọn Đại Vận nhanh & Đổi Năm xem hạn (Cập nhật trực tiếp lên ảnh) -->
-        <div class="bazi-daivan-switcher-box">
-          <div class="switcher-header-row">
-            <div class="switcher-title">
-              <span>⚡ Chọn Đại Vận hiển thị 20 năm Lưu Niên:</span>
-            </div>
-            <div class="switcher-quick-year">
-              <label for="bazi-quick-year">Năm xem hạn:</label>
-              <select id="bazi-quick-year" class="form-select-sm"></select>
-            </div>
-          </div>
-          <div class="bazi-daivan-pills" id="bazi-daivan-pills">
-            <!-- 10 Cột Đại Vận pills tạo tự động qua JS -->
-          </div>
-        </div>
-
         <!-- Khung hiển thị Hình Ảnh Lá Số (Chuột phải Copy được ngay, Chạm giữ Lưu ảnh) -->
         <div class="bazi-image-display-frame">
           <div id="bazi-img-loading" class="bazi-img-loading" style="display: none;">
@@ -303,21 +287,18 @@
           <!-- Watermark Thái Cực chìm -->
           <div class="bazi-watermark">☯</div>
 
-          <!-- Header Lá Số (Chuẩn Mệnh Bàn như ảnh) -->
+          <!-- Header Lá Số (Trải Ngang Cân Đối, Không Có Logo) -->
           <div class="bazi-sheet-header">
-            <div class="header-brand-side">
-              <div class="brand-badge-icon">☯</div>
-              <div class="brand-title-box">
-                <h2 class="sheet-main-title">TỨ TRỤ MỆNH BÀN</h2>
-                <div class="sheet-sub-brand">HOA SƠN BÁT TỰ • CHUẨN THIÊN VĂN</div>
-              </div>
+            <div class="sheet-title-center">
+              <h2 class="sheet-main-title">TỨ TRỤ MỆNH BÀN</h2>
+              <div class="sheet-sub-brand">HOA SƠN BÁT TỰ • CHUẨN THIÊN VĂN</div>
             </div>
-            <div class="header-meta-table">
-              <div class="meta-item"><span class="meta-label">Họ tên</span><span class="meta-sep">:</span><span class="meta-val" id="res-name">Đương số</span></div>
-              <div class="meta-item"><span class="meta-label">Giới tính</span><span class="meta-sep">:</span><span class="meta-val" id="res-gender">Dương Nam</span></div>
-              <div class="meta-item"><span class="meta-label">Dương lịch (GMT+7.0)</span><span class="meta-sep">:</span><span class="meta-val" id="res-solar-full">-</span></div>
-              <div class="meta-item"><span class="meta-label">Âm Dương hợp lịch</span><span class="meta-sep">:</span><span class="meta-val" id="res-lunar-full">-</span></div>
-              <div class="meta-item"><span class="meta-label">Năm xem hạn</span><span class="meta-sep">:</span><span class="meta-val meta-highlight" id="res-calc-year">-</span></div>
+            <div class="header-meta-grid">
+              <div class="meta-item"><span class="meta-label">Họ tên:</span><strong class="meta-val" id="res-name">Đương số</strong></div>
+              <div class="meta-item"><span class="meta-label">Giới tính:</span><strong class="meta-val" id="res-gender">Dương Nam</strong></div>
+              <div class="meta-item"><span class="meta-label">Năm xem hạn:</span><strong class="meta-val meta-highlight" id="res-calc-year">-</strong></div>
+              <div class="meta-item meta-item-wide"><span class="meta-label">Dương lịch (GMT+7.0):</span><span class="meta-val" id="res-solar-full">-</span></div>
+              <div class="meta-item meta-item-wide"><span class="meta-label">Âm Dương hợp lịch:</span><span class="meta-val" id="res-lunar-full">-</span></div>
             </div>
           </div>
 
@@ -333,17 +314,17 @@
                   <td class="col-cell num-bold" id="res-solar-day">-</td>
                   <td class="col-cell num-bold" id="res-solar-hour">-</td>
                 </tr>
-                <!-- Hàng 2: Chủ Tinh (Thập Thần Can) -->
+                <!-- Hàng 2: Thiên Tinh (Can) -->
                 <tr>
-                  <td class="col-title">CHỦ TINH</td>
+                  <td class="col-title">THIÊN TINH (CAN)</td>
                   <td class="col-cell" id="res-tt-can-nam">-</td>
                   <td class="col-cell" id="res-tt-can-thang">-</td>
                   <td class="col-cell cell-nhat-chu" id="res-tt-can-ngay">NHẬT CHỦ</td>
                   <td class="col-cell" id="res-tt-can-gio">-</td>
                 </tr>
-                <!-- Hàng 3: Bát Tự (Can Chi Lớn) -->
+                <!-- Hàng 3: Can & Chi -->
                 <tr class="row-big-chars">
-                  <td class="col-title">BÁT TỰ</td>
+                  <td class="col-title">CAN &amp; CHI</td>
                   <td class="col-cell">
                     <div class="can-chi-stack">
                       <span class="char-can" id="res-char-can-nam">-</span>
@@ -369,29 +350,13 @@
                     </div>
                   </td>
                 </tr>
-                <!-- Hàng 4: Địa Tinh (Thập Thần Chi) -->
+                <!-- Hàng 4: Địa Tinh (Chi) -->
                 <tr>
-                  <td class="col-title">ĐỊA TINH</td>
+                  <td class="col-title">ĐỊA TINH (CHI)</td>
                   <td class="col-cell" id="res-tt-chi-nam">-</td>
                   <td class="col-cell" id="res-tt-chi-thang">-</td>
                   <td class="col-cell" id="res-tt-chi-ngay">-</td>
                   <td class="col-cell" id="res-tt-chi-gio">-</td>
-                </tr>
-                <!-- Hàng 5: Trường Sinh -->
-                <tr>
-                  <td class="col-title">TRƯỜNG SINH</td>
-                  <td class="col-cell" id="res-ts-sinh-nam">-</td>
-                  <td class="col-cell" id="res-ts-sinh-thang">-</td>
-                  <td class="col-cell" id="res-ts-sinh-ngay">-</td>
-                  <td class="col-cell" id="res-ts-sinh-gio">-</td>
-                </tr>
-                <!-- Hàng 6: Nạp Âm -->
-                <tr>
-                  <td class="col-title">NẠP ÂM</td>
-                  <td class="col-cell font-napam" id="res-nap-am-nam">-</td>
-                  <td class="col-cell font-napam" id="res-nap-am-thang">-</td>
-                  <td class="col-cell font-napam" id="res-nap-am-ngay">-</td>
-                  <td class="col-cell font-napam" id="res-nap-am-gio">-</td>
                 </tr>
               </tbody>
             </table>
@@ -427,69 +392,10 @@
             </table>
           </div>
 
-          <!-- KHỐI BẢNG PHỤ (MỆNH CUNG, THAI NGUYÊN, KHÔNG VONG) & BẢNG THẦN SÁT NGUYÊN CỤC -->
-          <div class="bazi-bottom-section">
-            <!-- Bảng Phụ bên trái -->
-            <div class="bazi-extra-panel">
-              <table class="bazi-extra-table">
-                <tbody>
-                  <tr>
-                    <td class="col-title-extra">MỆNH CUNG</td>
-                    <td class="col-val-extra" id="res-menh-cung">-</td>
-                  </tr>
-                  <tr>
-                    <td class="col-title-extra">THAI NGUYÊN</td>
-                    <td class="col-val-extra" id="res-thai-nguyen">-</td>
-                  </tr>
-                  <tr>
-                    <td class="col-title-extra">NIÊN KHÔNG</td>
-                    <td class="col-val-extra" id="res-nien-khong">-</td>
-                  </tr>
-                  <tr>
-                    <td class="col-title-extra">NHẬT KHÔNG</td>
-                    <td class="col-val-extra" id="res-nhat-khong">-</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Bảng Thần Sát Nguyên Cục bên phải -->
-            <div class="bazi-thansat-panel">
-              <table class="bazi-thansat-table">
-                <thead>
-                  <tr>
-                    <th colspan="4" class="thansat-main-title">BẢNG THẦN SÁT NGUYÊN CỤC</th>
-                  </tr>
-                  <tr>
-                    <th class="thansat-col-header">NIÊN THẦN</th>
-                    <th class="thansat-col-header">NGUYỆT THẦN</th>
-                    <th class="thansat-col-header">NHẬT THẦN</th>
-                    <th class="thansat-col-header">THỜI THẦN</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="thansat-col-cell" id="res-ts-col-nam">-</td>
-                    <td class="thansat-col-cell" id="res-ts-col-thang">-</td>
-                    <td class="thansat-col-cell" id="res-ts-col-ngay">-</td>
-                    <td class="thansat-col-cell" id="res-ts-col-gio">-</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Chân bảng Lá Số / Footer Sheet chuẩn như Ảnh Người Dùng Gửi -->
+          <!-- Chân bảng Lá Số -->
           <div class="bazi-card-footer">
-            <div class="footer-left-link">
-              <span>Lá số lập tại <strong>https://luchao.io.vn</strong></span>
-            </div>
-            <div class="footer-elements-legend">
-              <span class="leg-item"><i class="leg-bar bar-kim"></i> Kim</span>
-              <span class="leg-item"><i class="leg-bar bar-moc"></i> Mộc</span>
-              <span class="leg-item"><i class="leg-bar bar-thuy"></i> Thủy</span>
-              <span class="leg-item"><i class="leg-bar bar-hoa"></i> Hỏa</span>
-              <span class="leg-item"><i class="leg-bar bar-tho"></i> Thổ</span>
+            <div class="footer-center-link">
+              <span>Lá số được lập tại website: <strong>https://luchao.io.vn</strong></span>
             </div>
           </div>
 
@@ -567,7 +473,6 @@
 
       // Khởi tạo Năm Tính (Năm xem hạn)
       const selCalcYear = document.getElementById("bazi-calc-year");
-      const quickCalcYear = document.getElementById("bazi-quick-year");
       const currentYear = new Date().getFullYear();
       for (let y = 1930; y <= 2070; y++) {
         if (selCalcYear) {
@@ -577,19 +482,13 @@
           if (y === currentYear) opt1.selected = true;
           selCalcYear.appendChild(opt1);
         }
-        if (quickCalcYear) {
-          const opt2 = document.createElement("option");
-          opt2.value = y;
-          opt2.textContent = `Năm ${y}`;
-          if (y === currentYear) opt2.selected = true;
-          quickCalcYear.appendChild(opt2);
-        }
       }
 
-      if (quickCalcYear) {
-        quickCalcYear.addEventListener("change", function () {
-          if (selCalcYear) selCalcYear.value = this.value;
-          runBaziCalculation();
+      if (selCalcYear) {
+        selCalcYear.addEventListener("change", function () {
+          if (currentBaziResult) {
+            runBaziCalculation();
+          }
         });
       }
 
@@ -821,39 +720,8 @@
         document.getElementById("res-tt-chi-ngay").textContent = p.day.thapThanChi;
         document.getElementById("res-tt-chi-gio").textContent = p.hour.thapThanChi;
 
-        // Hàng 5: Trường Sinh
-        document.getElementById("res-ts-sinh-nam").textContent = p.year.truongSinh || "-";
-        document.getElementById("res-ts-sinh-thang").textContent = p.month.truongSinh || "-";
-        document.getElementById("res-ts-sinh-ngay").textContent = p.day.truongSinh || "-";
-        document.getElementById("res-ts-sinh-gio").textContent = p.hour.truongSinh || "-";
-
-        // Hàng 6: Nạp Âm
-        document.getElementById("res-nap-am-nam").textContent = p.year.napAm || "-";
-        document.getElementById("res-nap-am-thang").textContent = p.month.napAm || "-";
-        document.getElementById("res-nap-am-ngay").textContent = p.day.napAm || "-";
-        document.getElementById("res-nap-am-gio").textContent = p.hour.napAm || "-";
-
-        // Bảng Phụ bên trái (Mệnh Cung, Thai Nguyên, Niên Không, Nhật Không)
-        document.getElementById("res-menh-cung").textContent = ext.menhCung?.name || "-";
-        document.getElementById("res-thai-nguyen").textContent = ext.thaiNguyen?.name || "-";
-        document.getElementById("res-nien-khong").textContent = ext.nienKhong || "-";
-        document.getElementById("res-nhat-khong").textContent = ext.nhatKhong || "-";
-
-        // Bảng Thần Sát Nguyên Cục bên phải (4 cột)
-        const formatThanSatCol = (tsList) => {
-          if (!tsList || tsList.length === 0) return '<span class="ts-empty">-</span>';
-          return tsList.map(ts => `<div class="thansat-name-item">${ts}</div>`).join("");
-        };
-        document.getElementById("res-ts-col-nam").innerHTML = formatThanSatCol(p.year.thanSat);
-        document.getElementById("res-ts-col-thang").innerHTML = formatThanSatCol(p.month.thanSat);
-        document.getElementById("res-ts-col-ngay").innerHTML = formatThanSatCol(p.day.thanSat);
-        document.getElementById("res-ts-col-gio").innerHTML = formatThanSatCol(p.hour.thanSat);
-
         // Render Bảng Đại Vận 10 Cột
         renderDaiVanTable(res.daiVan.list);
-
-        // Render Pills chọn Đại Vận nhanh trên giao diện
-        renderDaiVanPills(res.daiVan.list);
 
         // Render Bảng Lưu Niên theo đại vận đang chọn
         renderLuuNienTable(res.getLuuNienForDaiVan(selectedDaiVanIndex));
@@ -862,21 +730,7 @@
         updateImageSnapshot();
       }
 
-      // 8. Render Pills chọn Đại Vận nhanh trên UI
-      function renderDaiVanPills(dvList) {
-        const pillsBox = document.getElementById("bazi-daivan-pills");
-        pillsBox.innerHTML = "";
-        dvList.forEach(dv => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "bazi-dv-pill" + (dv.index === selectedDaiVanIndex ? " active" : "");
-          btn.innerHTML = `<span class="pill-tt">${dv.thapThanCan}/${dv.thapThanChi}</span><span class="pill-cc" style="color: ${dv.canColor}">${dv.canName}</span><span class="pill-cc" style="color: ${dv.chiColor}">${dv.chiName}</span><span class="pill-age">${dv.solarAgeStart}t</span>`;
-          btn.addEventListener("click", () => selectDaiVan(dv.index));
-          pillsBox.appendChild(btn);
-        });
-      }
-
-      // 9. Render Bảng Đại Vận 10 Cột trong Sheet (4 tầng chuẩn như ảnh)
+      // 8. Render Bảng Đại Vận 10 Cột trong Sheet (4 tầng chuẩn mực cân đối)
       function renderDaiVanTable(dvList) {
         const canChiRow = document.getElementById("res-daivan-can-chi-row");
         const ttRow = document.getElementById("res-daivan-thap-than-row");
@@ -895,7 +749,7 @@
           if (isTarget) cellClass += " target-dv";
           else if (isActive) cellClass += " active";
 
-          // Can Chi (Can trên, Chi dưới như ảnh)
+          // Can Chi (Can trên, Chi dưới cân đối)
           const tdCc = document.createElement("td");
           tdCc.className = cellClass;
           tdCc.innerHTML = `
@@ -930,17 +784,10 @@
         });
       }
 
-      // Chọn Đại Vận
+      // Chọn Đại Vận khi click trực tiếp vào cột trên bảng
       function selectDaiVan(idx) {
         if (!currentBaziResult) return;
         selectedDaiVanIndex = idx;
-
-        // Cập nhật pills UI
-        const pills = document.querySelectorAll(".bazi-dv-pill");
-        pills.forEach((p, i) => {
-          if (i + 1 === idx) p.classList.add("active");
-          else p.classList.remove("active");
-        });
 
         // Cập nhật bảng Đại Vận & Lưu Niên
         renderDaiVanTable(currentBaziResult.daiVan.list);
@@ -950,7 +797,7 @@
         updateImageSnapshot();
       }
 
-      // 10. Render Bảng Lưu Niên (20 Năm - 2 Hàng x 10 Cột)
+      // 9. Render Bảng Lưu Niên (20 Năm - 2 Hàng x 10 Cột đều tăm tắp, không bị rớt dòng)
       function renderLuuNienTable(lnList) {
         const tbody = document.getElementById("res-luunien-tbody");
         tbody.innerHTML = "";
@@ -968,12 +815,15 @@
 
             html += `
               <td class="${cellClass}">
-                <div class="ln-char">
-                  <span style="color: ${item.canColor}">${item.canName}</span>
-                  <span style="color: ${item.chiColor}">${item.chiName}</span>
+                <div class="ln-cell-inner">
+                  <div class="ln-char">
+                    <span style="color: ${item.canColor}">${item.canName}</span>
+                    <span style="color: ${item.chiColor}">${item.chiName}</span>
+                  </div>
+                  <div class="ln-year">${item.year}</div>
+                  <div class="ln-age">${item.age}t</div>
+                  <div class="ln-tt">${item.thapThan}</div>
                 </div>
-                <div class="ln-year">${item.year}</div>
-                <div class="ln-age">${item.age}t • ${item.thapThan}</div>
               </td>
             `;
           });

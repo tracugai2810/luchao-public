@@ -39,6 +39,12 @@
 }
 
 /* --- Reset cơ bản & Nền Trang Sáng Hiện Đại --- */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -508,7 +514,7 @@ body {
   border-radius: 8px;
   padding: 10px 14px;
   color: #0F172A;
-  font-size: 0.95rem;
+  font-size: 16px; /* 16px chống tự động zoom trên iOS Safari */
   font-family: inherit;
   outline: none;
   transition: all 0.2s ease;
@@ -524,23 +530,16 @@ body {
   box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
 }
 
-/* Khắc phục triệt để lỗi tràn khung nhập giờ trên iOS Safari & điện thoại */
+/* Đảm bảo ô Giờ sinh đồng bộ 100% với các ô nhập liệu khác, không biến dạng trên mobile */
 input[type="time"].form-input,
 .bazi-time-input {
   display: block;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
-  box-sizing: border-box !important;
-  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  text-align: left;
   background-color: #F8FAFC;
-}
-
-input[type="time"]::-webkit-date-and-time-value {
-  text-align: center;
 }
 
 .bazi-date-row {
@@ -661,9 +660,13 @@ input[type="time"]::-webkit-date-and-time-value {
   left: -9999px;
   top: 0;
   width: 1280px;
+  min-width: 1280px;
+  max-width: 1280px;
   opacity: 0.01;
   pointer-events: none;
   z-index: -9999;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
 }
 
 /* Container hiển thị kết quả chính */
@@ -870,6 +873,7 @@ input[type="time"]::-webkit-date-and-time-value {
 .bazi-chart-card {
   width: 1280px;
   min-width: 1280px;
+  max-width: 1280px;
   box-sizing: border-box;
   background: #FEF6E8; /* Màu nền giấy kem hoàng gia chuẩn nguhanh.net */
   border: 2.5px solid #000000; /* Viền đen sắc nét bao quanh toàn bộ lá số */
@@ -878,9 +882,11 @@ input[type="time"]::-webkit-date-and-time-value {
   box-shadow: 0 4px 24px rgba(30, 58, 138, 0.12);
   position: relative;
   overflow: hidden;
-  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
 }
 
 /* Watermark Thái Cực chìm - Ẩn hoàn toàn để nền lá số sạch tinh khiết */
@@ -914,7 +920,7 @@ input[type="time"]::-webkit-date-and-time-value {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  font-size: 1.15rem;
+  font-size: 18.5px;
   color: #1F2937;
   white-space: nowrap;
   line-height: 1.4;
@@ -923,27 +929,27 @@ input[type="time"]::-webkit-date-and-time-value {
 .meta-label {
   font-weight: 700 !important; /* In đậm tiêu đề theo yêu cầu */
   color: #0F172A;
-  font-size: 1.15rem;
+  font-size: 18.5px;
   letter-spacing: 0.15px;
 }
 
 .meta-val {
   font-weight: 400;
   color: #1E293B;
-  font-size: 1.15rem;
+  font-size: 18.5px;
 }
 
 #res-name {
   font-weight: 700;
   color: #0F172A;
-  font-size: 1.15rem; /* Bằng kích thước các chữ khác theo yêu cầu */
+  font-size: 18.5px; /* Bằng kích thước các chữ khác theo yêu cầu */
   letter-spacing: 0.2px;
 }
 
 .meta-highlight {
   color: #B45309 !important;
   font-weight: 700 !important;
-  font-size: 1.15rem;
+  font-size: 18.5px;
 }
 
 /* BẢNG TỨ TRỤ CHÍNH */
@@ -991,7 +997,7 @@ input[type="time"]::-webkit-date-and-time-value {
   font-weight: 700 !important;
   color: #0F172A !important; /* Màu đen mực sắc nét, dễ nhìn */
   background: #FEF6E8 !important;
-  font-size: 0.95rem;
+  font-size: 15px;
   letter-spacing: 0.4px;
   text-align: center;
   vertical-align: middle;
@@ -1016,7 +1022,7 @@ input[type="time"]::-webkit-date-and-time-value {
 
 .bazi-main-table .col-cell {
   width: 23.6%;
-  font-size: 1.22rem;
+  font-size: 19.5px;
   color: #0F172A; /* Màu đen mực sắc nét chuẩn yêu cầu */
   font-weight: 600;
   background: #FEF6E8;
@@ -1024,7 +1030,7 @@ input[type="time"]::-webkit-date-and-time-value {
 
 .bazi-main-table .num-bold {
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 20px;
   color: #0F172A;
   letter-spacing: 0.2px;
 }
@@ -1043,7 +1049,7 @@ input[type="time"]::-webkit-date-and-time-value {
   gap: 2px;
   font-weight: 800;
   color: #0F172A;
-  font-size: 1.15rem;
+  font-size: 18.5px;
   letter-spacing: 0.5px;
 }
 
@@ -1062,7 +1068,7 @@ input[type="time"]::-webkit-date-and-time-value {
 
 .can-chi-stack .char-can,
 .can-chi-stack .char-chi {
-  font-size: 2.25rem;
+  font-size: 36px;
   font-weight: 700;
   letter-spacing: 0.5px;
   line-height: 1.18;
@@ -1092,7 +1098,7 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .daivan-info-line {
-  font-size: 1.02rem;
+  font-size: 16.5px;
   color: #1E293B;
   line-height: 1.45;
   letter-spacing: 0.1px;
@@ -1106,12 +1112,12 @@ input[type="time"]::-webkit-date-and-time-value {
 .daivan-info-line .val-blue {
   color: #034687;
   font-weight: 700;
-  font-size: 1.02rem;
+  font-size: 16.5px;
 }
 
 .daivan-info-line .val-sub {
   color: #64748B;
-  font-size: 0.98rem;
+  font-size: 15.5px;
   font-weight: 500;
 }
 
@@ -1204,12 +1210,12 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .dai-van-table .cell-pair-line .char-name {
-  font-size: 1.05rem; /* To hơn Lưu Niên 1 chút (~16.8px so với ~15.6px) */
+  font-size: 17px; /* To hơn Lưu Niên 1 chút (17px so với 15.5px) */
   font-weight: 700; /* Can Chi in đậm nổi bật */
 }
 
 .dai-van-table .cell-pair-line .char-tt {
-  font-size: 0.98rem; /* To hơn Lưu Niên 1 chút (~15.7px so với ~14.9px) */
+  font-size: 15.5px; /* To hơn Lưu Niên 1 chút */
   font-weight: 400; /* Thập Thần nét thường, không in đậm */
   color: #1E293B; /* Màu mực dễ đọc, sắc sảo */
 }
@@ -1220,13 +1226,13 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .dai-van-table .cell-meta-stack .meta-age {
-  font-size: 0.96rem;
+  font-size: 15px;
   font-weight: 400;
   color: #475569;
 }
 
 .dai-van-table .cell-meta-stack .meta-year {
-  font-size: 0.98rem;
+  font-size: 15.5px;
   font-weight: 500;
   color: #1E293B;
 }
@@ -1245,12 +1251,12 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .luu-nien-table .cell-pair-line .char-name {
-  font-size: 0.98rem; /* Nhỏ hơn Đại Vận ~1.0px, gọn gàng, thanh thoát */
+  font-size: 15.5px; /* Nhỏ hơn Đại Vận ~1.5px, gọn gàng, thanh thoát */
   font-weight: 700; /* Can Chi in đậm nổi bật */
 }
 
 .luu-nien-table .cell-pair-line .char-tt {
-  font-size: 0.93rem; /* Nhỏ hơn Đại Vận */
+  font-size: 15px; /* Nhỏ hơn Đại Vận */
   font-weight: 400;
   color: #334155;
 }
@@ -1261,13 +1267,13 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .luu-nien-table .cell-meta-stack .meta-year {
-  font-size: 0.93rem;
+  font-size: 15px;
   font-weight: 500;
   color: #1E293B;
 }
 
 .luu-nien-table .cell-meta-stack .meta-age {
-  font-size: 0.88rem;
+  font-size: 14px;
   font-weight: 400;
   color: #64748B;
 }
@@ -1281,7 +1287,7 @@ input[type="time"]::-webkit-date-and-time-value {
   align-items: center;
   padding: 10px 4px 2px 4px;
   margin-top: 4px;
-  font-size: 0.92rem;
+  font-size: 14.5px;
   color: #4B5563;
   border-top: 1.5px solid #3B82F6;
   text-align: center;
@@ -1289,14 +1295,14 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .footer-center-link span {
-  font-size: 0.92rem;
+  font-size: 14.5px;
   color: #4B5563;
 }
 
 .footer-center-link strong {
   color: #034687;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 15px;
 }
 
 .footer-center-link a {
@@ -1318,7 +1324,7 @@ input[type="time"]::-webkit-date-and-time-value {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.9rem;
+  font-size: 14px;
   font-weight: 700;
   color: #0F172A;
 }

@@ -17,20 +17,59 @@
   <meta property="og:image" content="https://luchao.io.vn/banner.jpg">
   <meta property="og:locale" content="vi_VN">
 
+  <link rel="canonical" href="https://luchao.io.vn/bat-tu">
+
+  <!-- Schema.org JSON-LD Structured Data for Rich Snippets & SGE -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://luchao.io.vn/bat-tu/#app",
+        "name": "Lập Lá Số Hoa Sơn Bát Tự Chuẩn Từng Phút",
+        "url": "https://luchao.io.vn/bat-tu",
+        "description": "Phần mềm lập lá số Hoa Sơn Bát Tự chân truyền Đạo Gia Toàn Chân Phái. Thập Thần Địa Chi độc lập, đảo ngược Tài Tinh, tiết khí NOAA và giờ Mặt Trời chuẩn xác từng phút.",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "VND"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://luchao.io.vn/bat-tu/#webpage",
+        "url": "https://luchao.io.vn/bat-tu",
+        "name": "Lập Lá Số Hoa Sơn Bát Tự Chuẩn Từng Phút | luchao.io.vn",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://luchao.io.vn/#website",
+          "name": "luchao.io.vn",
+          "url": "https://luchao.io.vn/"
+        },
+        "inLanguage": "vi-VN"
+      }
+    ]
+  }
+  </script>
+
   <!-- Fonts (Segoe UI / Roboto chuẩn nét thanh thoát Ảnh 4) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=3.4">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=3.7">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=3.4"></script>
+  <script src="/bat-tu/bazi-engine.js?v=3.7"></script>
 </head>
 <body>
 
@@ -199,13 +238,10 @@
             </div>
           </div>
 
-          <!-- Giờ sinh (Giờ : Phút) -->
+          <!-- Giờ sinh (Chuẩn input time như Ảnh 1 & tu-vi) -->
           <div class="form-group">
-            <label for="bazi-hour">Giờ sinh (24 giờ)</label>
-            <div class="bazi-time-row">
-              <select id="bazi-hour" class="form-select"></select>
-              <select id="bazi-minute" class="form-select"></select>
-            </div>
+            <label for="bazi-time">Giờ sinh:</label>
+            <input type="time" id="bazi-time" class="form-input bazi-time-input" value="12:00" required>
           </div>
 
           <!-- Múi giờ -->
@@ -383,10 +419,19 @@
           <div class="bazi-table-responsive table-daivan-box">
             <table class="dai-van-table" id="res-daivan-table">
               <tbody>
-                <tr id="res-daivan-can-chi-row">
-                  <td class="col-title-vertical" rowspan="2">
+                <tr id="res-daivan-info-row">
+                  <td class="col-title-vertical" rowspan="3">
                     <div class="title-split"><span>ĐẠI</span><span>VẬN</span></div>
                   </td>
+                  <td colspan="10" class="daivan-info-cell" id="res-daivan-info-cell">
+                    <div class="daivan-info-content">
+                      <div class="daivan-info-title">Đại vận lưu niên</div>
+                      <div class="daivan-info-line">Số tính đại vận = <span class="val-blue" id="res-daivan-so-tinh">-</span>; Nhập đại vận lúc <span id="res-daivan-nhap-luc">-</span>.</div>
+                      <div class="daivan-info-line" id="res-daivan-tiet-khi">-</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="res-daivan-can-chi-row">
                   <!-- Can Chi inject via JS -->
                 </tr>
                 <tr id="res-daivan-meta-row">
@@ -409,6 +454,13 @@
           <div class="bazi-card-footer">
             <div class="footer-center-link">
               <span>Lá số được lập tại website: <a href="https://luchao.io.vn/bat-tu" target="_blank" rel="noopener"><strong>https://luchao.io.vn/bat-tu</strong></a></span>
+            </div>
+            <div class="footer-legend">
+              <span class="legend-item"><span class="legend-box legend-kim"></span> Kim</span>
+              <span class="legend-item"><span class="legend-box legend-moc"></span> Mộc</span>
+              <span class="legend-item"><span class="legend-box legend-thuy"></span> Thủy</span>
+              <span class="legend-item"><span class="legend-box legend-hoa"></span> Hỏa</span>
+              <span class="legend-item"><span class="legend-box legend-tho"></span> Thổ</span>
             </div>
           </div>
 
@@ -466,26 +518,13 @@
         return;
       }
 
-      // 1. Khởi tạo giờ phút dropdown và thời gian thực mặc định
+      // 1. Khởi tạo giờ sinh và ngày tháng mặc định theo thời gian thực hệ thống
       const now = new Date();
-      const curH = now.getHours();
-      const curM = Math.floor(now.getMinutes() / 5) * 5;
-
-      const selHour = document.getElementById("bazi-hour");
-      const selMinute = document.getElementById("bazi-minute");
-      for (let h = 0; h < 24; h++) {
-        const opt = document.createElement("option");
-        opt.value = h;
-        opt.textContent = `${String(h).padStart(2, "0")} Giờ`;
-        if (h === curH) opt.selected = true;
-        selHour.appendChild(opt);
-      }
-      for (let m = 0; m < 60; m += 5) {
-        const opt = document.createElement("option");
-        opt.value = m;
-        opt.textContent = `${String(m).padStart(2, "0")} Phút`;
-        if (m === curM) opt.selected = true;
-        selMinute.appendChild(opt);
+      const inTime = document.getElementById("bazi-time");
+      if (inTime) {
+        const hh = String(now.getHours()).padStart(2, "0");
+        const mm = String(now.getMinutes()).padStart(2, "0");
+        inTime.value = `${hh}:${mm}`;
       }
 
       // Khởi tạo ngày tháng năm sinh mặc định theo ngày hiện tại của hệ thống
@@ -631,9 +670,13 @@
           const isLeap = document.getElementById("bazi-is-leap") ? document.getElementById("bazi-is-leap").checked : false;
           const day = parseInt(document.getElementById("bazi-day").value, 10) || 1;
           const month = parseInt(document.getElementById("bazi-month").value, 10) || 1;
-          const year = parseInt(document.getElementById("bazi-year").value, 10) || 1990;
-          const hour = parseInt(selHour.value, 10) || 0;
-          const minute = parseInt(selMinute.value, 10) || 0;
+          const timeInput = document.getElementById("bazi-time");
+          let hour = 12, minute = 0;
+          if (timeInput && timeInput.value) {
+            const parts = timeInput.value.split(":");
+            hour = parseInt(parts[0], 10) || 0;
+            minute = parseInt(parts[1], 10) || 0;
+          }
           const tzStr = tzSelect ? tzSelect.value : "+07:00";
           const tzVal = parseFloat(tzStr.replace("+", "")) || 7;
           const provinceId = provHidden ? provHidden.value : "";
@@ -754,6 +797,17 @@
         document.getElementById("res-tt-chi-ngay").textContent = p.day.thapThanChi;
         document.getElementById("res-tt-chi-gio").textContent = p.hour.thapThanChi;
 
+        // Render thông tin tính đại vận (Ảnh 1)
+        const dvInfo = res.daiVan;
+        if (dvInfo) {
+          const elSoTinh = document.getElementById("res-daivan-so-tinh");
+          const elNhapLuc = document.getElementById("res-daivan-nhap-luc");
+          const elTietKhi = document.getElementById("res-daivan-tiet-khi");
+          if (elSoTinh) elSoTinh.textContent = dvInfo.soTinhDaiVan || "-";
+          if (elNhapLuc) elNhapLuc.textContent = `${dvInfo.startYears} tuổi ${dvInfo.startMonths} tháng`;
+          if (elTietKhi) elTietKhi.textContent = dvInfo.tietKhiRangeText || dvInfo.jieQiInfoText || "";
+        }
+
         // Render Bảng Đại Vận 10 Cột
         renderDaiVanTable(res.daiVan.list);
 
@@ -769,7 +823,7 @@
         const canChiRow = document.getElementById("res-daivan-can-chi-row");
         const metaRow = document.getElementById("res-daivan-meta-row");
 
-        canChiRow.innerHTML = '<td class="col-title-vertical" rowspan="2"><div class="title-split"><span>ĐẠI</span><span>VẬN</span></div></td>';
+        canChiRow.innerHTML = '';
         metaRow.innerHTML = '';
 
         dvList.forEach(dv => {
@@ -945,7 +999,7 @@
 
           html2canvas(printableCard, {
             scale: 2.2,
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "#FEF6E8",
             useCORS: true,
             logging: false,
             imageTimeout: 0,

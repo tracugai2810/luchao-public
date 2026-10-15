@@ -26,11 +26,11 @@
 
   const ELEMENT_NAMES = ["Kim", "Mộc", "Thủy", "Hỏa", "Thổ"];
   const ELEMENT_COLORS = {
-    "Kim": "#7A7A7A",   // Xám bạc đậm
-    "Mộc": "#15803D",   // Xanh lục ngọc đậm
-    "Thủy": "#1E3A8A",  // Xanh dương navy
-    "Hỏa": "#DC2626",   // Đỏ son đậm
-    "Thổ": "#854D0E"    // Nâu hoàng thổ đậm
+    "Kim": "#52525B",   // Xám thép đậm sắc nét, chuẩn tương phản cao
+    "Mộc": "#008000",   // Xanh lục đậm chuẩn nguhanh.net
+    "Thủy": "#08078D",  // Xanh lam navy sâu thẳm chuẩn nguhanh.net
+    "Hỏa": "#E60000",   // Đỏ cờ đậm rực rỡ chuẩn nguhanh.net
+    "Thổ": "#8C4817"    // Nâu đất hoàng thổ đậm chuẩn nguhanh.net
   };
 
   // 30 Nạp Âm của 60 Hoa Giáp
@@ -1044,6 +1044,9 @@
     let startYears = 1;
     let startMonths = 0;
     let startDays = 0;
+    let soTinhDaiVan = 0;
+    let soTinhDaiVanStr = "-";
+    let tietKhiRangeText = "";
     let jieQiInfoText = "";
 
     const birthUtcMs = Date.UTC(solarYear, solarMonth - 1, solarDay, effHour, effMinute) - (timeZone * 3600000);
@@ -1051,7 +1054,9 @@
     if (pillars.prevJieQiObj && pillars.nextJieQiObj) {
       const jqTarget = direction === 1 ? pillars.nextJieQiObj : pillars.prevJieQiObj;
       const deltaMs = Math.abs(jqTarget.utcMs - birthUtcMs);
-      const deltaMinutes = Math.floor(deltaMs / (60 * 1000));
+      const deltaMinutes = deltaMs / (60 * 1000);
+      soTinhDaiVan = deltaMinutes / 1440;
+      soTinhDaiVanStr = (+(soTinhDaiVan.toFixed(14))).toString();
 
       // 4320 phút = 1 năm, 360 phút = 1 tháng, 12 phút = 1 ngày
       startYears = Math.floor(deltaMinutes / 4320);
@@ -1061,10 +1066,18 @@
       startDays = Math.floor(remDaysMin / 12);
 
       jieQiInfoText = `Khởi Đại Vận: ${startYears} tuổi ${startMonths} tháng ${startDays} ngày (${direction === 1 ? 'Thuận hành đến tiết ' + jqTarget.name + ' [' + jqTarget.userDateStr + ']' : 'Nghịch hành lùi về tiết ' + jqTarget.name + ' [' + jqTarget.userDateStr + ']'})`;
+
+      const pName = pillars.prevJieQiObj.name || "";
+      const pDate = (pillars.prevJieQiObj.userDateStr || "").replace(/\//g, "-");
+      const nDate = (pillars.nextJieQiObj.userDateStr || "").replace(/\//g, "-");
+      tietKhiRangeText = `Tiết ${pName} bắt đầu ${pDate} và kết thúc ${nDate}`;
     } else {
       jieQiInfoText = `Khởi Đại Vận: 1 tuổi 8 tháng (Tính theo tiết khí thiên văn)`;
       startYears = 1;
       startMonths = 8;
+      soTinhDaiVan = 5;
+      soTinhDaiVanStr = "5.0";
+      tietKhiRangeText = "";
     }
 
     const startAgeDisplay = startMonths >= 6 ? startYears + 1 : Math.max(1, startYears);
@@ -1295,6 +1308,13 @@
       daiVan: {
         jieQiInfoText,
         startAgeDisplay,
+        soTinhDaiVan: soTinhDaiVanStr,
+        startYears,
+        startMonths,
+        startDays,
+        tietKhiRangeText,
+        prevJieQi: pillars.prevJieQiObj,
+        nextJieQi: pillars.nextJieQiObj,
         targetDaiVanIndex: (daiVanList.find(d => d.isTarget) || daiVanList[0]).index,
         list: daiVanList
       },

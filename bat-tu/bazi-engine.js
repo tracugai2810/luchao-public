@@ -1056,7 +1056,7 @@
       const deltaMs = Math.abs(jqTarget.utcMs - birthUtcMs);
       const deltaMinutes = deltaMs / (60 * 1000);
       soTinhDaiVan = deltaMinutes / 1440;
-      soTinhDaiVanStr = (+(soTinhDaiVan.toFixed(14))).toString();
+      soTinhDaiVanStr = soTinhDaiVan.toFixed(2);
 
       // 4320 phút = 1 năm, 360 phút = 1 tháng, 12 phút = 1 ngày
       startYears = Math.floor(deltaMinutes / 4320);
@@ -1076,7 +1076,7 @@
       startYears = 1;
       startMonths = 8;
       soTinhDaiVan = 5;
-      soTinhDaiVanStr = "5.0";
+      soTinhDaiVanStr = "5.00";
       tietKhiRangeText = "";
     }
 

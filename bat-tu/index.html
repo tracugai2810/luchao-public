@@ -67,14 +67,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=5.0">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=5.1">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=5.0"></script>
+  <script src="/bat-tu/bazi-engine.js?v=5.1"></script>
 </head>
 <body>
 
@@ -325,33 +325,42 @@
           <!-- Watermark Thái Cực chìm -->
           <div class="bazi-watermark">☯</div>
 
-          <!-- Header Thông Tin Đương Số (Bố Cục Cân Đối Chuẩn Mực Như Ảnh 2) -->
+          <!-- Header Thông Tin Đương Số (Bố Cục 3 Cột Cân Đối Theo Phương Án 1) -->
           <div class="bazi-sheet-header">
             <div class="header-meta-box">
+              <!-- Cột 1: Đương số & Giới tính -->
               <div class="meta-col meta-col-left">
                 <div class="meta-row">
                   <span class="meta-label">Họ tên:</span>
                   <span class="meta-val" id="res-name">Đương số</span>
                 </div>
                 <div class="meta-row">
-                  <span class="meta-label" id="res-solar-label">Dương lịch:</span>
-                  <span class="meta-val" id="res-solar-full">-</span>
+                  <span class="meta-label">Giới tính:</span>
+                  <span class="meta-val" id="res-gender">Nam</span>
                 </div>
               </div>
-              <div class="meta-col meta-col-right">
-                <div class="meta-row meta-row-split">
-                  <div class="meta-inline-item">
-                    <span class="meta-label">Giới tính:</span>
-                    <span class="meta-val" id="res-gender">Nam</span>
-                  </div>
-                  <div class="meta-inline-item">
-                    <span class="meta-label">Năm xem hạn:</span>
-                    <span class="meta-val meta-highlight" id="res-calc-year">-</span>
-                  </div>
+
+              <!-- Cột 2: Dương lịch & Âm lịch -->
+              <div class="meta-col meta-col-center">
+                <div class="meta-row">
+                  <span class="meta-label" id="res-solar-label">Dương lịch:</span>
+                  <span class="meta-val" id="res-solar-full">-</span>
                 </div>
                 <div class="meta-row">
                   <span class="meta-label">Âm Dương hợp lịch:</span>
                   <span class="meta-val" id="res-lunar-full">-</span>
+                </div>
+              </div>
+
+              <!-- Cột 3: Năm xem hạn & Tuổi xem hạn -->
+              <div class="meta-col meta-col-right">
+                <div class="meta-row">
+                  <span class="meta-label">Năm xem hạn:</span>
+                  <span class="meta-val meta-highlight" id="res-calc-year">-</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label">Tuổi xem hạn:</span>
+                  <span class="meta-val meta-highlight" id="res-calc-age">-</span>
                 </div>
               </div>
             </div>
@@ -756,7 +765,7 @@
         document.getElementById("res-solar-full").textContent = `${birthTimeDisplay} - ${inp.birthDateStr}`;
         document.getElementById("res-lunar-full").textContent = `${inp.birthTimeStr} - ${inp.lunarDateStr}`;
 
-        // Năm xem hạn
+        // Năm xem hạn & Tuổi xem hạn (Tính chuẩn theo năm Tiết Khí, đồng bộ 100% với Lưu Niên & Đại Vận)
         const cYear = inp.calcYear || currentYear;
         const jiaziC = ((cYear - 1924) % 60 + 60) % 60;
         const cCan = Engine.CAN[jiaziC % 10];
@@ -764,6 +773,13 @@
         const elCalcYear = document.getElementById("res-calc-year");
         if (elCalcYear) {
           elCalcYear.textContent = `${cYear} - ${cCan} ${cChi}`;
+        }
+
+        const birthBaziYear = p.year ? (parseInt(p.year.solarDateText, 10) || inp.year) : inp.year;
+        const calcAge = Math.max(1, cYear - birthBaziYear + 1);
+        const elCalcAge = document.getElementById("res-calc-age");
+        if (elCalcAge) {
+          elCalcAge.textContent = `${calcAge} tuổi`;
         }
 
         // Bảng Tứ Trụ
@@ -809,7 +825,10 @@
           const elSoTinh = document.getElementById("res-daivan-so-tinh");
           const elNhapLuc = document.getElementById("res-daivan-nhap-luc");
           const elTietKhi = document.getElementById("res-daivan-tiet-khi");
-          if (elSoTinh) elSoTinh.textContent = dvInfo.soTinhDaiVan || "-";
+          if (elSoTinh) {
+            const rawVal = parseFloat(dvInfo.soTinhDaiVan);
+            elSoTinh.textContent = !isNaN(rawVal) ? rawVal.toFixed(2) : (dvInfo.soTinhDaiVan || "-");
+          }
           if (elNhapLuc) elNhapLuc.textContent = `${dvInfo.startYears} tuổi ${dvInfo.startMonths} tháng`;
           if (elTietKhi) elTietKhi.textContent = dvInfo.tietKhiRangeText || dvInfo.jieQiInfoText || "";
         }

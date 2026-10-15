@@ -910,9 +910,9 @@ input[type="time"]::-webkit-date-and-time-value {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 36px;
+  gap: 20px;
   width: 100%;
-  padding: 8px 6px 14px 6px;
+  padding: 6px 4px 14px 4px;
   background: transparent;
   box-sizing: border-box;
 }
@@ -920,15 +920,22 @@ input[type="time"]::-webkit-date-and-time-value {
 .meta-col {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .meta-col-left {
-  flex: 1;
+  flex: 0.9;
+  min-width: 0;
+}
+
+.meta-col-center {
+  flex: 1.45;
+  min-width: 0;
 }
 
 .meta-col-right {
   flex: 1.15;
+  min-width: 0;
 }
 
 .meta-row {
@@ -941,24 +948,10 @@ input[type="time"]::-webkit-date-and-time-value {
   line-height: 1.4;
 }
 
-.meta-row-split {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 24px;
-}
-
-.meta-inline-item {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  white-space: nowrap;
-}
-
 .meta-label {
   font-weight: 700 !important; /* In đậm tiêu đề theo yêu cầu */
   color: #0F172A;
-  font-size: 1.16rem;
+  font-size: 1.15rem;
   letter-spacing: 0.15px;
 }
 
@@ -971,8 +964,8 @@ input[type="time"]::-webkit-date-and-time-value {
 #res-name {
   font-weight: 700;
   color: #0F172A;
-  font-size: 1.30rem;
-  letter-spacing: 0.5px;
+  font-size: 1.15rem; /* Bằng kích thước các chữ khác theo yêu cầu */
+  letter-spacing: 0.2px;
 }
 
 .meta-highlight {

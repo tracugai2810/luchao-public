@@ -1029,7 +1029,7 @@ body {
 .bazi-main-table .col-cell {
   width: 23.6%;
   font-size: 1.22rem;
-  color: #034687;
+  color: #0F172A; /* Màu đen mực sắc nét chuẩn yêu cầu */
   font-weight: 600;
   background: #FEF6E8;
 }
@@ -1042,8 +1042,8 @@ body {
 }
 
 .cell-nhat-chu {
-  font-weight: 700 !important;
-  color: #034687 !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
   font-size: 1.22rem !important;
   letter-spacing: 0.4px;
 }
@@ -1083,28 +1083,29 @@ body {
 .daivan-info-content {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   text-align: left;
 }
 
 .daivan-info-title {
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.08rem;
   color: #0F172A;
   line-height: 1.35;
   letter-spacing: 0.2px;
 }
 
 .daivan-info-line {
-  font-size: 0.96rem;
+  font-size: 1.02rem;
   color: #1E293B;
-  line-height: 1.45;
+  line-height: 1.5;
   letter-spacing: 0.1px;
 }
 
 .daivan-info-line .val-blue {
   color: #034687;
   font-weight: 700;
+  font-size: 1.02rem;
 }
 
 .dai-van-table td.dv-col,
@@ -1198,7 +1199,7 @@ body {
 .cell-meta-stack .meta-age {
   font-size: 0.96rem;
   font-weight: 600;
-  color: #0284C7;
+  color: #334155; /* Xám đen đậm sang trọng chuẩn nền kem cổ điển */
   white-space: nowrap;
   display: block;
 }

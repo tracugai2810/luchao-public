@@ -879,7 +879,7 @@ body {
   position: relative;
   z-index: 1;
   width: 100%;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
   background: transparent;
 }
 
@@ -889,7 +889,7 @@ body {
   align-items: flex-start;
   gap: 36px;
   width: 100%;
-  padding: 2px 4px 6px 4px;
+  padding: 8px 6px 14px 6px;
   background: transparent;
   box-sizing: border-box;
 }
@@ -897,7 +897,7 @@ body {
 .meta-col {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 .meta-col-left {
@@ -912,17 +912,17 @@ body {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  font-size: 1.02rem;
+  font-size: 1.15rem;
   color: #1F2937;
   white-space: nowrap;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .meta-row-split {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 20px;
+  gap: 24px;
 }
 
 .meta-inline-item {
@@ -935,27 +935,27 @@ body {
 .meta-label {
   font-weight: 700 !important; /* In đậm tiêu đề theo yêu cầu */
   color: #0F172A;
-  font-size: 1.02rem;
-  letter-spacing: 0.1px;
+  font-size: 1.16rem;
+  letter-spacing: 0.15px;
 }
 
 .meta-val {
   font-weight: 400;
   color: #1E293B;
-  font-size: 1.02rem;
+  font-size: 1.15rem;
 }
 
 #res-name {
   font-weight: 700;
   color: #0F172A;
-  font-size: 1.12rem;
-  letter-spacing: 0.3px;
+  font-size: 1.30rem;
+  letter-spacing: 0.5px;
 }
 
 .meta-highlight {
   color: #B45309 !important;
   font-weight: 700 !important;
-  font-size: 1.02rem;
+  font-size: 1.15rem;
 }
 
 /* BẢNG TỨ TRỤ CHÍNH */

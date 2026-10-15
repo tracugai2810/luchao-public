@@ -1,11 +1,11 @@
 /**
- * HOA SƠN BÁT TỰ ENGINE (Chu Thần Bân)
+ * HOA SƠN BÁT TỰ ENGINE
  * File: bazi-engine.js
  * 
  * Thiết kế cho: luchao.io.vn/bat-tu
- * Tuân thủ 100% lý luận của danh gia Chu Thần Bân (Toàn Chân Phái Hoa Sơn Bát Tự Học):
+ * Tuân thủ nguyên lý Toàn Chân Phái Hoa Sơn Bát Tự Học:
  * 1. Bảng Thập Thần Thiên Can đảo ngược Tài Tinh (Ta khắc cùng giới = Chính Tài, khác giới = Thiên Tài).
- * 2. Bảng Thập Thần Địa Chi (Trang 73) độc lập, KHÔNG DÙNG TÀNG CAN.
+ * 2. Bảng Thập Thần Địa Chi (Địa Tinh) độc lập, KHÔNG DÙNG TÀNG CAN.
  * 3. Quan hệ 3 Liên: Can Chi Liên (dọc), Thiên Can Liên (ngang), Địa Chi Liên (ngang).
  * 4. Lịch Mặt Trời Chân Thực (True Solar Time = Kinh độ 63 tỉnh VN + Equation of Time).
  * 5. Tiết Khí & Khởi Đại Vận chuẩn xác từng phút.
@@ -44,10 +44,10 @@
   ];
 
   // ==========================================
-  // II. MA TRẬN THẬP THẦN HOA SƠN (CHU THẦN BÂN)
+  // II. MA TRẬN THẬP THẦN HOA SƠN BÁT TỰ
   // ==========================================
   
-  // 1. Thập Thần Thiên Can (Trang 34, 59-67) - Đảo ngược Tài Tinh
+  // 1. Thập Thần Thiên Can - Đảo ngược Tài Tinh
   // Hàng = nhatCan, Cột = targetCan
   const THAP_THAN_THIEN_CAN = [
     // Giáp (0)
@@ -85,7 +85,7 @@
     "Kiêu": "Kiêu Thần"
   };
 
-  // 2. Thập Thần Địa Chi (Trang 73) - Chu Thần Bân nguyên tác
+  // 2. Thập Thần Địa Chi (Địa Tinh Bản Nguyên Ma Trận)
   // Hàng = nhatCan, Cột = targetChi (0: Tý .. 11: Hợi)
   const THAP_THAN_DIA_CHI = [
     // Giáp (0)

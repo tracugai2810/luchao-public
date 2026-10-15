@@ -851,7 +851,7 @@ body {
   background: #FEF6E8; /* Màu nền giấy kem hoàng gia chuẩn nguhanh.net */
   border: 2.5px solid #1E3A8A; /* Viền tổng đậm bao quanh theo Ảnh 3 & 4 */
   border-radius: 4px;
-  padding: 24px 28px;
+  padding: 26px 30px;
   box-shadow: 0 4px 24px rgba(30, 58, 138, 0.12);
   position: relative;
   overflow: hidden;
@@ -991,7 +991,7 @@ body {
 }
 
 .bazi-main-table td {
-  padding: 8px 3px;
+  padding: 14px 4px;
 }
 
 /* Cột Tiêu Đề Bên Trái In Đậm Rõ Nét Màu Đen Chuẩn */
@@ -1042,10 +1042,25 @@ body {
 }
 
 .cell-nhat-chu {
-  font-weight: 800 !important;
-  color: #0F172A !important;
-  font-size: 1.22rem !important;
-  letter-spacing: 0.4px;
+  vertical-align: middle;
+}
+
+/* Kiểu chữ NHẬT CHỦ xếp 2 dòng vuông vắn chuẩn Ảnh 2 */
+.nhat-chu-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.25;
+  gap: 2px;
+  font-weight: 800;
+  color: #0F172A;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+}
+
+.nhat-chu-stack span {
+  display: block;
 }
 
 .can-chi-stack {
@@ -1073,7 +1088,7 @@ body {
 
 /* Khung thông tin tính Đại Vận (Ảnh 1) */
 .daivan-info-cell {
-  padding: 8px 16px !important;
+  padding: 10px 16px !important;
   text-align: left !important;
   background: #FEF6E8 !important;
   border-bottom: 1px solid #93C5FD !important;
@@ -1108,17 +1123,21 @@ body {
   font-size: 1.02rem;
 }
 
+/* ==========================================================================
+   BẢNG ĐẠI VẬN & LƯU NIÊN (CHUẨN TỶ LỆ VÀNG, PHÂN BẬC ĐẠI VẬN > LƯU NIÊN)
+   ========================================================================== */
+
 .dai-van-table td.dv-col,
 .luu-nien-table td.ln-cell {
   width: 9.44%;
   vertical-align: middle;
   background: #FEF6E8;
-  padding: 4px 1px;
   transition: background 0.15s ease;
 }
 
 .dai-van-table td.dv-col {
   cursor: pointer;
+  padding: 3px 1px;
 }
 
 .dai-van-table td.dv-col:hover {
@@ -1130,9 +1149,12 @@ body {
   background: #FDE68A !important;
 }
 
-/* BẢNG LƯU NIÊN (20 NĂM) */
 .table-luunien-box {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+}
+
+.luu-nien-table td.ln-cell {
+  padding: 2px 1px;
 }
 
 .luu-nien-table td.ln-cell:hover {
@@ -1144,14 +1166,12 @@ body {
   background: #FDE68A !important;
 }
 
-/* KHỐI CAN - THẬP THẦN & CHI - THẬP THẦN (ĐỒNG BỘ 100% CẢ ĐẠI VẬN & LƯU NIÊN) */
+/* Base stack layout */
 .cell-pair-stack {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 6px 1px;
   width: 100%;
 }
 
@@ -1159,57 +1179,121 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  font-size: 1.06rem;
-  line-height: 1.35;
   white-space: nowrap;
   width: 100%;
 }
 
-.cell-pair-line .char-name {
-  font-size: 1.06rem;
-  font-weight: 700;
-}
-
-.cell-pair-line .char-sep {
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: #94A3B8;
-  margin: 0 1px;
-}
-
-.cell-pair-line .char-tt {
-  font-size: 1.04rem;
-  font-weight: 600;
-  color: #1E293B;
-}
-
-/* KHỐI NĂM & TUỔI (ĐỒNG BỘ 100% CẢ ĐẠI VẬN & LƯU NIÊN) */
 .cell-meta-stack {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 6px 1px;
   line-height: 1.25;
   width: 100%;
 }
 
-.cell-meta-stack .meta-age {
-  font-size: 0.96rem;
-  font-weight: 600;
-  color: #334155; /* Xám đen đậm sang trọng chuẩn nền kem cổ điển */
+.cell-meta-stack .meta-age,
+.cell-meta-stack .meta-year {
   white-space: nowrap;
   display: block;
 }
 
-.cell-meta-stack .meta-year {
+/* ---------------------------------------------------------
+   1. ĐẠI VẬN (10 Năm - Bề thế, nổi bật, to hơn Lưu Niên 1 chút)
+   --------------------------------------------------------- */
+.dai-van-table .cell-pair-stack {
+  gap: 5px;
+  padding: 9px 2px;
+}
+
+.dai-van-table .cell-pair-line {
+  gap: 3px;
+  line-height: 1.35;
+}
+
+.dai-van-table .cell-pair-line .char-name {
+  font-size: 1.12rem; /* To hơn Lưu Niên 1 chút (~18px so với ~16.3px) */
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.dai-van-table .cell-pair-line .char-sep {
   font-size: 0.98rem;
+  font-weight: 400;
+  color: #64748B;
+  margin: 0 1px;
+}
+
+.dai-van-table .cell-pair-line .char-tt {
+  font-size: 1.08rem; /* To hơn Lưu Niên 1 chút (~17.3px so với ~15.7px) */
+  font-weight: 700;
+  color: #0F172A; /* Màu đen mực sắc nét */
+  letter-spacing: 0.2px;
+}
+
+.dai-van-table .cell-meta-stack {
+  gap: 4px;
+  padding: 8px 2px;
+}
+
+.dai-van-table .cell-meta-stack .meta-age {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #1E293B; /* Xám đen sẫm rõ nét */
+}
+
+.dai-van-table .cell-meta-stack .meta-year {
+  font-size: 1.04rem;
+  font-weight: 700;
+  color: #0F172A; /* Màu đen mực */
+}
+
+/* ---------------------------------------------------------
+   2. LƯU NIÊN (Từng năm - Nhỏ hơn Đại Vận 1 chút, thanh thoát)
+   --------------------------------------------------------- */
+.luu-nien-table .cell-pair-stack {
+  gap: 4px;
+  padding: 6px 1px;
+}
+
+.luu-nien-table .cell-pair-line {
+  gap: 2px;
+  line-height: 1.30;
+}
+
+.luu-nien-table .cell-pair-line .char-name {
+  font-size: 1.02rem; /* Nhỏ hơn Đại Vận ~1.6px, gọn gàng, thanh thoát */
+  font-weight: 700;
+}
+
+.luu-nien-table .cell-pair-line .char-sep {
+  font-size: 0.90rem;
+  font-weight: 400;
+  color: #94A3B8;
+  margin: 0 1px;
+}
+
+.luu-nien-table .cell-pair-line .char-tt {
+  font-size: 0.98rem; /* Nhỏ hơn Đại Vận ~1.6px */
   font-weight: 600;
   color: #1E293B;
-  white-space: nowrap;
-  display: block;
+}
+
+.luu-nien-table .cell-meta-stack {
+  gap: 2px;
+  padding: 6px 1px;
+}
+
+.luu-nien-table .cell-meta-stack .meta-year {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.luu-nien-table .cell-meta-stack .meta-age {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #475569;
 }
 
 /* Chân bảng Lá Số / Footer Sheet */

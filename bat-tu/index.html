@@ -62,14 +62,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=4.1">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=4.2">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=4.1"></script>
+  <script src="/bat-tu/bazi-engine.js?v=4.2"></script>
 </head>
 <body>
 
@@ -372,7 +372,9 @@
                   <td class="col-title"><div class="title-split"><span>THIÊN</span><span>CAN</span></div></td>
                   <td class="col-cell" id="res-tt-can-nam">-</td>
                   <td class="col-cell" id="res-tt-can-thang">-</td>
-                  <td class="col-cell cell-nhat-chu" id="res-tt-can-ngay">NHẬT CHỦ</td>
+                  <td class="col-cell cell-nhat-chu" id="res-tt-can-ngay">
+                    <div class="nhat-chu-stack"><span>NHẬT</span><span>CHỦ</span></div>
+                  </td>
                   <td class="col-cell" id="res-tt-can-gio">-</td>
                 </tr>
                 <!-- Hàng 3: Bát Tự -->
@@ -772,7 +774,8 @@
         // Hàng 2: Chủ Tinh (Thập thần Can)
         document.getElementById("res-tt-can-nam").textContent = p.year.thapThanCan;
         document.getElementById("res-tt-can-thang").textContent = p.month.thapThanCan;
-        document.getElementById("res-tt-can-ngay").textContent = "NHẬT CHỦ";
+        const elNc = document.getElementById("res-tt-can-ngay");
+        if (elNc) elNc.innerHTML = '<div class="nhat-chu-stack"><span>NHẬT</span><span>CHỦ</span></div>';
         document.getElementById("res-tt-can-gio").textContent = p.hour.thapThanCan;
 
         // Hàng 3: Bát Tự (Can Chi Lớn & Tô Màu Ngũ Hành)

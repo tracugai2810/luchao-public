@@ -665,6 +665,60 @@
   }
 
   // ==========================================
+  // VI.B. VÒNG TRƯỜNG SINH, THAI NGUYÊN, MỆNH CUNG, KHÔNG VONG
+  // ==========================================
+  const TRUONG_SINH_NAMES = [
+    "Trường sinh", "Mộc dục", "Quan đới", "Lâm quan", 
+    "Đế vượng", "Suy", "Bệnh", "Tử", "Mộ", "Tuyệt", "Thai", "Dưỡng"
+  ];
+
+  function getTruongSinh(canIdx, chiIdx) {
+    const START_CHI = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];
+    const isDuong = (canIdx % 2 === 0);
+    const start = START_CHI[canIdx];
+    const step = isDuong ? (chiIdx - start + 12) % 12 : (start - chiIdx + 12) % 12;
+    return TRUONG_SINH_NAMES[step];
+  }
+
+  function calculateThaiNguyen(canThang, chiThang) {
+    const canThai = (canThang + 1) % 10;
+    const chiThai = (chiThang + 3) % 12;
+    const jiazi = (6 * canThai - 5 * chiThai + 60) % 60;
+    const napAmIndex = Math.floor(jiazi / 2);
+    return {
+      can: canThai,
+      chi: chiThai,
+      name: `${CAN[canThai]} ${CHI[chiThai]}`,
+      napAm: NAP_AM_30[napAmIndex] || ""
+    };
+  }
+
+  function calculateMenhCung(canNam, chiThang, chiGio) {
+    const mNum = (chiThang - 2 + 12) % 12 + 1; // Dần = 1 ... Sửu = 12
+    const hNum = (chiGio - 2 + 12) % 12 + 1;
+    const sum = mNum + hNum;
+    const cNum = sum <= 14 ? (14 - sum) : (26 - sum);
+    const chiMenh = (cNum - 1 + 2) % 12;
+
+    const canDanMap = [2, 4, 6, 8, 0, 2, 4, 6, 8, 0];
+    const canDan = canDanMap[canNam];
+    const offsetDan = (chiMenh - 2 + 12) % 12;
+    const canMenh = (canDan + offsetDan) % 10;
+
+    return {
+      can: canMenh,
+      chi: chiMenh,
+      name: `${CAN[canMenh]} ${CHI[chiMenh]}`
+    };
+  }
+
+  function calculateKhongVong(can, chi) {
+    const kv1 = (chi - can + 22) % 12;
+    const kv2 = (chi - can + 23) % 12;
+    return `${CHI[kv1]} - ${CHI[kv2]}`;
+  }
+
+  // ==========================================
   // VII. THUẬT TOÁN TÍNH TỨ TRỤ & TIẾT KHÍ CHUẨN TỪNG PHÚT
   // ==========================================
 
@@ -784,7 +838,7 @@
 
       // Nguyệt Chi theo 12 tiết khí
       let monthOrder = 1; // 1 = Dần (Lập Xuân)
-      if (deg >= 315 || deg < 345) monthOrder = 1; // Dần
+      if (deg >= 315 && deg < 345) monthOrder = 1; // Dần
       else if (deg >= 345 || deg < 15) monthOrder = 2; // Mão
       else if (deg >= 15 && deg < 45) monthOrder = 3; // Thìn
       else if (deg >= 45 && deg < 75) monthOrder = 4; // Tỵ
@@ -815,6 +869,7 @@
       gender = "nam",         // "nam" | "nu"
       calendarType = "solar",  // "solar" | "lunar"
       isLeapMonth = false,
+      calcYear: inCalcYear,
       year: inYear,
       month: inMonth,
       day: inDay,
@@ -828,6 +883,11 @@
       timeZone = 7,
       provinceId = null
     } = input;
+
+    const currentYear = new Date().getFullYear();
+    const calcYear = (inCalcYear !== undefined && inCalcYear !== null && !isNaN(parseInt(inCalcYear, 10))) 
+      ? parseInt(inCalcYear, 10) 
+      : currentYear;
 
     // 1. Chuyển đổi Âm lịch sang Dương lịch (nếu chọn Âm lịch)
     let solarYear = parseInt(inSolarYear !== undefined ? inSolarYear : inYear, 10);
@@ -958,10 +1018,27 @@
     const tsNgay = calculateThanSat(canNgay, canNam, chiNgay, chiNam, chiNgay);
     const tsGio = calculateThanSat(canNgay, canNam, chiNgay, chiNam, chiGio);
 
-    // Nạp Âm
-    const napAmNam = NAP_AM_30[Math.floor(((chiNam - canNam + 12) % 12 + canNam * 1.5) % 30)] || NAP_AM_30[Math.floor(((solarYear - 1924) % 60) / 2)];
-    const jiaziNgay = (jdn + 49) % 60;
-    const napAmNgay = NAP_AM_30[Math.floor(jiaziNgay / 2)];
+    // Nạp Âm 4 Trụ
+    const getNapAm = (can, chi) => {
+      const jiazi = (6 * can - 5 * chi + 60) % 60;
+      return NAP_AM_30[Math.floor(jiazi / 2)] || "";
+    };
+    const napAmNam = getNapAm(canNam, chiNam);
+    const napAmThang = getNapAm(canThang, chiThang);
+    const napAmNgay = getNapAm(canNgay, chiNgay);
+    const napAmGio = getNapAm(canGio, chiGio);
+
+    // Vòng 12 Trường Sinh theo Can Ngày
+    const tsSinhNam = getTruongSinh(canNgay, chiNam);
+    const tsSinhThang = getTruongSinh(canNgay, chiThang);
+    const tsSinhNgay = getTruongSinh(canNgay, chiNgay);
+    const tsSinhGio = getTruongSinh(canNgay, chiGio);
+
+    // Mệnh Cung, Thai Nguyên, Niên Không, Nhật Không
+    const thaiNguyen = calculateThaiNguyen(canThang, chiThang);
+    const menhCung = calculateMenhCung(canNam, chiThang, chiGio);
+    const nienKhong = calculateKhongVong(canNam, chiNam);
+    const nhatKhong = calculateKhongVong(canNgay, chiNgay);
 
     // 8. Tính Tuổi Khởi Đại Vận & 10 Đại Vận (Chuẩn từng phút)
     let startYears = 1;
@@ -994,7 +1071,6 @@
 
     // Lập 10 Cột Đại Vận
     const daiVanList = [];
-    const currentYear = new Date().getFullYear();
 
     for (let i = 1; i <= 10; i++) {
       const dvCan = (canThang + i * direction + 100) % 10;
@@ -1006,8 +1082,9 @@
       const ttCan = THAP_THAN_THIEN_CAN[canNgay][dvCan];
       const ttChi = THAP_THAN_DIA_CHI[canNgay][dvChi];
 
-      // Đánh dấu đại vận hiện tại
+      // Đánh dấu đại vận hiện tại và đại vận của năm xem (target)
       const isCurrent = (currentYear >= solarYearStart && currentYear < solarYearStart + 10);
+      const isTarget = (calcYear >= solarYearStart && calcYear < solarYearStart + 10);
 
       daiVanList.push({
         index: i,
@@ -1021,18 +1098,23 @@
         chiColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CHI[dvChi]]],
         thapThanCan: ttCan,
         thapThanChi: ttChi,
+        thapThanDisplay: `${ttCan} / ${ttChi}`,
         ageFrom,
         ageTo,
         ageRangeText: `${ageFrom}-${ageTo}t`,
         solarYearStart,
-        isCurrent
+        isCurrent,
+        isTarget
       });
     }
 
     // 9. Hàm lấy 20 Năm Lưu Niên theo Đại Vận được chọn
-    const getLuuNienForDaiVan = (dvIndex) => {
+    const getLuuNienForDaiVan = (dvIndex, customCalcYear) => {
       const dv = daiVanList.find(d => d.index === dvIndex) || daiVanList[0];
       const nextDv = daiVanList.find(d => d.index === dvIndex + 1);
+      const targetY = (customCalcYear !== undefined && customCalcYear !== null && !isNaN(parseInt(customCalcYear, 10)))
+        ? parseInt(customCalcYear, 10)
+        : calcYear;
 
       const years = [];
       // 10 năm đại vận này
@@ -1043,7 +1125,9 @@
         const yCan = jiaziYr % 10;
         const yChi = jiaziYr % 12;
         const ttCan = THAP_THAN_THIEN_CAN[canNgay][yCan];
+        const ttChi = THAP_THAN_DIA_CHI[canNgay][yChi];
         const isCurrent = (yr === currentYear);
+        const isTarget = (yr === targetY);
 
         years.push({
           year: yr,
@@ -1054,8 +1138,11 @@
           chiElem: ELEMENT_NAMES[NGU_HANH_CHI[yChi]],
           canColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CAN[yCan]]],
           chiColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CHI[yChi]]],
-          thapThan: ttCan,
+          thapThanCan: ttCan,
+          thapThanChi: ttChi,
+          thapThan: `${ttCan}/${ttChi}`,
           isCurrent,
+          isTarget,
           row: 1
         });
       }
@@ -1069,7 +1156,9 @@
           const yCan = jiaziYr % 10;
           const yChi = jiaziYr % 12;
           const ttCan = THAP_THAN_THIEN_CAN[canNgay][yCan];
+          const ttChi = THAP_THAN_DIA_CHI[canNgay][yChi];
           const isCurrent = (yr === currentYear);
+          const isTarget = (yr === targetY);
 
           years.push({
             year: yr,
@@ -1080,8 +1169,11 @@
             chiElem: ELEMENT_NAMES[NGU_HANH_CHI[yChi]],
             canColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CAN[yCan]]],
             chiColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CHI[yChi]]],
-            thapThan: ttCan,
+            thapThanCan: ttCan,
+            thapThanChi: ttChi,
+            thapThan: `${ttCan}/${ttChi}`,
             isCurrent,
+            isTarget,
             row: 2
           });
         }
@@ -1118,6 +1210,7 @@
       rawInput: {
         name,
         gender: genderLabel,
+        calcYear,
         birthDateStr: `${String(solarDay).padStart(2, '0')}/${String(solarMonth).padStart(2, '0')}/${solarYear}`,
         birthTimeStr: `${String(rawHour).padStart(2, '0')}:${String(rawMinute).padStart(2, '0')}`,
         lunarDateStr: `${String(lunarDateInfo.day).padStart(2, '0')}/${String(lunarDateInfo.month).padStart(2, '0')}/${lunarDateInfo.year}${lunarDateInfo.isLeap ? ' (Nhuận)' : ''}`,
@@ -1139,6 +1232,8 @@
           chiColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CHI[chiNam]]],
           thapThanCan: ttCanNam,
           thapThanChi: ttChiNam,
+          truongSinh: tsSinhNam,
+          napAm: napAmNam,
           canChiLien: cclNam,
           thanSat: tsNam
         },
@@ -1155,6 +1250,8 @@
           chiColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CHI[chiThang]]],
           thapThanCan: ttCanThang,
           thapThanChi: ttChiThang,
+          truongSinh: tsSinhThang,
+          napAm: napAmThang,
           canChiLien: cclThang,
           thanSat: tsThang
         },
@@ -1171,9 +1268,10 @@
           chiColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CHI[chiNgay]]],
           thapThanCan: ttCanNgay,
           thapThanChi: ttChiNgay,
+          truongSinh: tsSinhNgay,
+          napAm: napAmNgay,
           canChiLien: cclNgay,
-          thanSat: tsNgay,
-          napAm: napAmNgay
+          thanSat: tsNgay
         },
         hour: {
           label: "GIỜ",
@@ -1188,6 +1286,8 @@
           chiColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CHI[chiGio]]],
           thapThanCan: ttCanGio,
           thapThanChi: ttChiGio,
+          truongSinh: tsSinhGio,
+          napAm: napAmGio,
           canChiLien: cclGio,
           thanSat: tsGio
         }
@@ -1195,7 +1295,14 @@
       daiVan: {
         jieQiInfoText,
         startAgeDisplay,
+        targetDaiVanIndex: (daiVanList.find(d => d.isTarget) || daiVanList[0]).index,
         list: daiVanList
+      },
+      extraInfo: {
+        thaiNguyen,
+        menhCung,
+        nienKhong,
+        nhatKhong
       },
       getLuuNienForDaiVan,
       analysis: {
@@ -1227,6 +1334,10 @@
     analyzeThienCanLien,
     analyzeDiaChiLien,
     calculateThanSat,
+    getTruongSinh,
+    calculateThaiNguyen,
+    calculateMenhCung,
+    calculateKhongVong,
     calculateBazi
   };
 

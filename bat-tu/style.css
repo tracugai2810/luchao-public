@@ -7,22 +7,22 @@
 
 /* --- Biến CSS Bát Tự --- */
 :root {
-  /* Nền & Viền Lá Số Chuẩn Ảnh 1 */
-  --bazi-bg-paper: #FDF8EE;
-  --bazi-bg-paper-alt: #FAF5E8;
-  --bazi-border-outer: #7DA7D9;
-  --bazi-border-inner: #9BBCE0;
-  --bazi-header-bg: #F2F6FA;
-  --bazi-header-text: #1E293B;
-  --bazi-active-cell: #FCE4B8;
-  --bazi-active-border: #D97706;
+  /* Nền & Viền Lá Số Chuẩn Tứ Trụ Mệnh Bàn */
+  --bazi-bg-paper: #FFFFFF;
+  --bazi-bg-paper-alt: #F8FAFC;
+  --bazi-border-outer: #CBD5E1;
+  --bazi-border-inner: #E2E8F0;
+  --bazi-header-bg: #F8FAFC;
+  --bazi-header-text: #1E3A8A;
+  --bazi-active-cell: #FEF3C7;
+  --bazi-active-border: #F59E0B;
 
   /* Màu Ngũ Hành Chuẩn Phong Thủy */
-  --elem-kim: #4B5563;
+  --elem-kim: #64748B;
   --elem-moc: #15803D;
-  --elem-thuy: #1D4ED8;
+  --elem-thuy: #2563EB;
   --elem-hoa: #DC2626;
-  --elem-tho: #854D0E;
+  --elem-tho: #D97706;
 
   /* Màu Text Hệ Thống */
   --text-dark: #0F172A;
@@ -38,17 +38,17 @@
   --sar: env(safe-area-inset-right, 0px);
 }
 
-/* --- Reset cơ bản & Nền Trang Sáng / Giấy Kem --- */
+/* --- Reset cơ bản & Nền Trang Sáng Hiện Đại --- */
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: #F5EFE6;
+  font-family: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #F8FAFC;
   background-image: 
-    radial-gradient(circle at 15% 20%, rgba(217, 119, 6, 0.05) 0%, transparent 45%),
-    radial-gradient(circle at 85% 85%, rgba(185, 28, 28, 0.04) 0%, transparent 45%);
+    radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.03) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(217, 119, 6, 0.03) 0%, transparent 45%);
   color: var(--text-body);
   margin: 0;
   padding: 0;
@@ -633,12 +633,12 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Container Render Ngầm (Target để html2canvas chụp ảnh chuẩn 960px) */
+/* Container Render Ngầm (Target để html2canvas chụp ảnh chuẩn 1020px) */
 .bazi-capture-container {
   position: absolute;
   left: -9999px;
   top: 0;
-  width: 960px;
+  width: 1020px;
   opacity: 0.01;
   pointer-events: none;
   z-index: -9999;
@@ -646,28 +646,64 @@ body {
 
 /* Container hiển thị kết quả chính */
 .bazi-rendered-card-container {
-  max-width: 960px;
+  max-width: 1020px;
   margin: 0 auto 30px auto;
 }
 
 /* Thanh chọn Đại Vận nhanh trên UI */
 .bazi-daivan-switcher-box {
   background: #FFFFFF;
-  border: 1.5px solid var(--bazi-border-inner);
-  border-radius: 12px;
+  border: 1px solid var(--bazi-border-outer);
+  border-radius: 10px;
   padding: 12px 16px;
   margin-bottom: 14px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.switcher-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .bazi-daivan-switcher-box .switcher-title {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  color: #78350F;
-  margin-bottom: 8px;
+  color: #1E3A8A;
+  margin-bottom: 0;
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.switcher-quick-year {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1E3A8A;
+}
+
+.form-select-sm {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  font-size: 0.84rem;
+  font-family: inherit;
+  font-weight: 700;
+  color: #0F172A;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.form-select-sm:focus {
+  border-color: #2563EB;
 }
 
 .bazi-daivan-pills {
@@ -682,11 +718,11 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 12px;
+  padding: 6px 12px;
   border-radius: 8px;
-  border: 1.5px solid #E2E8F0;
+  border: 1px solid #CBD5E1;
   background: #F8FAFC;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: #1E293B;
   cursor: pointer;
   white-space: nowrap;
@@ -695,20 +731,20 @@ body {
 }
 
 .bazi-dv-pill:hover {
-  border-color: #D97706;
+  border-color: #F59E0B;
   background: #FEF3C7;
 }
 
 .bazi-dv-pill.active {
-  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-  border-color: #D97706;
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
+  background: #FEF3C7;
+  border-color: #F59E0B;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
   font-weight: 700;
   color: #78350F;
 }
 
 .bazi-dv-pill .pill-tt {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: #64748B;
   font-weight: 600;
 }
@@ -718,7 +754,7 @@ body {
 }
 
 .bazi-dv-pill .pill-age {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: #B45309;
   font-weight: 700;
 }
@@ -726,10 +762,10 @@ body {
 /* Khung hiển thị Ảnh Lá Số */
 .bazi-image-display-frame {
   position: relative;
-  background: #FAF6EF;
-  border-radius: 14px;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.1);
-  border: 2px solid var(--bazi-border-outer);
+  background: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--bazi-border-outer);
   overflow: hidden;
   min-height: 220px;
   display: flex;
@@ -740,18 +776,18 @@ body {
 .bazi-rendered-img {
   display: block;
   width: 100%;
-  max-width: 960px;
+  max-width: 1020px;
   height: auto;
   object-fit: contain;
   cursor: pointer;
-  -webkit-touch-callout: default !important; /* Cho phép menu chạm giữ trên iPhone / iPad */
+  -webkit-touch-callout: default !important;
   user-select: auto !important;
 }
 
 .bazi-img-loading {
   position: absolute;
   inset: 0;
-  background: rgba(250, 246, 239, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(4px);
   display: flex;
   flex-direction: column;
@@ -759,7 +795,7 @@ body {
   justify-content: center;
   gap: 12px;
   z-index: 5;
-  color: #78350F;
+  color: #1E3A8A;
   font-weight: 700;
   font-size: 0.95rem;
 }
@@ -767,8 +803,8 @@ body {
 .bazi-spinner {
   width: 38px;
   height: 38px;
-  border: 3.5px solid #FDE68A;
-  border-top-color: #D97706;
+  border: 3.5px solid #E2E8F0;
+  border-top-color: #2563EB;
   border-radius: 50%;
   animation: baziSpin 0.8s linear infinite;
 }
@@ -782,11 +818,11 @@ body {
   margin-top: 12px;
   text-align: center;
   font-size: 0.85rem;
-  color: #78716C;
-  background: rgba(255, 255, 255, 0.65);
+  color: #64748B;
+  background: #FFFFFF;
   padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px dashed var(--bazi-border-inner);
+  border-radius: 6px;
+  border: 1px dashed var(--bazi-border-outer);
 }
 
 .bazi-save-hints strong {
@@ -806,25 +842,28 @@ body {
   }
 }
 
-/* Sheet Lá Số Cốt Lõi */
+/* ==========================================================================
+   SHEET TỨ TRỤ MỆNH BÀN (CHUẨN ẢNH THỰC TẾ)
+   ========================================================================== */
 .bazi-chart-card {
-  background: var(--bazi-bg-paper);
-  border: 3px solid var(--bazi-border-outer);
-  border-radius: 12px;
-  padding: 26px 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
+  font-family: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Watermark mờ nền */
+/* Watermark Thái Cực chìm */
 .bazi-watermark {
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 26rem;
-  color: rgba(217, 119, 6, 0.035);
+  font-size: 28rem;
+  color: rgba(30, 58, 138, 0.022);
   pointer-events: none;
   user-select: none;
   z-index: 0;
@@ -835,291 +874,446 @@ body {
 .bazi-sheet-header {
   position: relative;
   z-index: 1;
-  text-align: center;
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px solid #CBD5E1;
   padding-bottom: 16px;
-  border-bottom: 2px solid var(--bazi-border-outer);
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
-.sheet-title-group h2 {
-  font-size: 1.85rem;
-  font-weight: 800;
-  color: #991B1B;
-  margin: 0;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  font-family: 'Noto Sans', 'Inter', serif;
-}
-
-.sheet-title-group .subtitle {
-  font-size: 0.92rem;
-  color: #78716C;
-  margin-top: 5px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
-
-.sheet-info-group {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px 16px;
-  margin-top: 14px;
-  background: rgba(255, 255, 255, 0.75);
-  padding: 12px 18px;
-  border-radius: 8px;
-  border: 1px solid var(--bazi-border-inner);
-}
-
-.sheet-info-item {
+.header-brand-side {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.92rem;
+  gap: 14px;
 }
 
-.sheet-info-item .label {
+.brand-badge-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  flex-shrink: 0;
+}
+
+.sheet-main-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.sheet-sub-brand {
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-gray);
+  color: #64748B;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
 }
 
-.sheet-info-item .val {
+.header-meta-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.92rem;
+  color: #1E293B;
+}
+
+.header-meta-table .meta-item {
+  display: flex;
+  align-items: baseline;
+}
+
+.meta-label {
+  width: 155px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.meta-sep {
+  width: 14px;
+  text-align: center;
+  color: #64748B;
   font-weight: 700;
-  color: var(--text-dark);
 }
 
-/* Bảng Tứ Trụ */
+.meta-val {
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.meta-highlight {
+  color: #B45309 !important;
+  font-weight: 800 !important;
+}
+
+/* Bảng Tứ Trụ Chính */
 .bazi-table-responsive {
   position: relative;
   z-index: 1;
+  width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  margin-bottom: 20px;
 }
 
-.bazi-table {
+.bazi-main-table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
   background: #FFFFFF;
-  border: 2px solid var(--bazi-border-outer);
-  font-size: 0.94rem;
+  border: 1px solid #CBD5E1;
+  table-layout: fixed;
+  margin-bottom: 12px;
 }
 
-.bazi-table th, .bazi-table td {
-  border: 1px solid var(--bazi-border-inner);
-  padding: 9px 8px;
+.bazi-main-table td {
+  border: 1px solid #CBD5E1;
+  padding: 8px 6px;
+  vertical-align: middle;
 }
 
-.bazi-table thead tr th {
-  background: var(--bazi-header-bg);
-  color: var(--bazi-header-text);
-  font-weight: 700;
-  font-size: 0.98rem;
+.bazi-main-table .col-title {
+  width: 12%;
+  font-weight: 800;
+  color: #1E3A8A;
+  background: #F8FAFC;
+  font-size: 0.88rem;
   letter-spacing: 0.5px;
 }
 
-.col-label {
-  width: 18%;
-  font-weight: 700;
-  background: var(--bazi-header-bg) !important;
-  color: var(--bazi-header-text);
-  font-size: 0.88rem;
-}
-
-.col-pillar {
-  width: 20.5%;
-}
-
-.col-nhat-chu {
-  background: #FEF3C7 !important;
-  color: #92400E !important;
-  font-weight: 800 !important;
-}
-
-.thap-than-text {
-  font-weight: 700;
+.bazi-main-table .col-cell {
+  width: 22%;
   font-size: 0.95rem;
   color: #1E293B;
+  font-weight: 600;
 }
 
-.thap-than-nhat-chu {
-  color: #991B1B !important;
+.bazi-main-table .num-bold {
+  font-weight: 700;
+  font-size: 1.18rem;
+  color: #0F172A;
+}
+
+.cell-nhat-chu {
   font-weight: 800;
+  color: #0F172A;
+  letter-spacing: 0.5px;
 }
 
-/* Can Chi Lớn */
-.can-chi-box {
+.can-chi-stack {
   display: flex;
   flex-direction: column;
-  gap: 4px;
   align-items: center;
   justify-content: center;
+  line-height: 1.15;
+  padding: 6px 0;
 }
 
-.big-char {
-  font-size: 2rem;
+.char-can, .char-chi {
+  font-size: 1.85rem;
   font-weight: 800;
-  line-height: 1.1;
-  font-family: 'Noto Sans', 'Inter', sans-serif;
   letter-spacing: 1px;
 }
 
-/* Thần Sát */
-.than-sat-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  justify-content: center;
-}
-
-.than-sat-tag {
-  font-size: 0.78rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
-  color: #1E40AF;
-  border-radius: 4px;
-}
-
-/* Section Khởi Đại Vận Info */
-.dai-van-header-bar {
-  background: #FEF3C7;
-  border: 1.5px solid #FDE68A;
-  color: #78350F;
-  font-weight: 700;
-  font-size: 0.95rem;
-  padding: 10px 16px;
-  border-radius: 8px;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-align: center;
+.font-napam {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #334155;
 }
 
 /* Bảng Đại Vận 10 Cột */
+.table-daivan-box {
+  margin-bottom: 12px;
+}
+
 .dai-van-table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
   background: #FFFFFF;
-  border: 1.5px solid var(--bazi-border-outer);
-  margin-bottom: 20px;
+  border: 1px solid #CBD5E1;
+  table-layout: fixed;
 }
 
-.dai-van-table th, .dai-van-table td {
-  border: 1px solid var(--bazi-border-inner);
-  padding: 8px 4px;
-  font-size: 0.86rem;
+.dai-van-table td, .dai-van-table th {
+  border: 1px solid #CBD5E1;
+  padding: 6px 3px;
+  vertical-align: middle;
 }
 
-.dai-van-table th.dv-col {
+.col-title-vertical {
+  width: 10%;
+  font-weight: 800;
+  color: #1E3A8A;
+  background: #F8FAFC;
+  font-size: 0.88rem;
+  letter-spacing: 0.5px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.dai-van-table td.dv-col {
+  width: 9%;
   cursor: pointer;
-  background: var(--bazi-header-bg);
-  transition: all 0.15s ease;
-  user-select: none;
+  transition: background 0.15s ease;
 }
 
-.dai-van-table th.dv-col:hover, .dai-van-table td.dv-col:hover {
+.dai-van-table td.dv-col:hover {
   background: #FEF3C7;
 }
 
-.dai-van-table th.dv-col.active, .dai-van-table td.dv-col.active {
-  background: var(--bazi-active-cell) !important;
-  border-left: 2px solid var(--bazi-active-border);
-  border-right: 2px solid var(--bazi-active-border);
+.dai-van-table td.dv-col.target-dv {
+  background: #FEF3C7 !important;
 }
 
-.dv-char-pair {
-  font-size: 1.15rem;
-  font-weight: 800;
+.dai-van-table td.dv-col.active:not(.target-dv) {
+  background: #EFF6FF !important;
+}
+
+.dv-char-stack {
   display: flex;
-  justify-content: center;
-  gap: 4px;
+  flex-direction: column;
+  line-height: 1.2;
+  font-size: 1.08rem;
+  font-weight: 700;
 }
 
 .dv-thap-than {
-  font-weight: 700;
-  font-size: 0.82rem;
-  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
 }
 
 .dv-age-range {
-  font-weight: 700;
-  color: #B45309;
-}
-
-.dv-year-start {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: #64748B;
 }
 
-/* Bảng Lưu Niên 20 Năm */
+.dv-year-start {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+/* Bảng Lưu Niên (20 Năm) */
+.table-luunien-box {
+  margin-bottom: 14px;
+}
+
 .luu-nien-table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
   background: #FFFFFF;
-  border: 1.5px solid var(--bazi-border-outer);
-  margin-bottom: 20px;
+  border: 1px solid #CBD5E1;
+  table-layout: fixed;
 }
 
-.luu-nien-table th, .luu-nien-table td {
-  border: 1px solid var(--bazi-border-inner);
-  padding: 6px 3px;
-  font-size: 0.82rem;
+.luu-nien-table td {
+  border: 1px solid #CBD5E1;
+  padding: 6px 2px;
+  vertical-align: middle;
 }
 
-.luu-nien-table th {
-  background: var(--bazi-header-bg);
-  font-weight: 700;
+.luu-nien-table td.ln-cell {
+  width: 9%;
 }
 
-.luu-nien-table tr.current-year {
-  background: #FEF3C7;
+.luu-nien-table td.ln-cell.target-year {
+  background: #FEF3C7 !important;
+  border: 2px solid #F59E0B !important;
+}
+
+.luu-nien-table td.ln-cell.current-year:not(.target-year) {
+  background: #FFFBEB !important;
+  border: 1.5px solid #FCD34D !important;
 }
 
 .ln-char {
-  font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 0.96rem;
+  font-weight: 700;
+  margin-bottom: 2px;
 }
 
 .ln-year {
-  color: #64748B;
-  font-size: 0.76rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1E293B;
 }
 
 .ln-age {
-  font-weight: 700;
-  color: #B45309;
+  font-size: 0.75rem;
+  color: #64748B;
 }
 
-/* Chân bảng Lá Số / Watermark Footer in Card */
-.bazi-card-footer {
-  margin-top: 18px;
-  padding-top: 14px;
-  border-top: 1px dashed var(--bazi-border-inner);
+/* Khối Bảng Phụ & Thần Sát Nguyên Cục */
+.bazi-bottom-section {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  border: 1px solid #CBD5E1;
+  margin-bottom: 14px;
+}
+
+.bazi-extra-panel {
+  width: 28%;
+  border-right: 1px solid #CBD5E1;
+}
+
+.bazi-extra-table {
+  width: 100%;
+  border-collapse: collapse;
+  height: 100%;
+}
+
+.bazi-extra-table td {
+  border-bottom: 1px solid #CBD5E1;
+  padding: 8px 10px;
+  font-size: 0.86rem;
+}
+
+.bazi-extra-table tr:last-child td {
+  border-bottom: none;
+}
+
+.col-title-extra {
+  width: 48%;
+  font-weight: 800;
+  color: #1E3A8A;
+  background: #F8FAFC;
   text-align: center;
-  font-size: 0.9rem;
-  color: #78716C;
+  border-right: 1px solid #CBD5E1;
+  letter-spacing: 0.3px;
+}
+
+.col-val-extra {
+  font-weight: 600;
+  color: #1E293B;
+  text-align: center;
+}
+
+.bazi-thansat-panel {
+  flex: 1;
+}
+
+.bazi-thansat-table {
+  width: 100%;
+  border-collapse: collapse;
+  height: 100%;
+  text-align: center;
+}
+
+.bazi-thansat-table th, .bazi-thansat-table td {
+  border: 1px solid #CBD5E1;
+  padding: 6px 8px;
+}
+
+.bazi-thansat-table th:first-child, .bazi-thansat-table td:first-child {
+  border-left: none;
+}
+
+.bazi-thansat-table th:last-child, .bazi-thansat-table td:last-child {
+  border-right: none;
+}
+
+.thansat-main-title {
+  font-weight: 800;
+  color: #1E3A8A;
+  background: #F8FAFC;
+  font-size: 0.92rem;
+  padding: 8px !important;
+  letter-spacing: 0.5px;
+  border-top: none !important;
+}
+
+.thansat-col-header {
+  font-weight: 700;
+  color: #1E3A8A;
+  background: #F8FAFC;
+  font-size: 0.84rem;
+  width: 25%;
+}
+
+.thansat-col-cell {
+  vertical-align: top;
+  padding: 8px 6px;
+  min-height: 85px;
+  border-bottom: none !important;
+}
+
+.thansat-name-item {
+  font-size: 0.86rem;
+  color: #1E293B;
+  line-height: 1.5;
+  margin-bottom: 2px;
+}
+
+.ts-empty {
+  color: #94A3B8;
+}
+
+/* Chân bảng Lá Số / Footer Sheet */
+.bazi-card-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  font-size: 0.85rem;
+  color: #64748B;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-top: 1px solid #CBD5E1;
+}
+
+.footer-left-link {
+  font-size: 0.86rem;
+}
+
+.footer-left-link strong {
+  color: #334155;
+  font-weight: 600;
+}
+
+.footer-elements-legend {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  letter-spacing: 0.4px;
+  gap: 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
 }
 
-.bazi-card-footer strong {
-  color: #991B1B;
-  font-weight: 800;
+.footer-elements-legend .leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.bazi-card-footer .footer-deco {
-  color: #D97706;
-  font-size: 0.8rem;
+.leg-bar {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
 }
+
+.bar-kim { background-color: #64748B; }
+.bar-moc { background-color: #15803D; }
+.bar-thuy { background-color: #0F172A; }
+.bar-hoa { background-color: #DC2626; }
+.bar-tho { background-color: #D97706; }
 
 /* Nút Action Footer */
 .bazi-actions-row {

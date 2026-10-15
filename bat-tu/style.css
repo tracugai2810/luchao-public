@@ -870,53 +870,23 @@ body {
   font-family: serif;
 }
 
-/* Sheet Header */
-/* Sheet Header Trải Ngang Cân Đối */
+/* Sheet Header Trải Ngang Cân Đối (Đã lược bỏ Tiêu Đề theo yêu cầu) */
 .bazi-sheet-header {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-bottom: 1.5px solid #CBD5E1;
-  padding-bottom: 14px;
-  margin-bottom: 14px;
   width: 100%;
-}
-
-.sheet-title-center {
-  text-align: center;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.sheet-main-title {
-  font-size: 1.85rem;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  line-height: 1.2;
-}
-
-.sheet-sub-brand {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #1E3A8A;
-  letter-spacing: 1px;
-  margin-top: 4px;
+  margin-bottom: 16px;
 }
 
 .header-meta-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  row-gap: 6px;
+  row-gap: 10px;
   column-gap: 16px;
   background: #F8FAFC;
-  border: 1px solid #E2E8F0;
+  border: 1.5px solid #CBD5E1;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: 12px 22px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -924,11 +894,23 @@ body {
 .header-meta-grid .meta-item {
   display: flex;
   align-items: baseline;
-  gap: 6px;
-  font-size: 0.92rem;
+  gap: 8px;
+  font-size: 0.96rem;
   color: #1E293B;
   white-space: nowrap;
   grid-column: span 2;
+}
+
+.header-meta-grid .meta-item.item-left {
+  justify-content: flex-start;
+}
+
+.header-meta-grid .meta-item.item-center {
+  justify-content: center;
+}
+
+.header-meta-grid .meta-item.item-right {
+  justify-content: flex-end;
 }
 
 .header-meta-grid .meta-item.meta-item-wide {
@@ -971,29 +953,29 @@ body {
 
 .bazi-main-table td {
   border: 1px solid #CBD5E1;
-  padding: 8px 6px;
+  padding: 12px 6px;
   vertical-align: middle;
 }
 
 .bazi-main-table .col-title {
-  width: 12%;
+  width: 14%;
   font-weight: 800;
   color: #1E3A8A;
   background: #F8FAFC;
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   letter-spacing: 0.5px;
 }
 
 .bazi-main-table .col-cell {
-  width: 22%;
-  font-size: 0.95rem;
+  width: 21.5%;
+  font-size: 1.02rem;
   color: #1E293B;
   font-weight: 600;
 }
 
 .bazi-main-table .num-bold {
   font-weight: 700;
-  font-size: 1.18rem;
+  font-size: 1.25rem;
   color: #0F172A;
 }
 
@@ -1008,20 +990,15 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  line-height: 1.15;
-  padding: 6px 0;
+  gap: 12px;
+  padding: 14px 0;
 }
 
 .char-can, .char-chi {
-  font-size: 1.85rem;
+  font-size: 2.1rem;
   font-weight: 800;
   letter-spacing: 1px;
-}
-
-.font-napam {
-  font-size: 0.88rem;
-  font-weight: 500;
-  color: #334155;
+  line-height: 1.15;
 }
 
 /* Bảng Đại Vận 10 Cột */
@@ -1076,44 +1053,47 @@ body {
 .dv-char-stack {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   line-height: 1.15;
-  font-size: 1.12rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  padding: 3px 0;
+  gap: 8px;
+  padding: 8px 0;
   white-space: nowrap;
 }
 
 .dv-thap-than {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: #334155;
   white-space: nowrap;
   line-height: 1.2;
-  padding: 2px 0;
+  padding: 5px 0;
 }
 
 .dv-age-range {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: #475569;
   font-weight: 600;
   white-space: nowrap;
   line-height: 1.2;
-  padding: 2px 0;
+  padding: 5px 0;
 }
 
 .dv-year-start {
   display: block;
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: #0F172A;
   white-space: nowrap;
   line-height: 1.2;
-  padding: 2px 0;
+  padding: 5px 0;
 }
 
-/* BẢNG LƯU NIÊN (20 NĂM - ĐỀU TĂM TẮP, 4 DÒNG CỐ ĐỊNH) */
+/* BẢNG LƯU NIÊN (20 NĂM - ĐỀU TĂM TẮP, THOÁNG ĐÃNG) */
 .table-luunien-box {
   margin-bottom: 14px;
 }
@@ -1129,7 +1109,7 @@ body {
 
 .luu-nien-table td {
   border: 1px solid #CBD5E1;
-  padding: 3px 1px;
+  padding: 5px 1px;
   vertical-align: middle;
 }
 
@@ -1158,40 +1138,41 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
-  min-height: 78px;
+  gap: 5px;
+  min-height: 98px;
   box-sizing: border-box;
-  padding: 2px 0;
+  padding: 6px 1px;
 }
 
 .ln-char {
-  font-size: 0.98rem;
+  font-size: 1.05rem;
   font-weight: 800;
-  line-height: 1.15;
+  line-height: 1.2;
   white-space: nowrap;
+  margin-bottom: 2px;
 }
 
 .ln-year {
-  font-size: 0.86rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: #1E293B;
-  line-height: 1.15;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
 .ln-age {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: #475569;
-  line-height: 1.15;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
 .ln-tt {
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #64748B;
-  line-height: 1.15;
+  line-height: 1.2;
   white-space: nowrap;
 }
 

@@ -13,7 +13,7 @@
   --bazi-border-outer: #3B82F6;
   --bazi-border-inner: #93C5FD;
   --bazi-header-bg: #FEF6E8;
-  --bazi-header-text: #034687;
+  --bazi-header-text: #0F172A;
   --bazi-active-cell: #FDE68A;
   --bazi-active-border: #F59E0B;
 
@@ -994,14 +994,14 @@ body {
   padding: 8px 3px;
 }
 
-/* Cột Tiêu Đề Bên Trái In Đậm Rõ Nét Chuẩn Ảnh 2 */
+/* Cột Tiêu Đề Bên Trái In Đậm Rõ Nét Màu Đen Chuẩn */
 .bazi-main-table .col-title,
 .col-title-vertical {
   width: 5.6%;
   min-width: 66px;
   max-width: 72px;
   font-weight: 700 !important;
-  color: #034687 !important;
+  color: #0F172A !important; /* Màu đen mực sắc nét, dễ nhìn */
   background: #FEF6E8 !important;
   font-size: 0.95rem;
   letter-spacing: 0.4px;
@@ -1023,7 +1023,7 @@ body {
 .title-split span {
   display: block;
   font-weight: 700 !important;
-  color: #034687 !important;
+  color: #0F172A !important;
 }
 
 .bazi-main-table .col-cell {

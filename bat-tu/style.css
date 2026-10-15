@@ -872,7 +872,7 @@ input[type="time"]::-webkit-date-and-time-value {
   min-width: 1280px;
   box-sizing: border-box;
   background: #FEF6E8; /* Màu nền giấy kem hoàng gia chuẩn nguhanh.net */
-  border: 2.5px solid #1E3A8A; /* Viền tổng đậm bao quanh theo Ảnh 3 & 4 */
+  border: 2.5px solid #000000; /* Viền đen sắc nét bao quanh toàn bộ lá số */
   border-radius: 4px;
   padding: 26px 30px;
   box-shadow: 0 4px 24px rgba(30, 58, 138, 0.12);
@@ -1227,7 +1227,7 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .dai-van-table .cell-pair-line {
-  gap: 4px;
+  gap: 8px; /* Tăng từ 4px lên 8px để Can Chi và Thập Thần tách bạch rõ ràng, thoáng mắt */
   line-height: 1.32;
 }
 
@@ -1268,7 +1268,7 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .luu-nien-table .cell-pair-line {
-  gap: 3px;
+  gap: 6px; /* Tăng từ 3px lên 6px để khoảng cách 2 chữ tự nhiên, dễ đọc */
   line-height: 1.28;
 }
 

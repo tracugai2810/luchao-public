@@ -1103,9 +1103,9 @@ input[type="time"]::-webkit-date-and-time-value {
   margin-bottom: 14px;
 }
 
-/* Khung thông tin tính Đại Vận (Ảnh 1) */
+/* Khung thông tin tính Đại Vận */
 .daivan-info-cell {
-  padding: 10px 16px !important;
+  padding: 8px 16px !important;
   text-align: left !important;
   background: #FEF6E8 !important;
   border-bottom: 1px solid #93C5FD !important;
@@ -1115,29 +1115,32 @@ input[type="time"]::-webkit-date-and-time-value {
 .daivan-info-content {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   text-align: left;
-}
-
-.daivan-info-title {
-  font-weight: 700;
-  font-size: 1.08rem;
-  color: #0F172A;
-  line-height: 1.35;
-  letter-spacing: 0.2px;
 }
 
 .daivan-info-line {
   font-size: 1.02rem;
   color: #1E293B;
-  line-height: 1.5;
+  line-height: 1.45;
   letter-spacing: 0.1px;
+}
+
+.daivan-info-line strong {
+  font-weight: 700;
+  color: #0F172A;
 }
 
 .daivan-info-line .val-blue {
   color: #034687;
   font-weight: 700;
   font-size: 1.02rem;
+}
+
+.daivan-info-line .val-sub {
+  color: #64748B;
+  font-size: 0.98rem;
+  font-weight: 500;
 }
 
 /* ==========================================================================
@@ -1216,7 +1219,7 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 /* ---------------------------------------------------------
-   1. ĐẠI VẬN (10 Năm - Không in đậm, thanh thoát, to hơn Lưu Niên 1 chút, tuyệt đối không tràn chữ)
+   1. ĐẠI VẬN (10 Năm - Bỏ dấu gạch, Can Chi in đậm màu ngũ hành, Thập Thần nét thường)
    --------------------------------------------------------- */
 .dai-van-table .cell-pair-stack {
   gap: 4px;
@@ -1224,25 +1227,18 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .dai-van-table .cell-pair-line {
-  gap: 2px;
+  gap: 4px;
   line-height: 1.32;
 }
 
 .dai-van-table .cell-pair-line .char-name {
-  font-size: 1.04rem; /* To hơn Lưu Niên 1 chút (~16.6px so với ~15.6px) */
+  font-size: 1.05rem; /* To hơn Lưu Niên 1 chút (~16.8px so với ~15.6px) */
   font-weight: 700; /* Can Chi in đậm nổi bật */
-}
-
-.dai-van-table .cell-pair-line .char-sep {
-  font-size: 0.88rem;
-  font-weight: 400;
-  color: #94A3B8;
-  margin: 0;
 }
 
 .dai-van-table .cell-pair-line .char-tt {
   font-size: 0.98rem; /* To hơn Lưu Niên 1 chút (~15.7px so với ~14.9px) */
-  font-weight: 400; /* Thập Thần nét thường, không in đậm để tránh tràn chữ */
+  font-weight: 400; /* Thập Thần nét thường, không in đậm */
   color: #1E293B; /* Màu mực dễ đọc, sắc sảo */
 }
 
@@ -1264,7 +1260,7 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 /* ---------------------------------------------------------
-   2. LƯU NIÊN (Từng năm - Nhỏ hơn Đại Vận 1 chút, thanh thoát)
+   2. LƯU NIÊN (Từng năm - Bỏ dấu gạch, thanh thoát)
    --------------------------------------------------------- */
 .luu-nien-table .cell-pair-stack {
   gap: 3px;
@@ -1272,20 +1268,13 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .luu-nien-table .cell-pair-line {
-  gap: 2px;
+  gap: 3px;
   line-height: 1.28;
 }
 
 .luu-nien-table .cell-pair-line .char-name {
   font-size: 0.98rem; /* Nhỏ hơn Đại Vận ~1.0px, gọn gàng, thanh thoát */
   font-weight: 700; /* Can Chi in đậm nổi bật */
-}
-
-.luu-nien-table .cell-pair-line .char-sep {
-  font-size: 0.85rem;
-  font-weight: 400;
-  color: #94A3B8;
-  margin: 0;
 }
 
 .luu-nien-table .cell-pair-line .char-tt {

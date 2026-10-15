@@ -67,14 +67,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=5.1">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=5.2">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=5.1"></script>
+  <script src="/bat-tu/bazi-engine.js?v=5.2"></script>
 </head>
 <body>
 
@@ -438,9 +438,12 @@
                   </td>
                   <td colspan="10" class="daivan-info-cell" id="res-daivan-info-cell">
                     <div class="daivan-info-content">
-                      <div class="daivan-info-title">Đại vận lưu niên</div>
-                      <div class="daivan-info-line">Số tính đại vận = <span class="val-blue" id="res-daivan-so-tinh">-</span>; Nhập đại vận lúc <span id="res-daivan-nhap-luc">-</span>.</div>
-                      <div class="daivan-info-line" id="res-daivan-tiet-khi">-</div>
+                      <div class="daivan-info-line">
+                        <strong>Khởi đại vận:</strong> Nhập vận lúc <strong class="val-blue" id="res-daivan-nhap-luc">-</strong> <span class="val-sub">(Số tính: <span id="res-daivan-so-tinh">-</span>)</span>
+                      </div>
+                      <div class="daivan-info-line">
+                        <span id="res-daivan-tiet-khi">-</span>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -858,19 +861,17 @@
           if (isTarget) cellClass += " target-dv";
           else if (isActive) cellClass += " active";
 
-          // Ô Can Chi: Can - Thập thần trên, Chi - Thập thần dưới
+          // Ô Can Chi: Can trên, Chi dưới (Bỏ dấu gạch ngang)
           const tdCc = document.createElement("td");
           tdCc.className = cellClass;
           tdCc.innerHTML = `
             <div class="cell-pair-stack">
               <div class="cell-pair-line">
                 <span class="char-name" style="color: ${dv.canColor}">${dv.canName}</span>
-                <span class="char-sep">-</span>
                 <span class="char-tt">${dv.thapThanCan}</span>
               </div>
               <div class="cell-pair-line">
                 <span class="char-name" style="color: ${dv.chiColor}">${dv.chiName}</span>
-                <span class="char-sep">-</span>
                 <span class="char-tt">${dv.thapThanChi}</span>
               </div>
             </div>
@@ -905,7 +906,7 @@
         updateImageSnapshot();
       }
 
-      // 9. Render Bảng Lưu Niên (20 Năm - Kích cỡ và cấu trúc đồng bộ 100% với Đại Vận)
+      // 9. Render Bảng Lưu Niên (20 Năm - Gộp 1 cột tiêu đề duy nhất cho cả 20 năm, bỏ dấu gạch ngang)
       function renderLuuNienTable(lnList) {
         const tbody = document.getElementById("res-luunien-tbody");
         tbody.innerHTML = "";
@@ -913,9 +914,11 @@
         const row1 = lnList.filter(l => l.row === 1);
         const row2 = lnList.filter(l => l.row === 2);
 
-        const appendDecadeRows = (list) => {
+        const appendDecadeRows = (list, isFirstDecade) => {
           const trCc = document.createElement("tr");
-          trCc.innerHTML = `<td class="col-title-vertical" rowspan="2"><div class="title-split"><span>LƯU</span><span>NIÊN</span></div></td>`;
+          if (isFirstDecade) {
+            trCc.innerHTML = `<td class="col-title-vertical" rowspan="4"><div class="title-split"><span>LƯU</span><span>NIÊN</span></div></td>`;
+          }
           const trMeta = document.createElement("tr");
 
           list.forEach(item => {
@@ -923,19 +926,17 @@
             if (item.isTarget) cellClass += " target-year";
             else if (item.isCurrent) cellClass += " current-year";
 
-            // Ô Can Chi: Can - Thập thần trên, Chi - Thập thần dưới
+            // Ô Can Chi: Can trên, Chi dưới (Bỏ dấu gạch ngang)
             const tdCc = document.createElement("td");
             tdCc.className = cellClass;
             tdCc.innerHTML = `
               <div class="cell-pair-stack">
                 <div class="cell-pair-line">
                   <span class="char-name" style="color: ${item.canColor}">${item.canName}</span>
-                  <span class="char-sep">-</span>
                   <span class="char-tt">${item.thapThanCan}</span>
                 </div>
                 <div class="cell-pair-line">
                   <span class="char-name" style="color: ${item.chiColor}">${item.chiName}</span>
-                  <span class="char-sep">-</span>
                   <span class="char-tt">${item.thapThanChi}</span>
                 </div>
               </div>
@@ -958,8 +959,8 @@
           tbody.appendChild(trMeta);
         };
 
-        if (row1.length > 0) appendDecadeRows(row1);
-        if (row2.length > 0) appendDecadeRows(row2);
+        if (row1.length > 0) appendDecadeRows(row1, true);
+        if (row2.length > 0) appendDecadeRows(row2, false);
       }
 
       // 11. Chuyển đổi DataURL sang Blob

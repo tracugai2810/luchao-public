@@ -1070,7 +1070,7 @@
       const pName = pillars.prevJieQiObj.name || "";
       const pDate = (pillars.prevJieQiObj.userDateStr || "").replace(/\//g, "-");
       const nDate = (pillars.nextJieQiObj.userDateStr || "").replace(/\//g, "-");
-      tietKhiRangeText = `Tiết ${pName} bắt đầu ${pDate} và kết thúc ${nDate}`;
+      tietKhiRangeText = `Tiết ${pName}: Bắt đầu ${pDate} → Kết thúc ${nDate}`;
     } else {
       jieQiInfoText = `Khởi Đại Vận: 1 tuổi 8 tháng (Tính theo tiết khí thiên văn)`;
       startYears = 1;

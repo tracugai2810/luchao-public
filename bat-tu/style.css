@@ -1079,6 +1079,7 @@ body {
   letter-spacing: 0.5px;
   line-height: 1.18;
   display: block;
+  text-transform: uppercase; /* In hoa toàn bộ chữ Bát Tự */
 }
 
 /* BẢNG ĐẠI VẬN 10 CỘT */
@@ -1199,101 +1200,99 @@ body {
 }
 
 /* ---------------------------------------------------------
-   1. ĐẠI VẬN (10 Năm - Bề thế, nổi bật, to hơn Lưu Niên 1 chút)
+   1. ĐẠI VẬN (10 Năm - Không in đậm, thanh thoát, to hơn Lưu Niên 1 chút, tuyệt đối không tràn chữ)
    --------------------------------------------------------- */
 .dai-van-table .cell-pair-stack {
-  gap: 5px;
-  padding: 9px 2px;
+  gap: 4px;
+  padding: 8px 1px;
 }
 
 .dai-van-table .cell-pair-line {
-  gap: 3px;
-  line-height: 1.35;
+  gap: 2px;
+  line-height: 1.32;
 }
 
 .dai-van-table .cell-pair-line .char-name {
-  font-size: 1.12rem; /* To hơn Lưu Niên 1 chút (~18px so với ~16.3px) */
-  font-weight: 700;
-  letter-spacing: 0.2px;
+  font-size: 1.04rem; /* To hơn Lưu Niên 1 chút (~16.6px so với ~15.6px) */
+  font-weight: 500; /* Không in đậm */
 }
 
 .dai-van-table .cell-pair-line .char-sep {
-  font-size: 0.98rem;
+  font-size: 0.88rem;
   font-weight: 400;
-  color: #64748B;
-  margin: 0 1px;
+  color: #94A3B8;
+  margin: 0;
 }
 
 .dai-van-table .cell-pair-line .char-tt {
-  font-size: 1.08rem; /* To hơn Lưu Niên 1 chút (~17.3px so với ~15.7px) */
-  font-weight: 700;
-  color: #0F172A; /* Màu đen mực sắc nét */
-  letter-spacing: 0.2px;
+  font-size: 0.98rem; /* To hơn Lưu Niên 1 chút (~15.7px so với ~14.9px) */
+  font-weight: 400; /* Không in đậm */
+  color: #1E293B; /* Màu mực dễ đọc, sắc sảo */
 }
 
 .dai-van-table .cell-meta-stack {
-  gap: 4px;
-  padding: 8px 2px;
+  gap: 3px;
+  padding: 7px 1px;
 }
 
 .dai-van-table .cell-meta-stack .meta-age {
-  font-size: 1.02rem;
-  font-weight: 700;
-  color: #1E293B; /* Xám đen sẫm rõ nét */
+  font-size: 0.96rem;
+  font-weight: 400; /* Không in đậm */
+  color: #475569;
 }
 
 .dai-van-table .cell-meta-stack .meta-year {
-  font-size: 1.04rem;
-  font-weight: 700;
-  color: #0F172A; /* Màu đen mực */
+  font-size: 0.98rem;
+  font-weight: 500; /* Không in đậm */
+  color: #1E293B;
 }
 
 /* ---------------------------------------------------------
    2. LƯU NIÊN (Từng năm - Nhỏ hơn Đại Vận 1 chút, thanh thoát)
    --------------------------------------------------------- */
 .luu-nien-table .cell-pair-stack {
-  gap: 4px;
+  gap: 3px;
   padding: 6px 1px;
 }
 
 .luu-nien-table .cell-pair-line {
   gap: 2px;
-  line-height: 1.30;
+  line-height: 1.28;
 }
 
 .luu-nien-table .cell-pair-line .char-name {
-  font-size: 1.02rem; /* Nhỏ hơn Đại Vận ~1.6px, gọn gàng, thanh thoát */
-  font-weight: 700;
+  font-size: 0.98rem; /* Nhỏ hơn Đại Vận ~1.0px, gọn gàng, thanh thoát */
+  font-weight: 500;
 }
 
 .luu-nien-table .cell-pair-line .char-sep {
-  font-size: 0.90rem;
+  font-size: 0.85rem;
   font-weight: 400;
   color: #94A3B8;
-  margin: 0 1px;
+  margin: 0;
 }
 
 .luu-nien-table .cell-pair-line .char-tt {
-  font-size: 0.98rem; /* Nhỏ hơn Đại Vận ~1.6px */
-  font-weight: 600;
-  color: #1E293B;
+  font-size: 0.93rem; /* Nhỏ hơn Đại Vận */
+  font-weight: 400;
+  color: #334155;
 }
 
 .luu-nien-table .cell-meta-stack {
   gap: 2px;
-  padding: 6px 1px;
+  padding: 5px 1px;
 }
 
 .luu-nien-table .cell-meta-stack .meta-year {
-  font-size: 0.98rem;
-  font-weight: 600;
-  color: #0F172A;
+  font-size: 0.93rem;
+  font-weight: 500;
+  color: #1E293B;
 }
 
 .luu-nien-table .cell-meta-stack .meta-age {
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: #475569;
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #64748B;
 }
 
 /* Chân bảng Lá Số / Footer Sheet */

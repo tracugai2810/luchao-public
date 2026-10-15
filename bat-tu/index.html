@@ -17,20 +17,20 @@
   <meta property="og:image" content="https://luchao.io.vn/banner.jpg">
   <meta property="og:locale" content="vi_VN">
 
-  <!-- Fonts (Arial chuẩn Ảnh 4) -->
+  <!-- Fonts (Segoe UI / Roboto chuẩn nét thanh thoát Ảnh 4) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=3.3">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=3.4">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=3.3"></script>
+  <script src="/bat-tu/bazi-engine.js?v=3.4"></script>
 </head>
 <body>
 
@@ -764,7 +764,7 @@
         updateImageSnapshot();
       }
 
-      // 8. Render Bảng Đại Vận 10 Cột trong Sheet (Đồng bộ chuẩn mực với Lưu Niên theo Ảnh 2 & 4)
+      // 8. Render Bảng Đại Vận 10 Cột trong Sheet (Hiển thị Thập Thần bên cạnh Can Chi theo yêu cầu)
       function renderDaiVanTable(dvList) {
         const canChiRow = document.getElementById("res-daivan-can-chi-row");
         const metaRow = document.getElementById("res-daivan-meta-row");
@@ -779,19 +779,27 @@
           if (isTarget) cellClass += " target-dv";
           else if (isActive) cellClass += " active";
 
-          // Can Chi (Can trên, Chi dưới, 1 chữ mỗi dòng theo Ảnh 2 & 4)
+          // Ô Can Chi: Can - Thập thần trên, Chi - Thập thần dưới
           const tdCc = document.createElement("td");
           tdCc.className = cellClass;
           tdCc.innerHTML = `
-            <div class="cell-char-stack">
-              <span class="char-can" style="color: ${dv.canColor}">${dv.canName}</span>
-              <span class="char-chi" style="color: ${dv.chiColor}">${dv.chiName}</span>
+            <div class="cell-pair-stack">
+              <div class="cell-pair-line">
+                <span class="char-name" style="color: ${dv.canColor}">${dv.canName}</span>
+                <span class="char-sep">-</span>
+                <span class="char-tt">${dv.thapThanCan}</span>
+              </div>
+              <div class="cell-pair-line">
+                <span class="char-name" style="color: ${dv.chiColor}">${dv.chiName}</span>
+                <span class="char-sep">-</span>
+                <span class="char-tt">${dv.thapThanChi}</span>
+              </div>
             </div>
           `;
           tdCc.addEventListener("click", () => selectDaiVan(dv.index));
           canChiRow.appendChild(tdCc);
 
-          // Tuổi & Năm (Tuổi trên, Năm dưới theo Ảnh 2 & 4)
+          // Ô Tuổi & Năm: Tuổi trên, Năm dưới (Kích cỡ đồng bộ Lưu Niên)
           const tdMeta = document.createElement("td");
           tdMeta.className = cellClass;
           tdMeta.innerHTML = `
@@ -818,7 +826,7 @@
         updateImageSnapshot();
       }
 
-      // 9. Render Bảng Lưu Niên (20 Năm - Kích cỡ và cấu trúc đồng bộ 100% với Đại Vận theo Ảnh 2 & 4)
+      // 9. Render Bảng Lưu Niên (20 Năm - Kích cỡ và cấu trúc đồng bộ 100% với Đại Vận)
       function renderLuuNienTable(lnList) {
         const tbody = document.getElementById("res-luunien-tbody");
         tbody.innerHTML = "";
@@ -836,18 +844,26 @@
             if (item.isTarget) cellClass += " target-year";
             else if (item.isCurrent) cellClass += " current-year";
 
-            // Ô Can Chi (Can trên, Chi dưới - Kích cỡ bằng Đại Vận)
+            // Ô Can Chi: Can - Thập thần trên, Chi - Thập thần dưới
             const tdCc = document.createElement("td");
             tdCc.className = cellClass;
             tdCc.innerHTML = `
-              <div class="cell-char-stack">
-                <span class="char-can" style="color: ${item.canColor}">${item.canName}</span>
-                <span class="char-chi" style="color: ${item.chiColor}">${item.chiName}</span>
+              <div class="cell-pair-stack">
+                <div class="cell-pair-line">
+                  <span class="char-name" style="color: ${item.canColor}">${item.canName}</span>
+                  <span class="char-sep">-</span>
+                  <span class="char-tt">${item.thapThanCan}</span>
+                </div>
+                <div class="cell-pair-line">
+                  <span class="char-name" style="color: ${item.chiColor}">${item.chiName}</span>
+                  <span class="char-sep">-</span>
+                  <span class="char-tt">${item.thapThanChi}</span>
+                </div>
               </div>
             `;
             trCc.appendChild(tdCc);
 
-            // Ô Năm & Tuổi (Năm trên, Tuổi dưới - Kích cỡ bằng Đại Vận)
+            // Ô Năm & Tuổi: Năm trên, Tuổi dưới (Kích cỡ đồng bộ Đại Vận)
             const tdMeta = document.createElement("td");
             tdMeta.className = cellClass;
             tdMeta.innerHTML = `

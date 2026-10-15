@@ -533,52 +533,225 @@
     return results;
   }
 
-  // 2.B. Định Vị Vượng - Suy Thiên Can & Ẩn Tình Chỉ Hướng (Chu Thần Bân - Chương 4, 6, 8, 9)
-  function calculateStemVuongSuy(canNam, canThang, canNgay, canGio, chiThang) {
-    const clientIndices = [canNam, canThang, canGio];
-    const clientStrength = [true, true, true]; // true: Vượng (Cường thế), false: Suy (Yếu thế)
+  function isHoaSonSinh(c1, c2) {
+    return SINH_PAIRS.some(p => p[0] === c1 && p[1] === c2);
+  }
 
-    // 1. Phân tích tương tác giữa 3 can khách thể (Tầng 1)
+  function isHoaSonKhac(c1, c2) {
+    return KHAC_PAIRS.some(p => p[0] === c1 && p[1] === c2);
+  }
+
+  // Đánh giá 3 Thiên can khách thể (Tầng 1 - Chu Thần Bân tr. 41-42, 108-116, 134, 138, 142, 150, 154-156)
+  function evaluateClientStems(canNam, canThang, canGio) {
+    const c = [canNam, canThang, canGio];
+    const strengths = [true, true, true]; // true: Vượng (Cường thế), false: Suy (Yếu thế)
+
+    // 1. Trùng điệp cả 3 can (Trang 154)
+    if (c[0] === c[1] && c[1] === c[2]) {
+      return {
+        clientStrength: strengths,
+        patternName: 'Trùng điệp tam vị',
+        patternDesc: `Ba can ${CAN[c[0]]} trùng điệp thuần nhất, tự thân hiển lộ Cường thế (Vượng).`
+      };
+    }
+
+    // 2. Có 2 can trùng điệp (A, A, B) (Trang 117, 154-156)
+    if (c[0] === c[1] || c[1] === c[2] || c[0] === c[2]) {
+      let dup_val, dup_indices, single_idx;
+      if (c[0] === c[1]) {
+        dup_val = c[0]; dup_indices = [0, 1]; single_idx = 2;
+      } else if (c[1] === c[2]) {
+        dup_val = c[1]; dup_indices = [1, 2]; single_idx = 0;
+      } else {
+        dup_val = c[0]; dup_indices = [0, 2]; single_idx = 1;
+      }
+
+      const single_val = c[single_idx];
+
+      if (isHoaSonKhac(dup_val, single_val)) {
+        // Trùng điệp hợp lực khắc can đơn (Ví dụ tr. 117: Bính Bính khắc Canh)
+        strengths[single_idx] = false;
+        return {
+          clientStrength: strengths,
+          patternName: 'Trùng điệp tương khắc',
+          patternDesc: `Hai can ${CAN[dup_val]} trùng điệp hợp lực khắc thương ${CAN[single_val]}: ${CAN[dup_val]} Cường thế (Vượng), ${CAN[single_val]} Yếu thế (Suy).`
+        };
+      } else if (isHoaSonKhac(single_val, dup_val)) {
+        // Can đơn khắc 2 can trùng điệp
+        for (let idx of dup_indices) strengths[idx] = false;
+        return {
+          clientStrength: strengths,
+          patternName: 'Tương khắc trùng điệp',
+          patternDesc: `${CAN[single_val]} khắc thương ${CAN[dup_val]}: ${CAN[single_val]} Cường thế (Vượng), cả hai can ${CAN[dup_val]} Yếu thế (Suy).`
+        };
+      } else if (isHoaSonSinh(dup_val, single_val)) {
+        return {
+          clientStrength: strengths,
+          patternName: 'Trùng điệp tương sinh',
+          patternDesc: `Hai can ${CAN[dup_val]} trùng điệp sinh vượng ${CAN[single_val]}: Tất cả đều Cường thế (Vượng).`
+        };
+      } else if (isHoaSonSinh(single_val, dup_val)) {
+        return {
+          clientStrength: strengths,
+          patternName: 'Tương sinh trùng điệp',
+          patternDesc: `${CAN[single_val]} sinh vượng hai can ${CAN[dup_val]} trùng điệp: Tất cả đều Cường thế (Vượng).`
+        };
+      } else if ((dup_val % 2 !== single_val % 2) && (Math.floor(dup_val / 2) === Math.floor(single_val / 2))) {
+        return {
+          clientStrength: strengths,
+          patternName: 'Đồng tài phối trùng điệp',
+          patternDesc: `${CAN[dup_val]} và ${CAN[single_val]} đồng khí ngũ hành khác âm dương (Đồng tài), cùng hiển lộ Cường thế (Vượng).`
+        };
+      } else {
+        return {
+          clientStrength: strengths,
+          patternName: 'Trùng điệp độc lập',
+          patternDesc: `Hai can ${CAN[dup_val]} trùng điệp và ${CAN[single_val]} không sinh khắc nhau, đều tự thân hiển lộ Cường thế (Vượng).`
+        };
+      }
+    }
+
+    // 3. Ba can phân biệt
+    const sinh_edges = [];
+    const khac_edges = [];
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (i === j) continue;
-        const cA = clientIndices[i];
-        const cB = clientIndices[j];
-        const elemA = NGU_HANH_CAN[cA];
-        const elemB = NGU_HANH_CAN[cB];
-        const isKhac = (
-          (elemA === 1 && elemB === 4) ||
-          (elemA === 4 && elemB === 2) ||
-          (elemA === 2 && elemB === 3) ||
-          (elemA === 3 && elemB === 0) ||
-          (elemA === 0 && elemB === 1)
-        );
-        if (isKhac) {
-          const k = 3 - i - j;
-          const cC = clientIndices[k];
-          const elemC = NGU_HANH_CAN[cC];
-          const isCKhacA = (
-            (elemC === 1 && elemA === 4) ||
-            (elemC === 4 && elemA === 2) ||
-            (elemC === 2 && elemA === 3) ||
-            (elemC === 3 && elemA === 0) ||
-            (elemC === 0 && elemA === 1)
-          );
-          if (isCKhacA) {
-            clientStrength[i] = false;
-            clientStrength[j] = true;
-          } else {
-            clientStrength[j] = false;
-          }
+        if (isHoaSonSinh(c[i], c[j])) sinh_edges.push([i, j]);
+        if (isHoaSonKhac(c[i], c[j])) khac_edges.push([i, j]);
+      }
+    }
+
+    // A. Tam giác Liên hoàn tương sinh (Trang 111, 134)
+    if (sinh_edges.length === 2) {
+      const e1 = sinh_edges[0];
+      const e2 = sinh_edges[1];
+      let A, B, C_idx;
+      if (e1[1] === e2[0]) {
+        A = e1[0]; B = e1[1]; C_idx = e2[1];
+      } else if (e2[1] === e1[0]) {
+        A = e2[0]; B = e2[1]; C_idx = e1[1];
+      } else {
+        A = 0; B = 1; C_idx = 2;
+      }
+      return {
+        clientStrength: strengths,
+        patternName: 'Tam giác Liên hoàn tương sinh',
+        patternDesc: `Tổ hợp liên hoàn tương sinh ${CAN[c[A]]} sinh ${CAN[c[B]]} sinh ${CAN[c[C_idx]]}, năng lượng dồn về cuối: Cả ba can đều Cường thế (Vượng).`
+      };
+    }
+
+    // B. Tam giác Liên hoàn tương khắc (Trang 111, 138)
+    if (khac_edges.length === 2) {
+      const e1 = khac_edges[0];
+      const e2 = khac_edges[1];
+      let A, B, C_idx;
+      if (e1[1] === e2[0]) {
+        A = e1[0]; B = e1[1]; C_idx = e2[1];
+      } else if (e2[1] === e1[0]) {
+        A = e2[0]; B = e2[1]; C_idx = e1[1];
+      } else {
+        A = 0; B = 1; C_idx = 2;
+      }
+      strengths[B] = false;
+      return {
+        clientStrength: strengths,
+        patternName: 'Tam giác Liên hoàn tương khắc',
+        patternDesc: `Tổ hợp liên hoàn tương khắc ${CAN[c[A]]} khắc ${CAN[c[B]]} khắc ${CAN[c[C_idx]]}: ${CAN[c[A]]} và ${CAN[c[C_idx]]} Cường thế (Vượng), ${CAN[c[B]]} ở giữa bị khắc nên Yếu thế (Suy).`
+      };
+    }
+
+    // C & D. len(sinh_edges) == 1 && len(khac_edges) == 1
+    if (sinh_edges.length === 1 && khac_edges.length === 1) {
+      const s_from = sinh_edges[0][0];
+      const s_to = sinh_edges[0][1];
+      const k_from = khac_edges[0][0];
+      const k_to = khac_edges[0][1];
+
+      if (s_to === k_from) {
+        // Liên sinh khắc chế (A sinh B khắc C - Trang 112, 142)
+        strengths[k_to] = false;
+        return {
+          clientStrength: strengths,
+          patternName: 'Tam giác Liên sinh khắc chế',
+          patternDesc: `Tổ hợp sinh khắc ${CAN[c[s_from]]} sinh ${CAN[c[s_to]]} tụ lực khắc thương ${CAN[c[k_to]]}: ${CAN[c[s_from]]} và ${CAN[c[s_to]]} Cường thế (Vượng), ${CAN[c[k_to]]} Yếu thế (Suy).`
+        };
+      } else if (k_to === s_from) {
+        // Căn nguyên bị thương (A khắc B sinh C - Trang 112, 150)
+        strengths[k_to] = false;
+        strengths[s_to] = false;
+        return {
+          clientStrength: strengths,
+          patternName: 'Tam giác Căn nguyên bị thương',
+          patternDesc: `Tổ hợp căn nguyên bị thương ${CAN[c[k_from]]} khắc thương nguồn sinh ${CAN[c[k_to]]} khiến ${CAN[c[s_to]]} mất nguồn sinh: ${CAN[c[k_from]]} Cường thế (Vượng), cả ${CAN[c[k_to]]} và ${CAN[c[s_to]]} đều Yếu thế (Suy).`
+        };
+      }
+    }
+
+    // E. Tương khắc đơn cặp (Trang 109, 156)
+    if (khac_edges.length === 1) {
+      const k_from = khac_edges[0][0];
+      const k_to = khac_edges[0][1];
+      strengths[k_to] = false;
+      const remain_idx = [0, 1, 2].find(x => x !== k_from && x !== k_to);
+      return {
+        clientStrength: strengths,
+        patternName: 'Tương khắc đơn cặp',
+        patternDesc: `${CAN[c[k_from]]} khắc thương ${CAN[c[k_to]]} (${CAN[c[k_to]]} Yếu thế, ${CAN[c[k_from]]} Cường thế); ${CAN[c[remain_idx]]} độc lập không bị khắc thương nên Cường thế (Vượng).`
+      };
+    }
+
+    // F. Tương sinh đơn cặp (Trang 109, 156)
+    if (sinh_edges.length === 1) {
+      const s_from = sinh_edges[0][0];
+      const s_to = sinh_edges[0][1];
+      const remain_idx = [0, 1, 2].find(x => x !== s_from && x !== s_to);
+      return {
+        clientStrength: strengths,
+        patternName: 'Tương sinh đơn cặp',
+        patternDesc: `${CAN[c[s_from]]} sinh ${CAN[c[s_to]]} cùng Cường thế (Vượng); ${CAN[c[remain_idx]]} độc lập không bị khắc thương nên Cường thế (Vượng).`
+      };
+    }
+
+    // G. len == 0: Kiểm tra Đồng tài hoặc Lạc đàn (Trang 155, 156)
+    let has_dong_tai = false;
+    for (let i = 0; i < 3; i++) {
+      for (let j = i + 1; j < 3; j++) {
+        if ((c[i] % 2 !== c[j] % 2) && (Math.floor(c[i] / 2) === Math.floor(c[j] / 2))) {
+          has_dong_tai = true;
+          break;
         }
       }
     }
+    if (has_dong_tai) {
+      return {
+        clientStrength: strengths,
+        patternName: 'Đồng tài khách thể',
+        patternDesc: 'Các can đồng khí ngũ hành khác âm dương (Đồng tài), không bị khắc thương, đều tự thân hiển lộ Cường thế (Vượng).'
+      };
+    }
+
+    return {
+      clientStrength: strengths,
+      patternName: 'Lạc đàn độc lập',
+      patternDesc: `Ba can ${CAN[c[0]]}, ${CAN[c[1]]}, ${CAN[c[2]]} phân lập không tương tác sinh khắc, đều tự thân hiển lộ Cường thế (Vượng).`
+    };
+  }
+
+  // 2.B. Định Vị Vượng - Suy Thiên Can & Ẩn Tình Chỉ Hướng (Chu Thần Bân - Chương 4, 6, 8, 9)
+  function calculateStemVuongSuy(canNam, canThang, canNgay, canGio, chiThang) {
+    const clientIndices = [canNam, canThang, canGio];
+    
+    // 1. Phân tích tương tác giữa 3 can khách thể (Tầng 1) chuẩn Chu Thần Bân
+    const { clientStrength, patternName, patternDesc } = evaluateClientStems(canNam, canThang, canGio);
 
     const pillarVuongSuy = {
       year: clientStrength[0] ? 'Vượng' : 'Suy',
       month: clientStrength[1] ? 'Vượng' : 'Suy',
       day: '-',
-      hour: clientStrength[2] ? 'Vượng' : 'Suy'
+      hour: clientStrength[2] ? 'Vượng' : 'Suy',
+      patternName,
+      patternDesc
     };
 
     const res = new Array(10).fill(null);
@@ -617,7 +790,6 @@
     }
 
     // Phase 4: Ẩn tình từ Điểm Tụ Lực / Sinh Khắc / Trùng điệp / Đồng tài
-    // Phase 4: Ẩn tình chỉ hướng
     const strongStems = [];
     clientIndices.forEach((c, idx) => {
       if (clientStrength[idx] && !strongStems.includes(c)) strongStems.push(c);
@@ -665,16 +837,7 @@
         if (i === j) continue;
         const cA = clientIndices[i];
         const cB = clientIndices[j];
-        const elemA = NGU_HANH_CAN[cA];
-        const elemB = NGU_HANH_CAN[cB];
-        const isSinh = (
-          (elemA === 1 && elemB === 3) ||
-          (elemA === 3 && elemB === 4) ||
-          (elemA === 4 && elemB === 0) ||
-          (elemA === 0 && elemB === 2) ||
-          (elemA === 2 && elemB === 1)
-        );
-        if (isSinh && clientStrength[j]) {
+        if (isHoaSonSinh(cA, cB) && clientStrength[j]) {
           tuLucStem = cB;
         }
       }
@@ -736,18 +899,9 @@
     // Phase 5: Nguyên Thần thay thế cho các can còn lại (Tầng 4)
     for (let c = 0; c < 10; c++) {
       if (res[c] !== null) continue;
-      const elemC = NGU_HANH_CAN[c];
       let ntFound = false;
       for (const sc of strongStems) {
-        const elemSc = NGU_HANH_CAN[sc];
-        const isScSinhC = (
-          (elemSc === 1 && elemC === 3) ||
-          (elemSc === 3 && elemC === 4) ||
-          (elemSc === 4 && elemC === 0) ||
-          (elemSc === 0 && elemC === 2) ||
-          (elemSc === 2 && elemC === 1)
-        );
-        if (isScSinhC) {
+        if (isHoaSonSinh(sc, c)) {
           res[c] = { status: 'Vượng', source: 'Nguyên Thần thay thế' };
           ntFound = true;
           break;
@@ -1596,6 +1750,9 @@
     analyzeThienCanLien,
     analyzeDiaChiLien,
     calculateStemVuongSuy,
+    evaluateClientStems,
+    isHoaSonSinh,
+    isHoaSonKhac,
     calculateThanSat,
     getTruongSinh,
     calculateThaiNguyen,

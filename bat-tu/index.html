@@ -23,14 +23,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=3.1">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=3.2">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=3.1"></script>
+  <script src="/bat-tu/bazi-engine.js?v=3.2"></script>
 </head>
 <body>
 
@@ -296,7 +296,7 @@
                   <span class="meta-val" id="res-name">Đương số</span>
                 </div>
                 <div class="meta-row">
-                  <span class="meta-label">Dương lịch (GMT+7.0):</span>
+                  <span class="meta-label" id="res-solar-label">Dương lịch:</span>
                   <span class="meta-val" id="res-solar-full">-</span>
                 </div>
               </div>
@@ -384,11 +384,8 @@
             <table class="dai-van-table" id="res-daivan-table">
               <tbody>
                 <tr id="res-daivan-can-chi-row">
-                  <td class="col-title-vertical" rowspan="4">ĐẠI VẬN</td>
-                  <!-- Can Chi inject via JS -->
-                </tr>
-                <tr id="res-daivan-thap-than-row">
-                  <!-- Thập thần kép inject via JS -->
+                  <td class="col-title-vertical" rowspan="3">ĐẠI VẬN</td>
+                  <!-- Can Chi + Thập thần inject via JS -->
                 </tr>
                 <tr id="res-daivan-age-row">
                   <!-- Độ tuổi inject via JS -->
@@ -694,6 +691,15 @@
         document.getElementById("res-gender").textContent = isNu ? "Nữ" : "Nam";
 
         const tzOpt = tzSelect ? tzSelect.options[tzSelect.selectedIndex].text : "VN (+7)";
+        const elSolarLabel = document.getElementById("res-solar-label");
+        if (elSolarLabel) {
+          if (inp.timeZone !== 7) {
+            elSolarLabel.textContent = `Dương lịch (${tzOpt}):`;
+          } else {
+            elSolarLabel.textContent = "Dương lịch:";
+          }
+        }
+
         let birthTimeDisplay = inp.birthTimeStr;
         if (inp.solarAdjustment) {
           birthTimeDisplay += ` (MT: ${inp.solarAdjustment.adjustedTimeStr})`;
@@ -759,15 +765,13 @@
         updateImageSnapshot();
       }
 
-      // 8. Render Bảng Đại Vận 10 Cột trong Sheet (4 tầng chuẩn mực cân đối)
+      // 8. Render Bảng Đại Vận 10 Cột trong Sheet (Đồng bộ chuẩn mực với Lưu Niên)
       function renderDaiVanTable(dvList) {
         const canChiRow = document.getElementById("res-daivan-can-chi-row");
-        const ttRow = document.getElementById("res-daivan-thap-than-row");
         const ageRow = document.getElementById("res-daivan-age-row");
         const yearRow = document.getElementById("res-daivan-year-row");
 
-        canChiRow.innerHTML = '<td class="col-title-vertical" rowspan="4">ĐẠI VẬN</td>';
-        ttRow.innerHTML = '';
+        canChiRow.innerHTML = '<td class="col-title-vertical" rowspan="3">ĐẠI VẬN</td>';
         ageRow.innerHTML = '';
         yearRow.innerHTML = '';
 
@@ -778,36 +782,37 @@
           if (isTarget) cellClass += " target-dv";
           else if (isActive) cellClass += " active";
 
-          // Can Chi (Can trên, Chi dưới cân đối)
+          // Can - Thập thần & Chi - Thập thần (Kích cỡ bằng nhau theo yêu cầu)
           const tdCc = document.createElement("td");
           tdCc.className = cellClass;
           tdCc.innerHTML = `
             <div class="dv-char-stack">
-              <span class="dv-char-can" style="color: ${dv.canColor}">${dv.canName}</span>
-              <span class="dv-char-chi" style="color: ${dv.chiColor}">${dv.chiName}</span>
+              <div class="cell-pair-line">
+                <span class="char-name" style="color: ${dv.canColor}">${dv.canName}</span>
+                <span class="char-sep">-</span>
+                <span class="char-tt">${dv.thapThanCan}</span>
+              </div>
+              <div class="cell-pair-line">
+                <span class="char-name" style="color: ${dv.chiColor}">${dv.chiName}</span>
+                <span class="char-sep">-</span>
+                <span class="char-tt">${dv.thapThanChi}</span>
+              </div>
             </div>
           `;
           tdCc.addEventListener("click", () => selectDaiVan(dv.index));
           canChiRow.appendChild(tdCc);
 
-          // Thập Thần kép (Can/Chi)
-          const tdTt = document.createElement("td");
-          tdTt.className = cellClass;
-          tdTt.innerHTML = `<span class="dv-thap-than">${dv.thapThanCan}/${dv.thapThanChi}</span>`;
-          tdTt.addEventListener("click", () => selectDaiVan(dv.index));
-          ttRow.appendChild(tdTt);
-
           // Độ Tuổi
           const tdAge = document.createElement("td");
           tdAge.className = cellClass;
-          tdAge.innerHTML = `<span class="dv-age-range">${dv.ageRangeText}</span>`;
+          tdAge.innerHTML = `<span class="cell-age">${dv.ageRangeText}</span>`;
           tdAge.addEventListener("click", () => selectDaiVan(dv.index));
           ageRow.appendChild(tdAge);
 
           // Năm Bắt Đầu
           const tdYr = document.createElement("td");
           tdYr.className = cellClass;
-          tdYr.innerHTML = `<span class="dv-year-start">${dv.solarYearStart}</span>`;
+          tdYr.innerHTML = `<span class="cell-year">${dv.solarYearStart}</span>`;
           tdYr.addEventListener("click", () => selectDaiVan(dv.index));
           yearRow.appendChild(tdYr);
         });
@@ -826,7 +831,7 @@
         updateImageSnapshot();
       }
 
-      // 9. Render Bảng Lưu Niên (20 Năm - 2 Hàng x 10 Cột đều tăm tắp, không bị rớt dòng)
+      // 9. Render Bảng Lưu Niên (20 Năm - Kích cỡ và cấu trúc đồng bộ 100% với Đại Vận)
       function renderLuuNienTable(lnList) {
         const tbody = document.getElementById("res-luunien-tbody");
         tbody.innerHTML = "";
@@ -845,13 +850,18 @@
             html += `
               <td class="${cellClass}">
                 <div class="ln-cell-inner">
-                  <div class="ln-char-stack">
-                    <span class="ln-can" style="color: ${item.canColor}">${item.canName}</span>
-                    <span class="ln-chi" style="color: ${item.chiColor}">${item.chiName}</span>
+                  <div class="cell-pair-line">
+                    <span class="char-name" style="color: ${item.canColor}">${item.canName}</span>
+                    <span class="char-sep">-</span>
+                    <span class="char-tt">${item.thapThanCan}</span>
                   </div>
-                  <div class="ln-year">${item.year}</div>
-                  <div class="ln-age">${item.age}t</div>
-                  <div class="ln-tt">${item.thapThan}</div>
+                  <div class="cell-pair-line">
+                    <span class="char-name" style="color: ${item.chiColor}">${item.chiName}</span>
+                    <span class="char-sep">-</span>
+                    <span class="char-tt">${item.thapThanChi}</span>
+                  </div>
+                  <div class="cell-year">${item.year}</div>
+                  <div class="cell-age">${item.age}t</div>
                 </div>
               </td>
             `;

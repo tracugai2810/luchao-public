@@ -633,12 +633,12 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Container Render Ngầm (Target để html2canvas chụp ảnh chuẩn 1020px) */
+/* Container Render Ngầm (Target để html2canvas chụp ảnh chuẩn 1140px) */
 .bazi-capture-container {
   position: absolute;
   left: -9999px;
   top: 0;
-  width: 1020px;
+  width: 1140px;
   opacity: 0.01;
   pointer-events: none;
   z-index: -9999;
@@ -646,7 +646,7 @@ body {
 
 /* Container hiển thị kết quả chính */
 .bazi-rendered-card-container {
-  max-width: 1020px;
+  max-width: 1140px;
   margin: 0 auto 30px auto;
 }
 
@@ -776,7 +776,7 @@ body {
 .bazi-rendered-img {
   display: block;
   width: 100%;
-  max-width: 1020px;
+  max-width: 1140px;
   height: auto;
   object-fit: contain;
   cursor: pointer;
@@ -870,12 +870,12 @@ body {
   font-family: serif;
 }
 
-/* Sheet Header (Bố cục 2 cột cân đối, trong suốt/trắng, không viền xám) */
+/* Sheet Header (Bố cục 2 cột cân đối, trong suốt/trắng, in đậm tiêu đề theo yêu cầu) */
 .bazi-sheet-header {
   position: relative;
   z-index: 1;
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 22px;
   background: transparent;
 }
 
@@ -883,9 +883,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 32px;
+  gap: 36px;
   width: 100%;
-  padding: 2px 4px 6px 4px;
+  padding: 4px 6px 8px 6px;
   background: transparent;
   box-sizing: border-box;
 }
@@ -893,7 +893,7 @@ body {
 .meta-col {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .meta-col-left {
@@ -908,7 +908,7 @@ body {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  font-size: 0.92rem;
+  font-size: 0.96rem;
   color: #1F2937;
   white-space: nowrap;
   line-height: 1.4;
@@ -918,7 +918,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 16px;
+  gap: 20px;
 }
 
 .meta-inline-item {
@@ -929,20 +929,27 @@ body {
 }
 
 .meta-label {
-  font-weight: 400;
-  color: #4B5563;
-  font-size: 0.92rem;
+  font-weight: 700 !important; /* In đậm tiêu đề theo yêu cầu */
+  color: #0F172A;
+  font-size: 0.96rem;
+  letter-spacing: 0.2px;
 }
 
 .meta-val {
   font-weight: 500;
-  color: #111827;
-  font-size: 0.92rem;
+  color: #1E293B;
+  font-size: 0.96rem;
+}
+
+#res-name {
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: 0.4px;
 }
 
 .meta-highlight {
   color: #B45309 !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 
 /* Bảng Tứ Trụ Chính */
@@ -961,12 +968,12 @@ body {
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
   table-layout: fixed;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .bazi-main-table td {
   border: 1px solid #CBD5E1;
-  padding: 10px 4px;
+  padding: 13px 6px; /* Tăng khoảng cách chiều cao chữ */
   vertical-align: middle;
   background: #FFFFFF;
 }
@@ -976,27 +983,28 @@ body {
   font-weight: 700;
   color: #1E3A8A;
   background: #FFFFFF !important;
-  font-size: 0.85rem;
-  letter-spacing: 0.3px;
+  font-size: 0.88rem;
+  letter-spacing: 0.4px;
 }
 
 .bazi-main-table .col-cell {
   width: 21.5%;
-  font-size: 0.92rem;
+  font-size: 0.96rem;
   color: #1F2937;
-  font-weight: 400;
+  font-weight: 500;
   background: #FFFFFF;
 }
 
 .bazi-main-table .num-bold {
-  font-weight: 400;
-  font-size: 1.05rem;
-  color: #111827;
+  font-weight: 500;
+  font-size: 1.12rem;
+  color: #0F172A;
+  letter-spacing: 0.3px;
 }
 
 .cell-nhat-chu {
   font-weight: 700;
-  color: #111827;
+  color: #0F172A;
   letter-spacing: 0.5px;
 }
 
@@ -1005,12 +1013,12 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 0;
+  gap: 16px; /* Tăng khoảng cách trên dưới thoáng đãng */
+  padding: 16px 0;
 }
 
 .char-can, .char-chi {
-  font-size: 1.85rem;
+  font-size: 2.15rem; /* Căn chỉnh kích thước rõ nét, cân đối */
   font-weight: 700;
   letter-spacing: 0.5px;
   line-height: 1.15;
@@ -1018,7 +1026,7 @@ body {
 
 /* Bảng Đại Vận 10 Cột */
 .table-daivan-box {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .dai-van-table {
@@ -1032,24 +1040,24 @@ body {
 
 .dai-van-table td, .dai-van-table th {
   border: 1px solid #CBD5E1;
-  padding: 4px 1px;
+  padding: 6px 2px;
   vertical-align: middle;
   background: #FFFFFF;
 }
 
 .col-title-vertical {
-  width: 8%;
+  width: 8.5%;
   font-weight: 700;
   color: #1E3A8A;
   background: #FFFFFF !important;
-  font-size: 0.85rem;
-  letter-spacing: 0.3px;
+  font-size: 0.88rem;
+  letter-spacing: 0.4px;
   text-align: center;
   vertical-align: middle;
 }
 
 .dai-van-table td.dv-col {
-  width: 9.2%;
+  width: 9.15%;
   cursor: pointer;
   transition: background 0.15s ease;
   background: #FFFFFF;
@@ -1069,50 +1077,63 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  line-height: 1.15;
-  font-size: 1.12rem;
+  gap: 8px; /* Tăng khoảng cách dòng */
+  padding: 12px 2px;
+  white-space: nowrap;
+}
+
+/* Class đồng bộ cho cặp Can - Thập thần & Chi - Thập thần ở cả Đại Vận & Lưu Niên */
+.cell-pair-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 0.94rem; /* Kích cỡ bằng nhau giữa Can và Thập thần */
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.cell-pair-line .char-name {
+  font-size: 0.94rem;
   font-weight: 700;
-  gap: 5px;
-  padding: 6px 0;
-  white-space: nowrap;
 }
 
-.dv-thap-than {
-  display: block;
-  font-size: 0.72rem;
+.cell-pair-line .char-sep {
+  font-size: 0.94rem;
   font-weight: 400;
-  color: #374151;
-  white-space: nowrap;
-  line-height: 1.25;
-  padding: 3px 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -0.2px;
+  color: #64748B;
+  margin: 0 2px;
 }
 
-.dv-age-range {
+.cell-pair-line .char-tt {
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.cell-age {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   color: #4B5563;
-  font-weight: 400;
+  font-weight: 500;
   white-space: nowrap;
   line-height: 1.25;
-  padding: 3px 0;
+  padding: 5px 0;
 }
 
-.dv-year-start {
+.cell-year {
   display: block;
-  font-size: 0.82rem;
-  font-weight: 400;
-  color: #111827;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #0F172A;
   white-space: nowrap;
   line-height: 1.25;
-  padding: 3px 0;
+  padding: 5px 0;
 }
 
-/* BẢNG LƯU NIÊN (20 NĂM - ĐỀU TĂM TẮP, KHÔNG BAO GIỜ BỊ TRÀN) */
+/* BẢNG LƯU NIÊN (20 NĂM - KÍCH CỠ & KHOẢNG CÁCH ĐỒNG BỘ 100% VỚI ĐẠI VẬN) */
 .table-luunien-box {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .luu-nien-table {
@@ -1126,13 +1147,13 @@ body {
 
 .luu-nien-table td {
   border: 1px solid #CBD5E1;
-  padding: 4px 1px;
+  padding: 6px 2px;
   vertical-align: middle;
   background: #FFFFFF;
 }
 
 .luu-nien-table td.ln-cell {
-  width: 9.2%;
+  width: 9.15%;
   cursor: pointer;
   transition: background 0.15s ease;
   background: #FFFFFF;
@@ -1152,49 +1173,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  min-height: 96px;
+  gap: 7px; /* Tăng khoảng cách dòng */
+  min-height: 116px; /* Tăng chiều cao để các dòng thoáng đãng, không bị chèn */
   box-sizing: border-box;
-  padding: 4px 1px;
-}
-
-.ln-char-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 2px;
-}
-
-.ln-year {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: #111827;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.ln-age {
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: #6B7280;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.ln-tt {
-  font-size: 0.7rem;
-  font-weight: 400;
-  color: #4B5563;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -0.2px;
-  max-width: 100%;
+  padding: 10px 2px;
 }
 
 /* Chân bảng Lá Số / Footer Sheet */

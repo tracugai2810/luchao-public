@@ -620,6 +620,10 @@ body {
    ========================================================================== */
 .bazi-result-container {
   display: none;
+}
+
+.bazi-result-container.show {
+  display: block !important;
   animation: fadeIn 0.3s ease forwards;
 }
 
@@ -1054,6 +1058,99 @@ body {
 .btn-bazi-reset:hover {
   background: #F1F5F9;
   border-color: #94A3B8;
+}
+
+/* ==========================================================================
+   BÁT TỰ SEO GUIDE SECTION & FOOTER
+   ========================================================================== */
+.bazi-seo-guide-section {
+  background: #FFFFFF;
+  border: 1px solid #E2D8C3;
+  border-radius: 14px;
+  padding: 32px 28px;
+  margin-top: 36px;
+  box-shadow: 0 4px 18px rgba(60, 40, 20, 0.04);
+}
+
+.bazi-seo-guide-section h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 14px 0;
+  border-bottom: 2px solid #E2D8C3;
+  padding-bottom: 12px;
+}
+
+.bazi-seo-guide-section h3 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #92400E;
+  margin: 24px 0 12px 0;
+}
+
+.bazi-seo-guide-section p {
+  font-size: 0.94rem;
+  line-height: 1.7;
+  color: #334155;
+  margin-bottom: 14px;
+}
+
+.bazi-seo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin: 16px 0 24px;
+}
+
+.bazi-seo-card {
+  background: #FFFDF9;
+  border: 1px solid #EADCC8;
+  border-left: 4px solid #D97706;
+  border-radius: 10px;
+  padding: 16px 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bazi-seo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.1);
+}
+
+.bazi-seo-card h4 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 8px 0;
+}
+
+.bazi-seo-card p {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #475569;
+  margin: 0;
+}
+
+.bazi-footer {
+  margin-top: 36px;
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 0.88rem;
+  color: #64748B;
+  border-top: 1px solid #E2D8C3;
+}
+
+.bazi-footer p {
+  margin: 4px 0;
+}
+
+.bazi-footer a {
+  color: #B45309;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.bazi-footer a:hover {
+  text-decoration: underline;
 }
 
 /* ==========================================================================

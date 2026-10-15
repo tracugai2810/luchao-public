@@ -1,7 +1,7 @@
 // Service Worker for luchao.io.vn PWA
 // Strategy: Network-First with safe offline fallback (Never breaks updates or dynamic APIs)
 
-const CACHE_NAME = 'luchao-pwa-v8';
+const CACHE_NAME = 'luchao-pwa-v9';
 const PRECACHE_ASSETS = [
   '/',
   '/favicon.png',

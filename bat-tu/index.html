@@ -431,15 +431,15 @@
             </table>
           </div>
 
-          <!-- BẢNG ĐẠI VẬN 10 CỘT -->
+          <!-- BẢNG ĐẠI VẬN (10 ĐẠI VẬN - 2 HÀNG x 5 CỘT) -->
           <div class="bazi-table-responsive table-daivan-box">
             <table class="dai-van-table" id="res-daivan-table">
               <tbody>
                 <tr id="res-daivan-info-row">
-                  <td class="col-title-vertical" rowspan="3">
+                  <td class="col-title-vertical" rowspan="5">
                     <div class="title-split"><span>ĐẠI</span><span>VẬN</span></div>
                   </td>
-                  <td colspan="10" class="daivan-info-cell" id="res-daivan-info-cell">
+                  <td colspan="5" class="daivan-info-cell" id="res-daivan-info-cell">
                     <div class="daivan-info-content">
                       <div class="daivan-info-line">
                         <strong>Khởi đại vận:</strong> Nhập vận lúc <strong class="val-blue" id="res-daivan-nhap-luc">-</strong> <span class="val-sub">(Số tính: <span id="res-daivan-so-tinh">-</span>)</span>
@@ -450,31 +450,37 @@
                     </div>
                   </td>
                 </tr>
-                <tr id="res-daivan-can-chi-row">
-                  <!-- Can Chi inject via JS -->
+                <tr id="res-daivan-can-chi-row-1">
+                  <!-- Can Chi Vận 1-5 -->
                 </tr>
-                <tr id="res-daivan-meta-row">
-                  <!-- Độ tuổi & Năm inject via JS -->
+                <tr id="res-daivan-meta-row-1">
+                  <!-- Tuổi & Năm Vận 1-5 -->
+                </tr>
+                <tr id="res-daivan-can-chi-row-2">
+                  <!-- Can Chi Vận 6-10 -->
+                </tr>
+                <tr id="res-daivan-meta-row-2">
+                  <!-- Tuổi & Năm Vận 6-10 -->
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- BẢNG LƯU NIÊN (20 NĂM) -->
+          <!-- BẢNG LƯU NIÊN (20 NĂM - 4 KHỐI x 5 CỘT) -->
           <div class="bazi-table-responsive table-luunien-box">
             <table class="luu-nien-table" id="res-luunien-table">
               <tbody id="res-luunien-tbody">
-                <!-- 2 Hàng Lưu Niên (mỗi hàng gồm Can Chi + Năm & Tuổi) inject via JS -->
+                <!-- 4 Khối Lưu Niên x 5 cột inject via JS -->
               </tbody>
             </table>
           </div>
 
-          <!-- BẢNG 10 THIÊN CAN (VƯỢNG SUY) -->
+          <!-- BẢNG 10 THIÊN CAN (VƯỢNG SUY - 2 HÀNG x 5 CỘT) -->
           <div class="bazi-table-responsive table-thiencan-box">
             <table class="thien-can-table" id="res-thiencan-table">
               <tbody>
                 <tr>
-                  <td class="col-title-vertical" rowspan="2">
+                  <td class="col-title-vertical" rowspan="4">
                     <div class="title-split"><span>10</span><span>CAN</span></div>
                   </td>
                   <td class="tc-cell tc-can" id="res-tc-name-0">Giáp</td>
@@ -482,11 +488,6 @@
                   <td class="tc-cell tc-can" id="res-tc-name-2">Bính</td>
                   <td class="tc-cell tc-can" id="res-tc-name-3">Đinh</td>
                   <td class="tc-cell tc-can" id="res-tc-name-4">Mậu</td>
-                  <td class="tc-cell tc-can" id="res-tc-name-5">Kỷ</td>
-                  <td class="tc-cell tc-can" id="res-tc-name-6">Canh</td>
-                  <td class="tc-cell tc-can" id="res-tc-name-7">Tân</td>
-                  <td class="tc-cell tc-can" id="res-tc-name-8">Nhâm</td>
-                  <td class="tc-cell tc-can" id="res-tc-name-9">Quý</td>
                 </tr>
                 <tr>
                   <td class="tc-cell tc-vs" id="res-tc-vs-0">-</td>
@@ -494,6 +495,15 @@
                   <td class="tc-cell tc-vs" id="res-tc-vs-2">-</td>
                   <td class="tc-cell tc-vs" id="res-tc-vs-3">-</td>
                   <td class="tc-cell tc-vs" id="res-tc-vs-4">-</td>
+                </tr>
+                <tr>
+                  <td class="tc-cell tc-can" id="res-tc-name-5">Kỷ</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-6">Canh</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-7">Tân</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-8">Nhâm</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-9">Quý</td>
+                </tr>
+                <tr>
                   <td class="tc-cell tc-vs" id="res-tc-vs-5">-</td>
                   <td class="tc-cell tc-vs" id="res-tc-vs-6">-</td>
                   <td class="tc-cell tc-vs" id="res-tc-vs-7">-</td>
@@ -770,6 +780,11 @@
         btnSubmit.addEventListener("click", runBaziCalculation);
       }
 
+      // Tự động lập lá số mẫu nếu có hash #demo hoặc query ?demo=1 để kiểm thử tự động
+      if (window.location.hash === "#demo" || window.location.search.includes("demo=1")) {
+        setTimeout(() => runBaziCalculation(new Event("submit")), 150);
+      }
+
       // 7. Render Lá Số
       function renderBaziChart(res) {
         const inp = res.rawInput;
@@ -916,51 +931,62 @@
         updateImageSnapshot();
       }
 
-      // 8. Render Bảng Đại Vận 10 Cột trong Sheet (Hiển thị Thập Thần bên cạnh Can Chi theo yêu cầu)
+      // 8. Render Bảng Đại Vận (2 Hàng x 5 Cột) trong Sheet (To, Rõ Nét, Đồng Bộ Lưới)
       function renderDaiVanTable(dvList) {
-        const canChiRow = document.getElementById("res-daivan-can-chi-row");
-        const metaRow = document.getElementById("res-daivan-meta-row");
+        const canChiRow1 = document.getElementById("res-daivan-can-chi-row-1");
+        const metaRow1 = document.getElementById("res-daivan-meta-row-1");
+        const canChiRow2 = document.getElementById("res-daivan-can-chi-row-2");
+        const metaRow2 = document.getElementById("res-daivan-meta-row-2");
 
-        canChiRow.innerHTML = '';
-        metaRow.innerHTML = '';
+        if (!canChiRow1 || !metaRow1 || !canChiRow2 || !metaRow2) return;
 
-        dvList.forEach(dv => {
-          const isActive = dv.index === selectedDaiVanIndex;
-          const isTarget = dv.isTarget;
-          let cellClass = "dv-col";
-          if (isTarget) cellClass += " target-dv";
-          else if (isActive) cellClass += " active";
+        canChiRow1.innerHTML = '';
+        metaRow1.innerHTML = '';
+        canChiRow2.innerHTML = '';
+        metaRow2.innerHTML = '';
 
-          // Ô Can Chi: Can trên, Chi dưới (Bỏ dấu gạch ngang)
-          const tdCc = document.createElement("td");
-          tdCc.className = cellClass;
-          tdCc.innerHTML = `
-            <div class="cell-pair-stack">
-              <div class="cell-pair-line">
-                <span class="char-name" style="color: ${dv.canColor}">${dv.canName}</span>
-                <span class="char-tt">${dv.thapThanCan}</span>
+        const appendDvCells = (subList, trCc, trMeta) => {
+          subList.forEach(dv => {
+            const isActive = dv.index === selectedDaiVanIndex;
+            const isTarget = dv.isTarget;
+            let cellClass = "dv-col";
+            if (isTarget) cellClass += " target-dv";
+            else if (isActive) cellClass += " active";
+
+            // Ô Can Chi: Can trên, Chi dưới (Bỏ dấu gạch ngang)
+            const tdCc = document.createElement("td");
+            tdCc.className = cellClass;
+            tdCc.innerHTML = `
+              <div class="cell-pair-stack">
+                <div class="cell-pair-line">
+                  <span class="char-name" style="color: ${dv.canColor}">${dv.canName}</span>
+                  <span class="char-tt">${dv.thapThanCan}</span>
+                </div>
+                <div class="cell-pair-line">
+                  <span class="char-name" style="color: ${dv.chiColor}">${dv.chiName}</span>
+                  <span class="char-tt">${dv.thapThanChi}</span>
+                </div>
               </div>
-              <div class="cell-pair-line">
-                <span class="char-name" style="color: ${dv.chiColor}">${dv.chiName}</span>
-                <span class="char-tt">${dv.thapThanChi}</span>
-              </div>
-            </div>
-          `;
-          tdCc.addEventListener("click", () => selectDaiVan(dv.index));
-          canChiRow.appendChild(tdCc);
+            `;
+            tdCc.addEventListener("click", () => selectDaiVan(dv.index));
+            trCc.appendChild(tdCc);
 
-          // Ô Tuổi & Năm: Tuổi trên, Năm dưới (Kích cỡ đồng bộ Lưu Niên)
-          const tdMeta = document.createElement("td");
-          tdMeta.className = cellClass;
-          tdMeta.innerHTML = `
-            <div class="cell-meta-stack">
-              <span class="meta-age">${dv.ageRangeText}</span>
-              <span class="meta-year">${dv.solarYearStart}</span>
-            </div>
-          `;
-          tdMeta.addEventListener("click", () => selectDaiVan(dv.index));
-          metaRow.appendChild(tdMeta);
-        });
+            // Ô Tuổi & Năm: Tuổi trên, Năm dưới (Kích cỡ to rõ, đồng bộ)
+            const tdMeta = document.createElement("td");
+            tdMeta.className = cellClass;
+            tdMeta.innerHTML = `
+              <div class="cell-meta-stack">
+                <span class="meta-age">${dv.ageRangeText}</span>
+                <span class="meta-year">${dv.solarYearStart}</span>
+              </div>
+            `;
+            tdMeta.addEventListener("click", () => selectDaiVan(dv.index));
+            trMeta.appendChild(tdMeta);
+          });
+        };
+
+        appendDvCells(dvList.slice(0, 5), canChiRow1, metaRow1);
+        appendDvCells(dvList.slice(5, 10), canChiRow2, metaRow2);
       }
 
       // Chọn Đại Vận khi click trực tiếp vào cột trên bảng
@@ -976,14 +1002,21 @@
         updateImageSnapshot();
       }
 
-      // 9. Render Bảng Lưu Niên - Tiểu Vận (20 Năm - Gộp 1 cột tiêu đề duy nhất cho cả 20 năm, 6 hàng)
+      // 9. Render Bảng Lưu Niên - Tiểu Vận (4 Khối x 5 Cột, 13 Hàng, Gộp Tiêu Đề Dọc)
       function renderLuuNienTable(lnList) {
         const tbody = document.getElementById("res-luunien-tbody");
         tbody.innerHTML = "";
 
-        const row1 = lnList.filter(l => l.row === 1);
-        const row2 = lnList.filter(l => l.row === 2);
-        const totalRows = (row1.length > 0 && row2.length > 0) ? 7 : 3;
+        // 20 năm chia làm 4 khối 5 năm:
+        // Khối 1: Năm 1 - 5 (Đại vận hiện tại 5 năm đầu)
+        // Khối 2: Năm 6 - 10 (Đại vận hiện tại 5 năm sau)
+        // [Divider ngăn cách Đại Vận]
+        // Khối 3: Năm 11 - 15 (Đại vận kế tiếp 5 năm đầu)
+        // Khối 4: Năm 16 - 20 (Đại vận kế tiếp 5 năm sau)
+        const block1 = lnList.slice(0, 5);
+        const block2 = lnList.slice(5, 10);
+        const block3 = lnList.slice(10, 15);
+        const block4 = lnList.slice(15, 20);
 
         let bdayTag = "";
         if (currentBaziResult && currentBaziResult.birthdayShortStr) {
@@ -993,11 +1026,11 @@
           if (parts.length >= 2) bdayTag = `(${parts[0]}/${parts[1]})`;
         }
 
-        const appendDecadeRows = (list, isFirstDecade) => {
+        const appendBlockRows = (list, isFirstBlock) => {
           const trCc = document.createElement("tr");
-          if (isFirstDecade) {
+          if (isFirstBlock) {
             trCc.innerHTML = `
-              <td class="col-title-vertical" rowspan="${totalRows}">
+              <td class="col-title-vertical" rowspan="13">
                 <div class="title-split">
                   <span>LƯU</span>
                   <span>NIÊN</span>
@@ -1034,7 +1067,7 @@
             `;
             trCc.appendChild(tdCc);
 
-            // Ô Năm & Tuổi: Năm trên, Tuổi dưới (Kích cỡ đồng bộ Đại Vận)
+            // Ô Năm & Tuổi: Năm trên, Tuổi dưới (Kích cỡ to rõ)
             const tdMeta = document.createElement("td");
             tdMeta.className = cellClass;
             tdMeta.innerHTML = `
@@ -1045,7 +1078,7 @@
             `;
             trMeta.appendChild(tdMeta);
 
-            // Ô Tiểu Vận: Can 1 Thập thần 1 ↓ Can 2 Thập thần 2 (Chiều dọc chuẩn yêu cầu)
+            // Ô Tiểu Vận: Can 1 Thập thần 1 ↓ Can 2 Thập thần 2 (Chiều dọc chuẩn Hoa Sơn)
             const tdTv = document.createElement("td");
             tdTv.className = cellClass;
             tdTv.innerHTML = `
@@ -1069,14 +1102,18 @@
           tbody.appendChild(trTv);
         };
 
-        if (row1.length > 0) appendDecadeRows(row1, true);
-        if (row2.length > 0) {
-          // Thêm hàng ngăn cách tạo khoảng hở chia ô rõ rệt giữa 2 khối 10 năm
+        if (block1.length > 0) appendBlockRows(block1, true);
+        if (block2.length > 0) appendBlockRows(block2, false);
+
+        if (block3.length > 0 || block4.length > 0) {
+          // Thêm hàng ngăn cách tạo khoảng hở chia ô rõ rệt giữa 2 khối Đại Vận (colspan 5 vì bảng có 5 cột nội dung)
           const trDivider = document.createElement("tr");
           trDivider.className = "ln-decade-divider-row";
-          trDivider.innerHTML = '<td colspan="10" class="ln-decade-divider-cell"></td>';
+          trDivider.innerHTML = '<td colspan="5" class="ln-decade-divider-cell"></td>';
           tbody.appendChild(trDivider);
-          appendDecadeRows(row2, false);
+
+          if (block3.length > 0) appendBlockRows(block3, false);
+          if (block4.length > 0) appendBlockRows(block4, false);
         }
       }
 

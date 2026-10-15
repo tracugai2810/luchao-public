@@ -23,14 +23,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=2.8">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=2.9">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=2.8"></script>
+  <script src="/bat-tu/bazi-engine.js?v=2.9"></script>
 </head>
 <body>
 
@@ -632,7 +632,6 @@
 
           // Tự động kích hoạt Đại Vận chứa năm xem hạn
           selectedDaiVanIndex = currentBaziResult.daiVan.targetDaiVanIndex || 1;
-          if (quickCalcYear) quickCalcYear.value = calcYearVal;
           if (selCalcYear) selCalcYear.value = calcYearVal;
 
           // Render ra giao diện

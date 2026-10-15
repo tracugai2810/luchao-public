@@ -724,12 +724,17 @@
       }
     }
 
-    const tenStemsVuongSuy = res.map((item, idx) => ({
-      canIdx: idx,
-      canName: CAN[idx],
-      status: item.status,
-      source: item.source
-    }));
+    const tenStemsVuongSuy = res.map((item, idx) => {
+      const elemName = ELEMENT_NAMES[NGU_HANH_CAN[idx]];
+      return {
+        canIdx: idx,
+        canName: CAN[idx],
+        elem: elemName,
+        color: ELEMENT_COLORS[elemName] || "#0F172A",
+        status: item.status,
+        source: item.source
+      };
+    });
 
     return { pillarVuongSuy, tenStemsVuongSuy };
   }
@@ -1540,6 +1545,8 @@
   global.BaziEngine = {
     CAN,
     CHI,
+    NGU_HANH_CAN,
+    NGU_HANH_CHI,
     ELEMENT_NAMES,
     ELEMENT_COLORS,
     VN_PROVINCES,

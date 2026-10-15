@@ -67,14 +67,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=5.7">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=5.8">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=5.7"></script>
+  <script src="/bat-tu/bazi-engine.js?v=5.8"></script>
 </head>
 <body>
 
@@ -875,8 +875,7 @@
               const vsEl = document.getElementById(`res-tc-vs-${idx}`);
               if (nameEl) {
                 nameEl.textContent = item.canName;
-                const elem = Engine.ELEMENT_NAMES[Engine.NGU_HANH_CAN[idx]];
-                nameEl.style.color = Engine.ELEMENT_COLORS[elem] || "#0F172A";
+                nameEl.style.color = item.color || (Engine.ELEMENT_COLORS && Engine.ELEMENT_COLORS[item.elem]) || "#0F172A";
               }
               if (vsEl) {
                 vsEl.textContent = item.status;

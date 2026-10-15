@@ -991,13 +991,13 @@ input[type="time"].form-input,
 /* Cột Tiêu Đề Bên Trái In Đậm Rõ Nét Màu Đen Chuẩn */
 .bazi-main-table .col-title,
 .col-title-vertical {
-  width: 7.5%;
-  min-width: 80px;
-  max-width: 90px;
+  width: 5.6%;
+  min-width: 66px;
+  max-width: 72px;
   font-weight: 700 !important;
   color: #0F172A !important; /* Màu đen mực sắc nét, dễ nhìn */
   background: #FEF6E8 !important;
-  font-size: 16.5px;
+  font-size: 15px;
   letter-spacing: 0.4px;
   text-align: center;
   vertical-align: middle;
@@ -1021,7 +1021,7 @@ input[type="time"].form-input,
 }
 
 .bazi-main-table .col-cell {
-  width: 23.125%;
+  width: 23.6%;
   font-size: 19.5px;
   color: #0F172A; /* Màu đen mực sắc nét chuẩn yêu cầu */
   font-weight: 600;
@@ -1122,12 +1122,12 @@ input[type="time"].form-input,
 }
 
 /* ==========================================================================
-   BẢNG ĐẠI VẬN & LƯU NIÊN (CHUẨN HỆ LƯỚI 5 CỘT, CHỮ TO RÕ NHÌN KHÔNG CẦN ZOOM)
+   BẢNG ĐẠI VẬN & LƯU NIÊN (CHUẨN TỶ LỆ VÀNG, PHÂN BẬC ĐẠI VẬN > LƯU NIÊN)
    ========================================================================== */
 
 .dai-van-table td.dv-col,
 .luu-nien-table td.ln-cell {
-  width: 18.5%; /* 5 cột x 18.5% = 92.5% + 7.5% tiêu đề = 100% */
+  width: 9.44%;
   vertical-align: middle;
   background: #FEF6E8;
   transition: background 0.15s ease;
@@ -1135,7 +1135,7 @@ input[type="time"].form-input,
 
 .dai-van-table td.dv-col {
   cursor: pointer;
-  padding: 4px 2px;
+  padding: 3px 1px;
 }
 
 .dai-van-table td.dv-col:hover {
@@ -1152,7 +1152,7 @@ input[type="time"].form-input,
 }
 
 .luu-nien-table td.ln-cell {
-  padding: 3px 2px;
+  padding: 2px 1px;
 }
 
 .luu-nien-table td.ln-cell:hover {
@@ -1197,152 +1197,152 @@ input[type="time"].form-input,
 }
 
 /* ---------------------------------------------------------
-   1. ĐẠI VẬN (5 Cột x 2 Hàng - Can Chi To Nổi Bật, Thập Thần Đậm Rõ)
+   1. ĐẠI VẬN (10 Năm - Bỏ dấu gạch, Can Chi in đậm màu ngũ hành, Thập Thần nét thường)
    --------------------------------------------------------- */
 .dai-van-table .cell-pair-stack {
-  gap: 5px;
-  padding: 9px 2px;
+  gap: 4px;
+  padding: 8px 1px;
 }
 
 .dai-van-table .cell-pair-line {
-  gap: 10px; /* Tách bạch rộng rãi giữa Can Chi và Thập Thần */
-  line-height: 1.35;
+  gap: 8px; /* Tăng từ 4px lên 8px để Can Chi và Thập Thần tách bạch rõ ràng, thoáng mắt */
+  line-height: 1.32;
 }
 
 .dai-van-table .cell-pair-line .char-name {
-  font-size: 20.5px; /* To, rõ ràng, ấn tượng */
+  font-size: 17px; /* To hơn Lưu Niên 1 chút (17px so với 15.5px) */
   font-weight: 700; /* Can Chi in đậm nổi bật */
 }
 
 .dai-van-table .cell-pair-line .char-tt {
-  font-size: 19px; /* Thập Thần to rõ */
-  font-weight: 600;
-  color: #0F172A; /* Màu mực dễ đọc, sắc sảo */
+  font-size: 15.5px; /* To hơn Lưu Niên 1 chút */
+  font-weight: 400; /* Thập Thần nét thường, không in đậm */
+  color: #1E293B; /* Màu mực dễ đọc, sắc sảo */
 }
 
 .dai-van-table .cell-meta-stack {
-  gap: 4px;
-  padding: 8px 2px;
+  gap: 3px;
+  padding: 7px 1px;
 }
 
 .dai-van-table .cell-meta-stack .meta-age {
-  font-size: 17.5px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 400;
   color: #475569;
 }
 
 .dai-van-table .cell-meta-stack .meta-year {
-  font-size: 18px;
-  font-weight: 600;
-  color: #0F172A;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: #1E293B;
 }
 
 /* ---------------------------------------------------------
-   2. LƯU NIÊN (5 Cột x 4 Khối - Chữ To Gấp Rưỡi Cũ, Rõ Từng Nét)
+   2. LƯU NIÊN (Từng năm - Bỏ dấu gạch, thanh thoát)
    --------------------------------------------------------- */
 .luu-nien-table .cell-pair-stack {
-  gap: 4px;
-  padding: 7px 2px;
+  gap: 3px;
+  padding: 6px 1px;
 }
 
 .luu-nien-table .cell-pair-line {
-  gap: 8px; /* Khoảng cách chữ tự nhiên, dễ đọc */
-  line-height: 1.32;
+  gap: 6px; /* Tăng từ 3px lên 6px để khoảng cách 2 chữ tự nhiên, dễ đọc */
+  line-height: 1.28;
 }
 
 .luu-nien-table .cell-pair-line .char-name {
-  font-size: 19.5px; /* Chữ to, thanh thoát, cực kỳ dễ đọc */
+  font-size: 15.5px; /* Nhỏ hơn Đại Vận ~1.5px, gọn gàng, thanh thoát */
   font-weight: 700; /* Can Chi in đậm nổi bật */
 }
 
 .luu-nien-table .cell-pair-line .char-tt {
-  font-size: 18px; /* Thập Thần to rõ */
-  font-weight: 600;
-  color: #0F172A;
+  font-size: 15px; /* Nhỏ hơn Đại Vận */
+  font-weight: 400;
+  color: #334155;
 }
 
 .luu-nien-table .cell-meta-stack {
-  gap: 3px;
-  padding: 6px 2px;
+  gap: 2px;
+  padding: 5px 1px;
 }
 
 .luu-nien-table .cell-meta-stack .meta-year {
-  font-size: 18px;
-  font-weight: 600;
-  color: #0F172A;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1E293B;
 }
 
 .luu-nien-table .cell-meta-stack .meta-age {
-  font-size: 16.5px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   color: #64748B;
 }
 
 /* ---------------------------------------------------------
-   3. TIỂU VẬN (Can 1 Thập thần ↓ Can 2 Thập thần - Chiều dọc, Chữ To Đồng Bộ)
+   3. TIỂU VẬN (Can 1 Thập thần ↓ Can 2 Thập thần - Chiều dọc, Chuẩn Hoa Sơn)
    --------------------------------------------------------- */
 .luu-nien-table .cell-tv-line {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
   white-space: nowrap;
-  padding: 6px 2px;
-  line-height: 1.28;
+  padding: 5px 1px;
+  line-height: 1.25;
 }
 
 .luu-nien-table .cell-tv-line .tv-item {
   display: inline-flex;
   align-items: baseline;
-  gap: 5px;
+  gap: 4px;
 }
 
 .luu-nien-table .cell-tv-line .tv-can {
-  font-size: 19px; /* To bằng Lưu Niên */
+  font-size: 15.5px; /* Bằng 100% kích thước Can Lưu Niên (15.5px) */
   font-weight: 700;
 }
 
 .luu-nien-table .cell-tv-line .tv-tt {
-  font-size: 18px; /* To bằng Thập Thần Lưu Niên */
-  font-weight: 600;
-  color: #0F172A;
+  font-size: 15px; /* Bằng 100% kích thước Thập Thần Lưu Niên (15px) */
+  font-weight: 400;
+  color: #334155;
 }
 
 .luu-nien-table .cell-tv-line .tv-arrow {
-  font-size: 13px;
-  color: #64748B;
+  font-size: 11px;
+  color: #94A3B8;
   line-height: 1;
   margin: 1px 0;
 }
 
 .col-title-vertical .title-dash {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #64748B;
   line-height: 1;
-  margin: 3px 0;
+  margin: 2px 0;
 }
 
 .col-title-vertical .title-bday {
-  font-size: 16.5px; /* To, rõ ràng mốc ngày sinh */
+  font-size: 15px; /* Bằng 100% kích cỡ chữ LƯU NIÊN TIỂU VẬN (15px) */
   font-weight: 700;
   color: #1D4ED8;
-  margin-top: 4px;
-  letter-spacing: -0.3px;
+  margin-top: 3px;
+  letter-spacing: -0.4px;
   white-space: nowrap;
 }
 
 /* ---------------------------------------------------------
-   4. HÀNG PHÂN CÁCH 2 KHỐI ĐẠI VẬN LƯU NIÊN - TIỂU VẬN
+   4. HÀNG PHÂN CÁCH 2 KHỐI 10 NĂM LƯU NIÊN - TIỂU VẬN
    --------------------------------------------------------- */
 .luu-nien-table .ln-decade-divider-row {
-  height: 12px;
-  line-height: 12px;
+  height: 10px;
+  line-height: 10px;
 }
 
 .luu-nien-table .ln-decade-divider-cell {
-  height: 12px;
+  height: 10px;
   background: #FEF6E8; /* Màu nền giấy kem hoàng gia chuẩn nguhanh.net */
   border-top: 1.5px solid #3B82F6 !important; /* Đường viền xanh chốt khối 1 */
   border-bottom: 1.5px solid #3B82F6 !important; /* Đường viền xanh khởi đầu khối 2 */
@@ -1352,7 +1352,7 @@ input[type="time"].form-input,
 }
 
 /* ==========================================================================
-   3. BẢNG 10 THIÊN CAN (VƯỢNG SUY - 2 HÀNG x 5 CỘT)
+   3. BẢNG 10 THIÊN CAN (VƯỢNG SUY)
    ========================================================================== */
 .table-thiencan-box {
   margin-bottom: 14px;
@@ -1371,11 +1371,11 @@ input[type="time"].form-input,
   border: 1px solid #93C5FD;
   vertical-align: middle;
   background: #FEF6E8;
-  padding: 7px 2px;
+  padding: 6px 1px;
 }
 
 .thien-can-table td.tc-cell {
-  width: 18.5%; /* 5 cột x 18.5% = 92.5% */
+  width: 9.44%;
   vertical-align: middle;
   text-align: center;
   white-space: nowrap;
@@ -1384,18 +1384,18 @@ input[type="time"].form-input,
 }
 
 .thien-can-table .tc-can {
-  font-size: 19.5px;
+  font-size: 16.5px;
   font-weight: 700;
-  line-height: 1.3;
-  padding: 8px 2px;
+  line-height: 1.25;
+  padding: 6px 1px;
 }
 
 .thien-can-table .tc-vs {
-  font-size: 18px;
-  font-weight: 500;
-  color: #0F172A;
-  line-height: 1.3;
-  padding: 7px 2px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #1E293B;
+  line-height: 1.25;
+  padding: 5px 1px;
 }
 
 /* Chân bảng Lá Số / Footer Sheet */

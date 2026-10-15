@@ -56,20 +56,25 @@
   }
   </script>
 
+  <!-- Cache Control (Chống cache Safari & Mobile) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <!-- Fonts (Segoe UI / Roboto chuẩn nét thanh thoát Ảnh 4) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=4.3">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=5.0">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=4.3"></script>
+  <script src="/bat-tu/bazi-engine.js?v=5.0"></script>
 </head>
 <body>
 
@@ -304,13 +309,10 @@
           <span class="hint-mobile">💡 Chạm giữ vào ảnh trên điện thoại để <strong>Sao chép</strong> hoặc <strong>Lưu vào Thư viện Ảnh</strong></span>
         </div>
 
-        <!-- Nút Action: Tải ảnh & Lập lại -->
+        <!-- Nút Action: Tải ảnh -->
         <div class="bazi-actions-row">
           <button type="button" class="btn-bazi-action btn-bazi-download" id="btn-download-chart">
             📥 Tải Ảnh Lá Số (HD PNG)
-          </button>
-          <button type="button" class="btn-bazi-action btn-bazi-reset" id="btn-reset-form">
-            🔄 Lập Lá Số Mới
           </button>
         </div>
 
@@ -998,11 +1000,14 @@
           captureContainer.style.position = "fixed";
           captureContainer.style.left = "0";
           captureContainer.style.top = "0";
+          captureContainer.style.width = "1280px";
           captureContainer.style.zIndex = "-9999";
           captureContainer.style.opacity = "0.01";
 
           html2canvas(printableCard, {
-            scale: 2.2,
+            scale: 2.0,
+            width: 1280,
+            windowWidth: 1280,
             backgroundColor: "#FEF6E8",
             useCORS: true,
             logging: false,
@@ -1115,13 +1120,6 @@
       }
 
       document.getElementById("btn-download-chart").addEventListener("click", saveOrShareChart);
-
-      // 15. Nút Reset
-      document.getElementById("btn-reset-form").addEventListener("click", function () {
-        resultSection.style.display = "none";
-        resultSection.classList.remove("show");
-        form.scrollIntoView({ behavior: "smooth", block: "center" });
-      });
 
     });
   </script>

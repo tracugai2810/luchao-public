@@ -492,6 +492,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .form-group label {
@@ -512,6 +513,8 @@ body {
   outline: none;
   transition: all 0.2s ease;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   box-sizing: border-box;
 }
 
@@ -519,6 +522,25 @@ body {
   background: #FFFFFF;
   border-color: #D97706;
   box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+
+/* Khắc phục triệt để lỗi tràn khung nhập giờ trên iOS Safari & điện thoại */
+input[type="time"].form-input,
+.bazi-time-input {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  box-sizing: border-box !important;
+  text-align: center;
+  background-color: #F8FAFC;
+}
+
+input[type="time"]::-webkit-date-and-time-value {
+  text-align: center;
 }
 
 .bazi-date-row {
@@ -847,6 +869,7 @@ body {
    ========================================================================== */
 .bazi-chart-card {
   width: 1280px;
+  min-width: 1280px;
   box-sizing: border-box;
   background: #FEF6E8; /* Màu nền giấy kem hoàng gia chuẩn nguhanh.net */
   border: 2.5px solid #1E3A8A; /* Viền tổng đậm bao quanh theo Ảnh 3 & 4 */
@@ -1214,7 +1237,7 @@ body {
 
 .dai-van-table .cell-pair-line .char-name {
   font-size: 1.04rem; /* To hơn Lưu Niên 1 chút (~16.6px so với ~15.6px) */
-  font-weight: 500; /* Không in đậm */
+  font-weight: 700; /* Can Chi in đậm nổi bật */
 }
 
 .dai-van-table .cell-pair-line .char-sep {
@@ -1226,7 +1249,7 @@ body {
 
 .dai-van-table .cell-pair-line .char-tt {
   font-size: 0.98rem; /* To hơn Lưu Niên 1 chút (~15.7px so với ~14.9px) */
-  font-weight: 400; /* Không in đậm */
+  font-weight: 400; /* Thập Thần nét thường, không in đậm để tránh tràn chữ */
   color: #1E293B; /* Màu mực dễ đọc, sắc sảo */
 }
 
@@ -1237,13 +1260,13 @@ body {
 
 .dai-van-table .cell-meta-stack .meta-age {
   font-size: 0.96rem;
-  font-weight: 400; /* Không in đậm */
+  font-weight: 400;
   color: #475569;
 }
 
 .dai-van-table .cell-meta-stack .meta-year {
   font-size: 0.98rem;
-  font-weight: 500; /* Không in đậm */
+  font-weight: 500;
   color: #1E293B;
 }
 
@@ -1262,7 +1285,7 @@ body {
 
 .luu-nien-table .cell-pair-line .char-name {
   font-size: 0.98rem; /* Nhỏ hơn Đại Vận ~1.0px, gọn gàng, thanh thoát */
-  font-weight: 500;
+  font-weight: 700; /* Can Chi in đậm nổi bật */
 }
 
 .luu-nien-table .cell-pair-line .char-sep {
@@ -1556,7 +1579,8 @@ body {
   }
 
   .bazi-form-card {
-    padding: 16px;
+    padding: 16px 14px;
+    overflow: hidden;
   }
 
   .bazi-form-grid {
@@ -1564,32 +1588,8 @@ body {
     gap: 14px;
   }
 
-  .bazi-chart-card {
-    padding: 14px 10px;
-  }
-
-  .sheet-title-group h2 {
-    font-size: 1.3rem;
-  }
-
-  .sheet-info-group {
-    grid-template-columns: 1fr;
-    gap: 6px;
-    padding: 10px 12px;
-  }
-
-  .big-char {
-    font-size: 1.6rem;
-  }
-
   .btn-bazi-action {
     width: 100%;
     justify-content: center;
-  }
-
-  .bazi-card-footer {
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
   }
 }

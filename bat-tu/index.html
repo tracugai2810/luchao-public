@@ -67,14 +67,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=5.6">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=5.7">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=5.6"></script>
+  <script src="/bat-tu/bazi-engine.js?v=5.7"></script>
 </head>
 <body>
 
@@ -415,6 +415,14 @@
                   <td class="col-cell" id="res-tt-chi-ngay">-</td>
                   <td class="col-cell" id="res-tt-chi-gio">-</td>
                 </tr>
+                <!-- Hàng 5: Vượng Suy -->
+                <tr>
+                  <td class="col-title"><div class="title-split"><span>VƯỢNG</span><span>SUY</span></div></td>
+                  <td class="col-cell" id="res-vs-can-nam">-</td>
+                  <td class="col-cell" id="res-vs-can-thang">-</td>
+                  <td class="col-cell" id="res-vs-can-ngay">-</td>
+                  <td class="col-cell" id="res-vs-can-gio">-</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -453,6 +461,41 @@
             <table class="luu-nien-table" id="res-luunien-table">
               <tbody id="res-luunien-tbody">
                 <!-- 2 Hàng Lưu Niên (mỗi hàng gồm Can Chi + Năm & Tuổi) inject via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- BẢNG 10 THIÊN CAN (VƯỢNG SUY) -->
+          <div class="bazi-table-responsive table-thiencan-box">
+            <table class="thien-can-table" id="res-thiencan-table">
+              <tbody>
+                <tr>
+                  <td class="col-title-vertical" rowspan="2">
+                    <div class="title-split"><span>10</span><span>CAN</span></div>
+                  </td>
+                  <td class="tc-cell tc-can" id="res-tc-name-0">Giáp</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-1">Ất</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-2">Bính</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-3">Đinh</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-4">Mậu</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-5">Kỷ</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-6">Canh</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-7">Tân</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-8">Nhâm</td>
+                  <td class="tc-cell tc-can" id="res-tc-name-9">Quý</td>
+                </tr>
+                <tr>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-0">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-1">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-2">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-3">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-4">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-5">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-6">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-7">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-8">-</td>
+                  <td class="tc-cell tc-vs" id="res-tc-vs-9">-</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -812,6 +855,35 @@
         document.getElementById("res-tt-chi-thang").textContent = p.month.thapThanChi;
         document.getElementById("res-tt-chi-ngay").textContent = p.day.thapThanChi;
         document.getElementById("res-tt-chi-gio").textContent = p.hour.thapThanChi;
+
+        // Hàng 5: Vượng Suy 4 Trụ & Bảng 10 Thiên Can (Chu Thần Bân)
+        const vs = res.vuongSuy || (res.analysis && res.analysis.vuongSuy);
+        if (vs) {
+          const elVsNam = document.getElementById("res-vs-can-nam");
+          const elVsThang = document.getElementById("res-vs-can-thang");
+          const elVsNgay = document.getElementById("res-vs-can-ngay");
+          const elVsGio = document.getElementById("res-vs-can-gio");
+          if (elVsNam) elVsNam.textContent = vs.pillarVuongSuy.year;
+          if (elVsThang) elVsThang.textContent = vs.pillarVuongSuy.month;
+          if (elVsNgay) elVsNgay.textContent = vs.pillarVuongSuy.day;
+          if (elVsGio) elVsGio.textContent = vs.pillarVuongSuy.hour;
+
+          // Bảng 10 Thiên Can Vượng Suy
+          if (vs.tenStemsVuongSuy && vs.tenStemsVuongSuy.length === 10) {
+            vs.tenStemsVuongSuy.forEach((item, idx) => {
+              const nameEl = document.getElementById(`res-tc-name-${idx}`);
+              const vsEl = document.getElementById(`res-tc-vs-${idx}`);
+              if (nameEl) {
+                nameEl.textContent = item.canName;
+                const elem = Engine.ELEMENT_NAMES[Engine.NGU_HANH_CAN[idx]];
+                nameEl.style.color = Engine.ELEMENT_COLORS[elem] || "#0F172A";
+              }
+              if (vsEl) {
+                vsEl.textContent = item.status;
+              }
+            });
+          }
+        }
 
         // Render thông tin tính đại vận (Ảnh 1)
         const dvInfo = res.daiVan;

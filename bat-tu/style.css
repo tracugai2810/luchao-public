@@ -1278,6 +1278,53 @@ input[type="time"].form-input,
   color: #64748B;
 }
 
+/* ==========================================================================
+   3. BẢNG 10 THIÊN CAN (VƯỢNG SUY)
+   ========================================================================== */
+.table-thiencan-box {
+  margin-bottom: 14px;
+}
+
+.thien-can-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  background: #FEF6E8;
+  border: 1.5px solid #3B82F6;
+  table-layout: fixed;
+}
+
+.thien-can-table td {
+  border: 1px solid #93C5FD;
+  vertical-align: middle;
+  background: #FEF6E8;
+  padding: 6px 1px;
+}
+
+.thien-can-table td.tc-cell {
+  width: 9.44%;
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.thien-can-table .tc-can {
+  font-size: 16.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 6px 1px;
+}
+
+.thien-can-table .tc-vs {
+  font-size: 15px;
+  font-weight: 400;
+  color: #1E293B;
+  line-height: 1.25;
+  padding: 5px 1px;
+}
+
 /* Chân bảng Lá Số / Footer Sheet */
 .bazi-card-footer {
   position: relative;

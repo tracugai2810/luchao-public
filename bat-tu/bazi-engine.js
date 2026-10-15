@@ -487,6 +487,12 @@
     return { type: "khac_phai", label: "Khác phái", desc: "Ít tác dụng trực tiếp" };
   }
 
+  // Các cặp tương tác Thiên Can (Hoa Sơn Bát Tự)
+  const HOP_PAIRS = [[0, 5], [1, 6], [2, 7], [3, 8], [4, 9]];
+  const XUNG_PAIRS = [[0, 6], [1, 7], [2, 8], [3, 9]];
+  const SINH_PAIRS = [[0, 3], [1, 2], [2, 5], [3, 4], [4, 7], [5, 6], [6, 9], [7, 8], [8, 1], [9, 0]];
+  const KHAC_PAIRS = [[0, 4], [1, 5], [2, 6], [3, 7], [4, 8], [5, 9], [6, 0], [7, 1], [8, 2], [9, 3]];
+
   // 2. Thiên Can Liên (Tác dụng ngang giữa 3 can khách thể: Niên, Nguyệt, Thời - Trang 33-34)
   function analyzeThienCanLien(canNam, canThang, canGio) {
     const list = [
@@ -495,15 +501,6 @@
       { name: "Thời Can", can: canGio }
     ];
     const results = [];
-
-    // Hợp
-    const HOP_PAIRS = [[0, 5], [1, 6], [2, 7], [3, 8], [4, 9]];
-    // Xung
-    const XUNG_PAIRS = [[0, 6], [1, 7], [2, 8], [3, 9]];
-    // Sinh (Khác giới)
-    const SINH_PAIRS = [[0, 3], [1, 2], [2, 5], [3, 4], [4, 7], [5, 6], [6, 9], [7, 8], [8, 1], [9, 0]];
-    // Khắc (Cùng giới)
-    const KHAC_PAIRS = [[0, 4], [1, 5], [2, 6], [3, 7], [4, 8], [5, 9], [6, 0], [7, 1], [8, 2], [9, 3]];
 
     for (let i = 0; i < list.length; i++) {
       for (let j = i + 1; j < list.length; j++) {
@@ -534,6 +531,207 @@
       }
     }
     return results;
+  }
+
+  // 2.B. Định Vị Vượng - Suy Thiên Can & Ẩn Tình Chỉ Hướng (Chu Thần Bân - Chương 4, 6, 8, 9)
+  function calculateStemVuongSuy(canNam, canThang, canNgay, canGio, chiThang) {
+    const clientIndices = [canNam, canThang, canGio];
+    const clientStrength = [true, true, true]; // true: Vượng (Cường thế), false: Suy (Yếu thế)
+
+    // 1. Phân tích tương tác giữa 3 can khách thể (Tầng 1)
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (i === j) continue;
+        const cA = clientIndices[i];
+        const cB = clientIndices[j];
+        const elemA = NGU_HANH_CAN[cA];
+        const elemB = NGU_HANH_CAN[cB];
+        const isKhac = (
+          (elemA === 1 && elemB === 4) ||
+          (elemA === 4 && elemB === 2) ||
+          (elemA === 2 && elemB === 3) ||
+          (elemA === 3 && elemB === 0) ||
+          (elemA === 0 && elemB === 1)
+        );
+        if (isKhac) {
+          const k = 3 - i - j;
+          const cC = clientIndices[k];
+          const elemC = NGU_HANH_CAN[cC];
+          const isCKhacA = (
+            (elemC === 1 && elemA === 4) ||
+            (elemC === 4 && elemA === 2) ||
+            (elemC === 2 && elemA === 3) ||
+            (elemC === 3 && elemA === 0) ||
+            (elemC === 0 && elemA === 1)
+          );
+          if (isCKhacA) {
+            clientStrength[i] = false;
+            clientStrength[j] = true;
+          } else {
+            clientStrength[j] = false;
+          }
+        }
+      }
+    }
+
+    const pillarVuongSuy = {
+      year: clientStrength[0] ? 'Vượng' : 'Suy',
+      month: clientStrength[1] ? 'Vượng' : 'Suy',
+      day: '-',
+      hour: clientStrength[2] ? 'Vượng' : 'Suy'
+    };
+
+    const res = new Array(10).fill(null);
+
+    // Phase 1: Lộ tính khách thể
+    clientIndices.forEach((c, idx) => {
+      res[c] = {
+        status: clientStrength[idx] ? 'Vượng' : 'Suy',
+        source: 'Lộ tính'
+      };
+    });
+
+    // Phase 2: Bập bênh Âm Dương cho can ẩn có can lộ cùng hành (Tầng 2 - Cơ chế 1)
+    for (let c = 0; c < 10; c++) {
+      if (res[c] !== null) continue;
+      const opp = (c % 2 === 0) ? c + 1 : c - 1;
+      if (res[opp] !== null && res[opp].source === 'Lộ tính') {
+        const oppIsVuong = (res[opp].status === 'Vượng');
+        res[c] = {
+          status: oppIsVuong ? 'Suy' : 'Vượng',
+          source: 'Bập bênh Âm Dương'
+        };
+      }
+    }
+
+    // Phase 3: Nguyệt lệnh đề thăng (Tầng 3 - Chốt chặn 2)
+    const nguyetElem = NGU_HANH_CHI[chiThang];
+    for (let c = 0; c < 10; c++) {
+      if (res[c] !== null) continue;
+      if (NGU_HANH_CAN[c] === nguyetElem) {
+        res[c] = {
+          status: 'Vượng',
+          source: 'Nguyệt lệnh đề thăng'
+        };
+      }
+    }
+
+    // Phase 4: Ẩn tình từ Điểm Tụ Lực / Sinh Khắc / Trùng điệp / Đồng tài
+    const strongStems = [];
+    clientIndices.forEach((c, idx) => {
+      if (clientStrength[idx] && !strongStems.includes(c)) strongStems.push(c);
+    });
+
+    // Tìm chữ nhận sinh (Điểm tụ lực nhận năng lượng)
+    let tuLucStem = null;
+    for (let i = 0; i < clientIndices.length; i++) {
+      for (let j = 0; j < clientIndices.length; j++) {
+        if (i === j) continue;
+        const cA = clientIndices[i];
+        const cB = clientIndices[j];
+        const elemA = NGU_HANH_CAN[cA];
+        const elemB = NGU_HANH_CAN[cB];
+        const isSinh = (
+          (elemA === 1 && elemB === 3) ||
+          (elemA === 3 && elemB === 4) ||
+          (elemA === 4 && elemB === 0) ||
+          (elemA === 0 && elemB === 2) ||
+          (elemA === 2 && elemB === 1)
+        );
+        if (isSinh && clientStrength[j]) {
+          tuLucStem = cB;
+        }
+      }
+    }
+
+    const activeAttackers = tuLucStem !== null ? [tuLucStem, ...strongStems.filter(s => s !== tuLucStem)] : strongStems;
+
+    for (const att of activeAttackers) {
+      const pair = KHAC_PAIRS.find(p => p[0] === att);
+      if (pair) {
+        const cTarget = pair[1]; // Chữ cùng giới bị khắc
+        if (res[cTarget] === null) {
+          res[cTarget] = { status: 'Suy', source: 'Ẩn tình bị khắc' };
+          // Bập bênh âm dương giải phóng can đối lập
+          const oppTarget = (cTarget % 2 === 0) ? cTarget + 1 : cTarget - 1;
+          if (res[oppTarget] === null) {
+            res[oppTarget] = { status: 'Vượng', source: 'Bập bênh giải phóng' };
+          }
+        }
+      }
+    }
+
+    // Trùng điệp 4 hướng nếu còn can null
+    const counts = {};
+    clientIndices.forEach(c => { counts[c] = (counts[c] || 0) + 1; });
+    const trungDiepStems = Object.keys(counts).filter(c => counts[c] >= 2).map(Number);
+
+    for (const td of trungDiepStems) {
+      // Sinh vượng
+      const sinhP = SINH_PAIRS.find(p => p[0] === td);
+      if (sinhP && res[sinhP[1]] === null) {
+        res[sinhP[1]] = { status: 'Vượng', source: 'Trùng điệp sinh vượng' };
+      }
+      // Hợp vượng
+      const hopP = HOP_PAIRS.find(p => p[0] === td || p[1] === td);
+      if (hopP) {
+        const other = hopP[0] === td ? hopP[1] : hopP[0];
+        if (res[other] === null) {
+          res[other] = { status: 'Vượng', source: 'Trùng điệp hợp vượng' };
+        }
+      }
+      // Khắc yếu
+      const khacP = KHAC_PAIRS.find(p => p[0] === td);
+      if (khacP && res[khacP[1]] === null) {
+        res[khacP[1]] = { status: 'Suy', source: 'Trùng điệp khắc yếu' };
+        const opp = (khacP[1] % 2 === 0) ? khacP[1] + 1 : khacP[1] - 1;
+        if (res[opp] === null) res[opp] = { status: 'Vượng', source: 'Bập bênh giải phóng' };
+      }
+      // Xung yếu
+      const xungP = XUNG_PAIRS.find(p => p[0] === td || p[1] === td);
+      if (xungP) {
+        const other = xungP[0] === td ? xungP[1] : xungP[0];
+        if (res[other] === null) {
+          res[other] = { status: 'Suy', source: 'Trùng điệp xung yếu' };
+          const opp = (other % 2 === 0) ? other + 1 : other - 1;
+          if (res[opp] === null) res[opp] = { status: 'Vượng', source: 'Bập bênh giải phóng' };
+        }
+      }
+    }
+
+    // Phase 5: Nguyên Thần thay thế cho các can còn lại (Tầng 4)
+    for (let c = 0; c < 10; c++) {
+      if (res[c] !== null) continue;
+      const elemC = NGU_HANH_CAN[c];
+      let ntFound = false;
+      for (const sc of strongStems) {
+        const elemSc = NGU_HANH_CAN[sc];
+        const isScSinhC = (
+          (elemSc === 1 && elemC === 3) ||
+          (elemSc === 3 && elemC === 4) ||
+          (elemSc === 4 && elemC === 0) ||
+          (elemSc === 0 && elemC === 2) ||
+          (elemSc === 2 && elemC === 1)
+        );
+        if (isScSinhC) {
+          res[c] = { status: 'Vượng', source: 'Nguyên Thần thay thế' };
+          ntFound = true;
+          break;
+        }
+      }
+      if (!ntFound) {
+        res[c] = { status: 'Suy', source: 'Khuyết suy' };
+      }
+    }
+
+    const tenStemsVuongSuy = res.map((item, idx) => ({
+      canIdx: idx,
+      canName: CAN[idx],
+      status: item.status,
+      source: item.source
+    }));
+
+    return { pillarVuongSuy, tenStemsVuongSuy };
   }
 
   // 3. Địa Chi Liên (Tác dụng ngang giữa 4 chi: Niên, Nguyệt, Nhật, Thời - Trang 35, 37, 176, 186)
@@ -1195,9 +1393,10 @@
       return years;
     };
 
-    // 10. Phân tích 3 Liên (Thiên Can Liên & Địa Chi Liên)
+    // 10. Phân tích 3 Liên (Thiên Can Liên & Địa Chi Liên) & Vượng Suy Thiên Can
     const thienCanLienList = analyzeThienCanLien(canNam, canThang, canGio);
     const diaChiLienList = analyzeDiaChiLien(chiNam, chiThang, chiNgay, chiGio);
+    const vuongSuyInfo = calculateStemVuongSuy(canNam, canThang, canNgay, canGio, chiThang);
 
     // 11. Thống kê Ngũ Hành trên 8 chữ nguyên cục
     const elementCounts = { "Kim": 0, "Mộc": 0, "Thủy": 0, "Hỏa": 0, "Thổ": 0 };
@@ -1330,8 +1529,10 @@
         diaChiLienList,
         elementCounts,
         vuongNhat,
-        khuyetList
-      }
+        khuyetList,
+        vuongSuy: vuongSuyInfo
+      },
+      vuongSuy: vuongSuyInfo
     };
   }
 
@@ -1353,6 +1554,7 @@
     checkCanChiLien,
     analyzeThienCanLien,
     analyzeDiaChiLien,
+    calculateStemVuongSuy,
     calculateThanSat,
     getTruongSinh,
     calculateThaiNguyen,

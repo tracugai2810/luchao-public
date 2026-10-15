@@ -17,20 +17,20 @@
   <meta property="og:image" content="https://luchao.io.vn/banner.jpg">
   <meta property="og:locale" content="vi_VN">
 
-  <!-- Fonts (Arial & Roboto clean sans-serif matching Image 2) -->
+  <!-- Fonts (Arial chuẩn Ảnh 4) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=3.2">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=3.3">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=3.2"></script>
+  <script src="/bat-tu/bazi-engine.js?v=3.3"></script>
 </head>
 <body>
 
@@ -325,23 +325,23 @@
               <tbody>
                 <!-- Hàng 1: Dương Lịch -->
                 <tr>
-                  <td class="col-title">DƯƠNG LỊCH</td>
+                  <td class="col-title"><div class="title-split"><span>DƯƠNG</span><span>LỊCH</span></div></td>
                   <td class="col-cell num-bold" id="res-solar-year">-</td>
                   <td class="col-cell num-bold" id="res-solar-month">-</td>
                   <td class="col-cell num-bold" id="res-solar-day">-</td>
                   <td class="col-cell num-bold" id="res-solar-hour">-</td>
                 </tr>
-                <!-- Hàng 2: Thiên Tinh (Can) -->
+                <!-- Hàng 2: Thiên Can -->
                 <tr>
-                  <td class="col-title">THIÊN TINH (CAN)</td>
+                  <td class="col-title"><div class="title-split"><span>THIÊN</span><span>CAN</span></div></td>
                   <td class="col-cell" id="res-tt-can-nam">-</td>
                   <td class="col-cell" id="res-tt-can-thang">-</td>
                   <td class="col-cell cell-nhat-chu" id="res-tt-can-ngay">NHẬT CHỦ</td>
                   <td class="col-cell" id="res-tt-can-gio">-</td>
                 </tr>
-                <!-- Hàng 3: Can & Chi -->
+                <!-- Hàng 3: Bát Tự -->
                 <tr class="row-big-chars">
-                  <td class="col-title">CAN &amp; CHI</td>
+                  <td class="col-title"><div class="title-split"><span>BÁT</span><span>TỰ</span></div></td>
                   <td class="col-cell">
                     <div class="can-chi-stack">
                       <span class="char-can" id="res-char-can-nam">-</span>
@@ -367,9 +367,9 @@
                     </div>
                   </td>
                 </tr>
-                <!-- Hàng 4: Địa Tinh (Chi) -->
+                <!-- Hàng 4: Địa Chi -->
                 <tr>
-                  <td class="col-title">ĐỊA TINH (CHI)</td>
+                  <td class="col-title"><div class="title-split"><span>ĐỊA</span><span>CHI</span></div></td>
                   <td class="col-cell" id="res-tt-chi-nam">-</td>
                   <td class="col-cell" id="res-tt-chi-thang">-</td>
                   <td class="col-cell" id="res-tt-chi-ngay">-</td>
@@ -384,14 +384,13 @@
             <table class="dai-van-table" id="res-daivan-table">
               <tbody>
                 <tr id="res-daivan-can-chi-row">
-                  <td class="col-title-vertical" rowspan="3">ĐẠI VẬN</td>
-                  <!-- Can Chi + Thập thần inject via JS -->
+                  <td class="col-title-vertical" rowspan="2">
+                    <div class="title-split"><span>ĐẠI</span><span>VẬN</span></div>
+                  </td>
+                  <!-- Can Chi inject via JS -->
                 </tr>
-                <tr id="res-daivan-age-row">
-                  <!-- Độ tuổi inject via JS -->
-                </tr>
-                <tr id="res-daivan-year-row">
-                  <!-- Năm bắt đầu inject via JS -->
+                <tr id="res-daivan-meta-row">
+                  <!-- Độ tuổi & Năm inject via JS -->
                 </tr>
               </tbody>
             </table>
@@ -401,7 +400,7 @@
           <div class="bazi-table-responsive table-luunien-box">
             <table class="luu-nien-table" id="res-luunien-table">
               <tbody id="res-luunien-tbody">
-                <!-- 2 Hàng Lưu Niên inject via JS -->
+                <!-- 2 Hàng Lưu Niên (mỗi hàng gồm Can Chi + Năm & Tuổi) inject via JS -->
               </tbody>
             </table>
           </div>
@@ -765,15 +764,13 @@
         updateImageSnapshot();
       }
 
-      // 8. Render Bảng Đại Vận 10 Cột trong Sheet (Đồng bộ chuẩn mực với Lưu Niên)
+      // 8. Render Bảng Đại Vận 10 Cột trong Sheet (Đồng bộ chuẩn mực với Lưu Niên theo Ảnh 2 & 4)
       function renderDaiVanTable(dvList) {
         const canChiRow = document.getElementById("res-daivan-can-chi-row");
-        const ageRow = document.getElementById("res-daivan-age-row");
-        const yearRow = document.getElementById("res-daivan-year-row");
+        const metaRow = document.getElementById("res-daivan-meta-row");
 
-        canChiRow.innerHTML = '<td class="col-title-vertical" rowspan="3">ĐẠI VẬN</td>';
-        ageRow.innerHTML = '';
-        yearRow.innerHTML = '';
+        canChiRow.innerHTML = '<td class="col-title-vertical" rowspan="2"><div class="title-split"><span>ĐẠI</span><span>VẬN</span></div></td>';
+        metaRow.innerHTML = '';
 
         dvList.forEach(dv => {
           const isActive = dv.index === selectedDaiVanIndex;
@@ -782,39 +779,29 @@
           if (isTarget) cellClass += " target-dv";
           else if (isActive) cellClass += " active";
 
-          // Can - Thập thần & Chi - Thập thần (Kích cỡ bằng nhau theo yêu cầu)
+          // Can Chi (Can trên, Chi dưới, 1 chữ mỗi dòng theo Ảnh 2 & 4)
           const tdCc = document.createElement("td");
           tdCc.className = cellClass;
           tdCc.innerHTML = `
-            <div class="dv-char-stack">
-              <div class="cell-pair-line">
-                <span class="char-name" style="color: ${dv.canColor}">${dv.canName}</span>
-                <span class="char-sep">-</span>
-                <span class="char-tt">${dv.thapThanCan}</span>
-              </div>
-              <div class="cell-pair-line">
-                <span class="char-name" style="color: ${dv.chiColor}">${dv.chiName}</span>
-                <span class="char-sep">-</span>
-                <span class="char-tt">${dv.thapThanChi}</span>
-              </div>
+            <div class="cell-char-stack">
+              <span class="char-can" style="color: ${dv.canColor}">${dv.canName}</span>
+              <span class="char-chi" style="color: ${dv.chiColor}">${dv.chiName}</span>
             </div>
           `;
           tdCc.addEventListener("click", () => selectDaiVan(dv.index));
           canChiRow.appendChild(tdCc);
 
-          // Độ Tuổi
-          const tdAge = document.createElement("td");
-          tdAge.className = cellClass;
-          tdAge.innerHTML = `<span class="cell-age">${dv.ageRangeText}</span>`;
-          tdAge.addEventListener("click", () => selectDaiVan(dv.index));
-          ageRow.appendChild(tdAge);
-
-          // Năm Bắt Đầu
-          const tdYr = document.createElement("td");
-          tdYr.className = cellClass;
-          tdYr.innerHTML = `<span class="cell-year">${dv.solarYearStart}</span>`;
-          tdYr.addEventListener("click", () => selectDaiVan(dv.index));
-          yearRow.appendChild(tdYr);
+          // Tuổi & Năm (Tuổi trên, Năm dưới theo Ảnh 2 & 4)
+          const tdMeta = document.createElement("td");
+          tdMeta.className = cellClass;
+          tdMeta.innerHTML = `
+            <div class="cell-meta-stack">
+              <span class="meta-age">${dv.ageRangeText}</span>
+              <span class="meta-year">${dv.solarYearStart}</span>
+            </div>
+          `;
+          tdMeta.addEventListener("click", () => selectDaiVan(dv.index));
+          metaRow.appendChild(tdMeta);
         });
       }
 
@@ -831,7 +818,7 @@
         updateImageSnapshot();
       }
 
-      // 9. Render Bảng Lưu Niên (20 Năm - Kích cỡ và cấu trúc đồng bộ 100% với Đại Vận)
+      // 9. Render Bảng Lưu Niên (20 Năm - Kích cỡ và cấu trúc đồng bộ 100% với Đại Vận theo Ảnh 2 & 4)
       function renderLuuNienTable(lnList) {
         const tbody = document.getElementById("res-luunien-tbody");
         tbody.innerHTML = "";
@@ -839,39 +826,45 @@
         const row1 = lnList.filter(l => l.row === 1);
         const row2 = lnList.filter(l => l.row === 2);
 
-        const buildRowHtml = (list) => {
-          const tr = document.createElement("tr");
-          let html = `<td class="col-title-vertical">LƯU NIÊN</td>`;
+        const appendDecadeRows = (list) => {
+          const trCc = document.createElement("tr");
+          trCc.innerHTML = `<td class="col-title-vertical" rowspan="2"><div class="title-split"><span>LƯU</span><span>NIÊN</span></div></td>`;
+          const trMeta = document.createElement("tr");
+
           list.forEach(item => {
             let cellClass = "ln-cell";
             if (item.isTarget) cellClass += " target-year";
             else if (item.isCurrent) cellClass += " current-year";
 
-            html += `
-              <td class="${cellClass}">
-                <div class="ln-cell-inner">
-                  <div class="cell-pair-line">
-                    <span class="char-name" style="color: ${item.canColor}">${item.canName}</span>
-                    <span class="char-sep">-</span>
-                    <span class="char-tt">${item.thapThanCan}</span>
-                  </div>
-                  <div class="cell-pair-line">
-                    <span class="char-name" style="color: ${item.chiColor}">${item.chiName}</span>
-                    <span class="char-sep">-</span>
-                    <span class="char-tt">${item.thapThanChi}</span>
-                  </div>
-                  <div class="cell-year">${item.year}</div>
-                  <div class="cell-age">${item.age}t</div>
-                </div>
-              </td>
+            // Ô Can Chi (Can trên, Chi dưới - Kích cỡ bằng Đại Vận)
+            const tdCc = document.createElement("td");
+            tdCc.className = cellClass;
+            tdCc.innerHTML = `
+              <div class="cell-char-stack">
+                <span class="char-can" style="color: ${item.canColor}">${item.canName}</span>
+                <span class="char-chi" style="color: ${item.chiColor}">${item.chiName}</span>
+              </div>
             `;
+            trCc.appendChild(tdCc);
+
+            // Ô Năm & Tuổi (Năm trên, Tuổi dưới - Kích cỡ bằng Đại Vận)
+            const tdMeta = document.createElement("td");
+            tdMeta.className = cellClass;
+            tdMeta.innerHTML = `
+              <div class="cell-meta-stack">
+                <span class="meta-year">${item.year}</span>
+                <span class="meta-age">${item.age}t</span>
+              </div>
+            `;
+            trMeta.appendChild(tdMeta);
           });
-          tr.innerHTML = html;
-          return tr;
+
+          tbody.appendChild(trCc);
+          tbody.appendChild(trMeta);
         };
 
-        if (row1.length > 0) tbody.appendChild(buildRowHtml(row1));
-        if (row2.length > 0) tbody.appendChild(buildRowHtml(row2));
+        if (row1.length > 0) appendDecadeRows(row1);
+        if (row2.length > 0) appendDecadeRows(row2);
       }
 
       // 11. Chuyển đổi DataURL sang Blob

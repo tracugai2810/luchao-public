@@ -17,20 +17,20 @@
   <meta property="og:image" content="https://luchao.io.vn/banner.jpg">
   <meta property="og:locale" content="vi_VN">
 
-  <!-- Fonts & CDN Libraries (Be Vietnam Pro & Inter đồng bộ chuẩn Tử Vi và Tứ Trụ Mệnh Bàn) -->
+  <!-- Fonts (Arial & Roboto clean sans-serif matching Image 2) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=3.0">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=3.1">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=3.0"></script>
+  <script src="/bat-tu/bazi-engine.js?v=3.1"></script>
 </head>
 <body>
 
@@ -287,14 +287,35 @@
           <!-- Watermark Thái Cực chìm -->
           <div class="bazi-watermark">☯</div>
 
-          <!-- Header Thông Tin Đương Số (Trải Ngang Cân Đối) -->
+          <!-- Header Thông Tin Đương Số (Bố Cục Cân Đối Chuẩn Mực Như Ảnh 2) -->
           <div class="bazi-sheet-header">
-            <div class="header-meta-grid">
-              <div class="meta-item item-left"><span class="meta-label">Họ tên:</span><strong class="meta-val" id="res-name">Đương số</strong></div>
-              <div class="meta-item item-center"><span class="meta-label">Giới tính:</span><strong class="meta-val" id="res-gender">Nam</strong></div>
-              <div class="meta-item item-right"><span class="meta-label">Năm xem hạn:</span><strong class="meta-val meta-highlight" id="res-calc-year">-</strong></div>
-              <div class="meta-item meta-item-wide item-left"><span class="meta-label">Dương lịch (GMT+7.0):</span><span class="meta-val" id="res-solar-full">-</span></div>
-              <div class="meta-item meta-item-wide item-right"><span class="meta-label">Âm Dương hợp lịch:</span><span class="meta-val" id="res-lunar-full">-</span></div>
+            <div class="header-meta-box">
+              <div class="meta-col meta-col-left">
+                <div class="meta-row">
+                  <span class="meta-label">Họ tên:</span>
+                  <span class="meta-val" id="res-name">Đương số</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label">Dương lịch (GMT+7.0):</span>
+                  <span class="meta-val" id="res-solar-full">-</span>
+                </div>
+              </div>
+              <div class="meta-col meta-col-right">
+                <div class="meta-row meta-row-split">
+                  <div class="meta-inline-item">
+                    <span class="meta-label">Giới tính:</span>
+                    <span class="meta-val" id="res-gender">Nam</span>
+                  </div>
+                  <div class="meta-inline-item">
+                    <span class="meta-label">Năm xem hạn:</span>
+                    <span class="meta-val meta-highlight" id="res-calc-year">-</span>
+                  </div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label">Âm Dương hợp lịch:</span>
+                  <span class="meta-val" id="res-lunar-full">-</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -391,7 +412,7 @@
           <!-- Chân bảng Lá Số -->
           <div class="bazi-card-footer">
             <div class="footer-center-link">
-              <span>Lá số được lập tại website: <strong>https://luchao.io.vn</strong></span>
+              <span>Lá số được lập tại website: <a href="https://luchao.io.vn/bat-tu" target="_blank" rel="noopener"><strong>https://luchao.io.vn/bat-tu</strong></a></span>
             </div>
           </div>
 
@@ -824,9 +845,9 @@
             html += `
               <td class="${cellClass}">
                 <div class="ln-cell-inner">
-                  <div class="ln-char">
-                    <span style="color: ${item.canColor}">${item.canName}</span>
-                    <span style="color: ${item.chiColor}">${item.chiName}</span>
+                  <div class="ln-char-stack">
+                    <span class="ln-can" style="color: ${item.canColor}">${item.canName}</span>
+                    <span class="ln-chi" style="color: ${item.chiColor}">${item.chiName}</span>
                   </div>
                   <div class="ln-year">${item.year}</div>
                   <div class="ln-age">${item.age}t</div>

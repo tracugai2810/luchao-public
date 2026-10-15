@@ -274,10 +274,14 @@
             <div id="bazi-province-dropdown" class="province-dropdown"></div>
           </div>
 
-          <!-- Năm xem hạn (Năm tính) -->
+          <!-- Ngày / Tháng / Năm xem hạn -->
           <div class="form-group">
-            <label for="bazi-calc-year">Năm tính (Năm xem hạn)</label>
-            <select id="bazi-calc-year" class="form-select"></select>
+            <label id="bazi-calc-date-label">Ngày / Tháng / Năm xem hạn</label>
+            <div class="bazi-date-row">
+              <input type="number" id="bazi-calc-day" class="form-input" placeholder="Ngày" min="1" max="31">
+              <input type="number" id="bazi-calc-month" class="form-input" placeholder="Tháng" min="1" max="12">
+              <input type="number" id="bazi-calc-year" class="form-input" placeholder="Năm" min="1900" max="2100">
+            </div>
           </div>
 
         </div>
@@ -347,7 +351,7 @@
 
               <!-- Hàng 3: Năm xem hạn & Tuổi xem hạn -->
               <div class="meta-row">
-                <span class="meta-label">Năm xem hạn:</span>
+                <span class="meta-label" id="res-calc-label">Năm xem hạn:</span>
                 <span class="meta-val meta-highlight" id="res-calc-year">-</span>
               </div>
               <div class="meta-row">
@@ -585,26 +589,13 @@
       if (inMonth) inMonth.value = now.getMonth() + 1;
       if (inYear) inYear.value = now.getFullYear();
 
-      // Khởi tạo Năm Tính (Năm xem hạn)
-      const selCalcYear = document.getElementById("bazi-calc-year");
-      const currentYear = new Date().getFullYear();
-      for (let y = 1930; y <= 2070; y++) {
-        if (selCalcYear) {
-          const opt1 = document.createElement("option");
-          opt1.value = y;
-          opt1.textContent = `Năm ${y}`;
-          if (y === currentYear) opt1.selected = true;
-          selCalcYear.appendChild(opt1);
-        }
-      }
-
-      if (selCalcYear) {
-        selCalcYear.addEventListener("change", function () {
-          if (currentBaziResult) {
-            runBaziCalculation();
-          }
-        });
-      }
+      // Khởi tạo Ngày / Tháng / Năm xem hạn (Mặc định lấy ngày hôm nay)
+      const inCalcDay = document.getElementById("bazi-calc-day");
+      const inCalcMonth = document.getElementById("bazi-calc-month");
+      const inCalcYear = document.getElementById("bazi-calc-year");
+      if (inCalcDay) inCalcDay.value = now.getDate();
+      if (inCalcMonth) inCalcMonth.value = now.getMonth() + 1;
+      if (inCalcYear) inCalcYear.value = now.getFullYear();
 
       // 2. Chuyển đổi loại lịch
       const calTypeSelect = document.getElementById("bazi-cal-type");
@@ -731,7 +722,13 @@
           const tzStr = tzSelect ? tzSelect.value : "+07:00";
           const tzVal = parseFloat(tzStr.replace("+", "")) || 7;
           const provinceId = provHidden ? provHidden.value : "";
-          const calcYearVal = parseInt(selCalcYear ? selCalcYear.value : currentYear, 10) || currentYear;
+          const inCalcDay = document.getElementById("bazi-calc-day");
+          const inCalcMonth = document.getElementById("bazi-calc-month");
+          const inCalcYear = document.getElementById("bazi-calc-year");
+          const now = new Date();
+          const calcDayVal = inCalcDay ? (parseInt(inCalcDay.value, 10) || now.getDate()) : now.getDate();
+          const calcMonthVal = inCalcMonth ? (parseInt(inCalcMonth.value, 10) || (now.getMonth() + 1)) : (now.getMonth() + 1);
+          const calcYearVal = inCalcYear ? (parseInt(inCalcYear.value, 10) || now.getFullYear()) : now.getFullYear();
 
           // Tính toán Bát Tự
           currentBaziResult = Engine.calculateBazi({
@@ -739,6 +736,8 @@
             gender,
             calendarType: calType,
             isLeapMonth: isLeap,
+            calcDay: calcDayVal,
+            calcMonth: calcMonthVal,
             calcYear: calcYearVal,
             day,
             month,
@@ -751,7 +750,6 @@
 
           // Tự động kích hoạt Đại Vận chứa năm xem hạn
           selectedDaiVanIndex = currentBaziResult.daiVan.targetDaiVanIndex || 1;
-          if (selCalcYear) selCalcYear.value = calcYearVal;
 
           // Render ra giao diện
           renderBaziChart(currentBaziResult);
@@ -781,7 +779,8 @@
         // Header thông tin
         document.getElementById("res-name").textContent = inp.name.toUpperCase();
         const isNu = (inp.gender && (inp.gender.toLowerCase().includes("nữ") || inp.gender.toLowerCase().includes("nu")));
-        document.getElementById("res-gender").textContent = isNu ? "Nữ" : "Nam";
+        // Hiển thị chuẩn xác Dương Nam / Âm Nam / Dương Nữ / Âm Nữ theo Chu Thần Bân
+        document.getElementById("res-gender").textContent = inp.gender || (isNu ? "Nữ" : "Nam");
 
         const tzOpt = tzSelect ? tzSelect.options[tzSelect.selectedIndex].text : "VN (+7)";
         const elSolarLabel = document.getElementById("res-solar-label");
@@ -808,8 +807,17 @@
         const cCan = Engine.CAN[jiaziC % 10];
         const cChi = Engine.CHI[jiaziC % 12];
         const elCalcYear = document.getElementById("res-calc-year");
+        const elCalcLabel = document.getElementById("res-calc-label");
         if (elCalcYear) {
-          elCalcYear.textContent = `${cYear} - ${cCan} ${cChi}`;
+          if (inp.calcDay && inp.calcMonth) {
+            const dStr = String(inp.calcDay).padStart(2, '0');
+            const mStr = String(inp.calcMonth).padStart(2, '0');
+            elCalcYear.textContent = `${dStr}/${mStr}/${cYear} - ${cCan} ${cChi}`;
+            if (elCalcLabel) elCalcLabel.textContent = "Thời gian xem hạn:";
+          } else {
+            elCalcYear.textContent = `${cYear} - ${cCan} ${cChi}`;
+            if (elCalcLabel) elCalcLabel.textContent = "Năm xem hạn:";
+          }
         }
 
         const birthBaziYear = p.year ? (parseInt(p.year.solarDateText, 10) || inp.year) : inp.year;
@@ -968,7 +976,7 @@
         updateImageSnapshot();
       }
 
-      // 9. Render Bảng Lưu Niên (20 Năm - Gộp 1 cột tiêu đề duy nhất cho cả 20 năm, bỏ dấu gạch ngang)
+      // 9. Render Bảng Lưu Niên - Tiểu Vận (20 Năm - Gộp 1 cột tiêu đề duy nhất cho cả 20 năm, 6 hàng)
       function renderLuuNienTable(lnList) {
         const tbody = document.getElementById("res-luunien-tbody");
         tbody.innerHTML = "";
@@ -976,12 +984,32 @@
         const row1 = lnList.filter(l => l.row === 1);
         const row2 = lnList.filter(l => l.row === 2);
 
+        let bdayTag = "";
+        if (currentBaziResult && currentBaziResult.birthdayShortStr) {
+          bdayTag = `(${currentBaziResult.birthdayShortStr})`;
+        } else if (currentBaziResult && currentBaziResult.rawInput && currentBaziResult.rawInput.birthDateStr) {
+          const parts = currentBaziResult.rawInput.birthDateStr.split("/");
+          if (parts.length >= 2) bdayTag = `(${parts[0]}/${parts[1]})`;
+        }
+
         const appendDecadeRows = (list, isFirstDecade) => {
           const trCc = document.createElement("tr");
           if (isFirstDecade) {
-            trCc.innerHTML = `<td class="col-title-vertical" rowspan="4"><div class="title-split"><span>LƯU</span><span>NIÊN</span></div></td>`;
+            trCc.innerHTML = `
+              <td class="col-title-vertical" rowspan="6">
+                <div class="title-split">
+                  <span>LƯU</span>
+                  <span>NIÊN</span>
+                  <span class="title-dash">—</span>
+                  <span>TIỂU</span>
+                  <span>VẬN</span>
+                  ${bdayTag ? `<span class="title-bday">${bdayTag}</span>` : ""}
+                </div>
+              </td>
+            `;
           }
           const trMeta = document.createElement("tr");
+          const trTv = document.createElement("tr");
 
           list.forEach(item => {
             let cellClass = "ln-cell";
@@ -1015,10 +1043,29 @@
               </div>
             `;
             trMeta.appendChild(tdMeta);
+
+            // Ô Tiểu Vận: Can 1 Thập thần 1 → Can 2 Thập thần 2 (Chuẩn Hoa Sơn Bát Tự tr. 331-336)
+            const tdTv = document.createElement("td");
+            tdTv.className = cellClass;
+            tdTv.innerHTML = `
+              <div class="cell-tv-line">
+                <span class="tv-item">
+                  <span class="tv-can" style="color: ${item.tvCanColor1}">${item.tvCanName1}</span>
+                  <span class="tv-tt">${item.tvThapThan1}</span>
+                </span>
+                <span class="tv-arrow">→</span>
+                <span class="tv-item">
+                  <span class="tv-can" style="color: ${item.tvCanColor2}">${item.tvCanName2}</span>
+                  <span class="tv-tt">${item.tvThapThan2}</span>
+                </span>
+              </div>
+            `;
+            trTv.appendChild(tdTv);
           });
 
           tbody.appendChild(trCc);
           tbody.appendChild(trMeta);
+          tbody.appendChild(trTv);
         };
 
         if (row1.length > 0) appendDecadeRows(row1, true);

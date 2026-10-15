@@ -1278,6 +1278,60 @@ input[type="time"].form-input,
   color: #64748B;
 }
 
+/* ---------------------------------------------------------
+   3. TIỂU VẬN (Can 1 Thập thần → Can 2 Thập thần - Chuẩn Hoa Sơn)
+   --------------------------------------------------------- */
+.luu-nien-table .cell-tv-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  white-space: nowrap;
+  padding: 5px 1px;
+  line-height: 1.25;
+}
+
+.luu-nien-table .cell-tv-line .tv-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1.5px;
+}
+
+.luu-nien-table .cell-tv-line .tv-can {
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.luu-nien-table .cell-tv-line .tv-tt {
+  font-size: 11px;
+  font-weight: 400;
+  color: #334155;
+  letter-spacing: -0.2px;
+}
+
+.luu-nien-table .cell-tv-line .tv-arrow {
+  font-size: 10px;
+  color: #64748B;
+  margin: 0 1px;
+  opacity: 0.85;
+}
+
+.col-title-vertical .title-dash {
+  font-size: 10px;
+  color: #64748B;
+  line-height: 1;
+  margin: 1px 0;
+}
+
+.col-title-vertical .title-bday {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #1D4ED8;
+  margin-top: 2px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
 /* ==========================================================================
    3. BẢNG 10 THIÊN CAN (VƯỢNG SUY)
    ========================================================================== */

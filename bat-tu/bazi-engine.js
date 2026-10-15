@@ -1260,6 +1260,8 @@
       gender = "nam",         // "nam" | "nu"
       calendarType = "solar",  // "solar" | "lunar"
       isLeapMonth = false,
+      calcDay: inCalcDay,
+      calcMonth: inCalcMonth,
       calcYear: inCalcYear,
       year: inYear,
       month: inMonth,
@@ -1275,10 +1277,17 @@
       provinceId = null
     } = input;
 
-    const currentYear = new Date().getFullYear();
+    const now = new Date();
+    const currentYear = now.getFullYear();
     const calcYear = (inCalcYear !== undefined && inCalcYear !== null && !isNaN(parseInt(inCalcYear, 10))) 
       ? parseInt(inCalcYear, 10) 
       : currentYear;
+    const calcDay = (inCalcDay !== undefined && inCalcDay !== null && !isNaN(parseInt(inCalcDay, 10)))
+      ? parseInt(inCalcDay, 10)
+      : null;
+    const calcMonth = (inCalcMonth !== undefined && inCalcMonth !== null && !isNaN(parseInt(inCalcMonth, 10)))
+      ? parseInt(inCalcMonth, 10)
+      : null;
 
     // 1. Chuyển đổi Âm lịch sang Dương lịch (nếu chọn Âm lịch)
     let solarYear = parseInt(inSolarYear !== undefined ? inSolarYear : inYear, 10);
@@ -1512,7 +1521,7 @@
       });
     }
 
-    // 9. Hàm lấy 20 Năm Lưu Niên theo Đại Vận được chọn
+    // 9. Hàm lấy 20 Năm Lưu Niên theo Đại Vận được chọn (Kèm Tiểu Vận chuẩn Hoa Sơn Bát Tự - tr. 331-336)
     const getLuuNienForDaiVan = (dvIndex, customCalcYear) => {
       const dv = daiVanList.find(d => d.index === dvIndex) || daiVanList[0];
       const nextDv = daiVanList.find(d => d.index === dvIndex + 1);
@@ -1520,11 +1529,12 @@
         ? parseInt(customCalcYear, 10)
         : calcYear;
 
-      const years = [];
-      // 10 năm đại vận này
-      for (let y = 0; y < 10; y++) {
-        const yr = dv.solarYearStart + y;
-        const age = dv.ageFrom + y;
+      // Chiều Tiểu Vận: Dương Nam / Âm Nữ đi Thuận (+1), Âm Nam / Dương Nữ đi Nghịch (-1) - tr. 331
+      const tvDirection = (isDuongNam || isAmNu) ? 1 : -1;
+      // Gốc khởi Tiểu Vận là Trụ Giờ (Thời trụ)
+      const hourJiazi = (6 * canGio - 5 * chiGio + 60) % 60;
+
+      const calcYearData = (yr, age, row) => {
         const jiaziYr = ((yr - 1924) % 60 + 60) % 60;
         const yCan = jiaziYr % 10;
         const yChi = jiaziYr % 12;
@@ -1533,7 +1543,27 @@
         const isCurrent = (yr === currentYear);
         const isTarget = (yr === targetY);
 
-        years.push({
+        // Tính 2 giai đoạn Tiểu Vận trong năm yr (tr. 331-336):
+        // Tuổi mụ (tuổi ta) trong năm yr:
+        const currentAge = yr - solarYear + 1;
+
+        // Giai đoạn 1: Trước ngày sinh nhật dương lịch (tuổi currentAge - 1)
+        const ageBefore = Math.max(1, currentAge - 1);
+        const tvJiazi1 = ((hourJiazi + tvDirection * ageBefore) % 60 + 60) % 60;
+        const tvCan1 = tvJiazi1 % 10;
+        const tvCanName1 = CAN[tvCan1];
+        const tvCanColor1 = ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CAN[tvCan1]]];
+        const tvThapThan1 = THAP_THAN_THIEN_CAN[canNgay][tvCan1];
+
+        // Giai đoạn 2: Từ ngày sinh nhật dương lịch trở đi (tuổi currentAge)
+        const ageAfter = Math.max(1, currentAge);
+        const tvJiazi2 = ((hourJiazi + tvDirection * ageAfter) % 60 + 60) % 60;
+        const tvCan2 = tvJiazi2 % 10;
+        const tvCanName2 = CAN[tvCan2];
+        const tvCanColor2 = ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CAN[tvCan2]]];
+        const tvThapThan2 = THAP_THAN_THIEN_CAN[canNgay][tvCan2];
+
+        return {
           year: yr,
           age,
           canName: CAN[yCan],
@@ -1545,10 +1575,24 @@
           thapThanCan: ttCan,
           thapThanChi: ttChi,
           thapThan: `${ttCan}/${ttChi}`,
+          tvCanName1,
+          tvCanColor1,
+          tvThapThan1,
+          tvCanName2,
+          tvCanColor2,
+          tvThapThan2,
           isCurrent,
           isTarget,
-          row: 1
-        });
+          row
+        };
+      };
+
+      const years = [];
+      // 10 năm đại vận này
+      for (let y = 0; y < 10; y++) {
+        const yr = dv.solarYearStart + y;
+        const age = dv.ageFrom + y;
+        years.push(calcYearData(yr, age, 1));
       }
 
       // 10 năm đại vận kế tiếp (nếu có)
@@ -1556,30 +1600,7 @@
         for (let y = 0; y < 10; y++) {
           const yr = nextDv.solarYearStart + y;
           const age = nextDv.ageFrom + y;
-          const jiaziYr = ((yr - 1924) % 60 + 60) % 60;
-          const yCan = jiaziYr % 10;
-          const yChi = jiaziYr % 12;
-          const ttCan = THAP_THAN_THIEN_CAN[canNgay][yCan];
-          const ttChi = THAP_THAN_DIA_CHI[canNgay][yChi];
-          const isCurrent = (yr === currentYear);
-          const isTarget = (yr === targetY);
-
-          years.push({
-            year: yr,
-            age,
-            canName: CAN[yCan],
-            chiName: CHI[yChi],
-            canElem: ELEMENT_NAMES[NGU_HANH_CAN[yCan]],
-            chiElem: ELEMENT_NAMES[NGU_HANH_CHI[yChi]],
-            canColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CAN[yCan]]],
-            chiColor: ELEMENT_COLORS[ELEMENT_NAMES[NGU_HANH_CHI[yChi]]],
-            thapThanCan: ttCan,
-            thapThanChi: ttChi,
-            thapThan: `${ttCan}/${ttChi}`,
-            isCurrent,
-            isTarget,
-            row: 2
-          });
+          years.push(calcYearData(yr, age, 2));
         }
       }
 
@@ -1615,7 +1636,10 @@
       rawInput: {
         name,
         gender: genderLabel,
+        calcDay,
+        calcMonth,
         calcYear,
+        calcDateStr: (calcDay && calcMonth) ? `${String(calcDay).padStart(2, '0')}/${String(calcMonth).padStart(2, '0')}/${calcYear}` : `${calcYear}`,
         birthDateStr: `${String(solarDay).padStart(2, '0')}/${String(solarMonth).padStart(2, '0')}/${solarYear}`,
         birthTimeStr: `${String(rawHour).padStart(2, '0')}:${String(rawMinute).padStart(2, '0')}`,
         lunarDateStr: `${String(lunarDateInfo.day).padStart(2, '0')}/${String(lunarDateInfo.month).padStart(2, '0')}/${lunarDateInfo.year}${lunarDateInfo.isLeap ? ' (Nhuận)' : ''}`,
@@ -1717,6 +1741,10 @@
         nhatKhong
       },
       getLuuNienForDaiVan,
+      solarDay,
+      solarMonth,
+      solarYear,
+      birthdayShortStr: `${String(solarDay).padStart(2, "0")}/${String(solarMonth).padStart(2, "0")}`,
       analysis: {
         thienCanLienList,
         diaChiLienList,

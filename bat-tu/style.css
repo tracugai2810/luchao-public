@@ -654,14 +654,14 @@ input[type="time"].form-input,
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Container Render Ngầm (Target để html2canvas chụp ảnh chuẩn 1280px) */
+/* Container Render Ngầm (Target để html2canvas chụp ảnh chuẩn 1920px) */
 .bazi-capture-container {
   position: absolute;
   left: -9999px;
   top: 0;
-  width: 1280px;
-  min-width: 1280px;
-  max-width: 1280px;
+  width: 1920px;
+  min-width: 1920px;
+  max-width: 1920px;
   opacity: 0.01;
   pointer-events: none;
   z-index: -9999;
@@ -671,7 +671,7 @@ input[type="time"].form-input,
 
 /* Container hiển thị kết quả chính */
 .bazi-rendered-card-container {
-  max-width: 1280px;
+  max-width: 1920px;
   margin: 0 auto 30px auto;
 }
 
@@ -801,7 +801,7 @@ input[type="time"].form-input,
 .bazi-rendered-img {
   display: block;
   width: 100%;
-  max-width: 1280px;
+  max-width: 1920px;
   height: auto;
   object-fit: contain;
   cursor: pointer;
@@ -871,14 +871,14 @@ input[type="time"].form-input,
    SHEET TỨ TRỤ MỆNH BÀN (CHUẨN ẢNH THỰC TẾ)
    ========================================================================== */
 .bazi-chart-card {
-  width: 1280px;
-  min-width: 1280px;
-  max-width: 1280px;
+  width: 1920px;
+  min-width: 1920px;
+  max-width: 1920px;
   box-sizing: border-box;
   background: #FEF6E8; /* Màu nền giấy kem hoàng gia chuẩn nguhanh.net */
   border: 2.5px solid #000000; /* Viền đen sắc nét bao quanh toàn bộ lá số */
   border-radius: 4px;
-  padding: 26px 30px;
+  padding: 28px 36px;
   box-shadow: 0 4px 24px rgba(30, 58, 138, 0.12);
   position: relative;
   overflow: hidden;
@@ -991,13 +991,13 @@ input[type="time"].form-input,
 /* Cột Tiêu Đề Bên Trái In Đậm Rõ Nét Màu Đen Chuẩn */
 .bazi-main-table .col-title,
 .col-title-vertical {
-  width: 5.6%;
-  min-width: 66px;
-  max-width: 72px;
+  width: 5%;
+  min-width: 80px;
+  max-width: 100px;
   font-weight: 700 !important;
   color: #0F172A !important; /* Màu đen mực sắc nét, dễ nhìn */
   background: #FEF6E8 !important;
-  font-size: 15px;
+  font-size: 15.5px;
   letter-spacing: 0.4px;
   text-align: center;
   vertical-align: middle;
@@ -1127,7 +1127,7 @@ input[type="time"].form-input,
 
 .dai-van-table td.dv-col,
 .luu-nien-table td.ln-cell {
-  width: 9.44%;
+  width: 9.5%;
   vertical-align: middle;
   background: #FEF6E8;
   transition: background 0.15s ease;
@@ -1135,7 +1135,7 @@ input[type="time"].form-input,
 
 .dai-van-table td.dv-col {
   cursor: pointer;
-  padding: 3px 1px;
+  padding: 4px 2px;
 }
 
 .dai-van-table td.dv-col:hover {
@@ -1152,7 +1152,7 @@ input[type="time"].form-input,
 }
 
 .luu-nien-table td.ln-cell {
-  padding: 2px 1px;
+  padding: 4px 2px;
 }
 
 .luu-nien-table td.ln-cell:hover {
@@ -1285,50 +1285,50 @@ input[type="time"].form-input,
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 3.5px;
   white-space: nowrap;
-  padding: 5px 1px;
-  line-height: 1.25;
+  padding: 7px 2px;
+  line-height: 1.3;
 }
 
 .luu-nien-table .cell-tv-line .tv-item {
   display: inline-flex;
   align-items: baseline;
-  gap: 1.5px;
+  gap: 2.5px;
 }
 
 .luu-nien-table .cell-tv-line .tv-can {
-  font-size: 12.5px;
+  font-size: 15.5px; /* Bằng kích thước Can Lưu Niên (15.5px) */
   font-weight: 700;
 }
 
 .luu-nien-table .cell-tv-line .tv-tt {
-  font-size: 11px;
+  font-size: 15px; /* Bằng kích thước Thập Thần Lưu Niên (15px) */
   font-weight: 400;
   color: #334155;
-  letter-spacing: -0.2px;
 }
 
 .luu-nien-table .cell-tv-line .tv-arrow {
-  font-size: 10px;
+  font-size: 13.5px;
   color: #64748B;
-  margin: 0 1px;
-  opacity: 0.85;
+  margin: 0 2px;
+  opacity: 0.9;
 }
 
 .col-title-vertical .title-dash {
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 700;
   color: #64748B;
   line-height: 1;
-  margin: 1px 0;
+  margin: 2px 0;
 }
 
 .col-title-vertical .title-bday {
-  font-size: 10.5px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   color: #1D4ED8;
-  margin-top: 2px;
-  letter-spacing: -0.3px;
+  margin-top: 3px;
+  letter-spacing: -0.2px;
   white-space: nowrap;
 }
 

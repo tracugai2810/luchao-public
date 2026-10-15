@@ -1,7 +1,8 @@
 # Cổng Thông Tin & Công Cụ Huyền Học Toàn Diện luchao.io.vn
 
-> luchao.io.vn là nền tảng tra cứu và ứng dụng Huyền Học Á Đông chuyên sâu, tích hợp 4 hệ thống công cụ chuẩn xác kế thừa trực tiếp từ các trường phái học thuật kinh điển:
+> luchao.io.vn là nền tảng tra cứu và ứng dụng Huyền Học Á Đông chuyên sâu, tích hợp 5 hệ thống công cụ chuẩn xác kế thừa trực tiếp từ các trường phái học thuật kinh điển:
 > - **Kinh Dịch Lục Hào & SIM Phong Thủy**: Chu Thần Bân (Chu Thần Bân Dịch Học & Lục Hào Dự Đoán Học)
+> - **Hoa Sơn Bát Tự**: Toàn Chân Phái - Chu Thần Bân (Độc lập 3 Liên, Địa Tinh không Tàng Can)
 > - **Tử Vi Đẩu Số Bắc Phái**: Lương Nhược Du (Lương Phái Phi Tinh Tứ Hóa)
 > - **Phong Thủy Huyền Không**: Thẩm Thị Huyền Không Học (Thẩm Trúc Nhưng, chuyên sâu Vận 9: 2024 - 2043)
 
@@ -25,7 +26,18 @@
   - Phân tích tương tác tầng thứ: Tiên Thiên (Gốc lá số), Đại Hạn (10 năm), Lưu Niên (Từng năm), cung chuyển Kỵ theo chuẩn Lương Phái.
   - Xuất file ảnh lá số sắc nét lưu về điện thoại/máy tính.
 
-## 3. Tinh Bàn Phong Thủy Huyền Không Phi Tinh (Thẩm Thị Huyền Không Học)
+## 3. Lập Lá Số Hoa Sơn Bát Tự Online (Chu Thần Bân)
+- **URL**: https://luchao.io.vn/bat-tu
+- **Trường phái kế thừa**: Toàn Chân Hoa Sơn Phái - Chu Thần Bân.
+- **Mô tả**: Công cụ lập lá số Tứ Trụ Bát Tự theo nguyên tác Hoa Sơn Bát Tự của đại sư Chu Thần Bân. Hệ thống áp dụng triết lý Địa Chi độc lập (không dùng Tàng Can), Thập Thần Địa Chi theo ma trận Địa Tinh chuẩn mực, đảo ngược quy ước Tài Tinh (khắc cùng giới là Chính Tài, khác giới là Thiên Tài).
+- **Tính năng nổi bật**:
+  - Tính toán Lịch Mặt Trời chân thực (True Solar Time) với độ lệch kinh độ 63 tỉnh thành VN + phương trình thời gian EoT chuẩn từng phút.
+  - Phân định Tiết Khí chuẩn xác từng phút và tính toán thời điểm khởi Đại Vận chi tiết đến Năm - Tháng - Ngày.
+  - Bảng Tứ Trụ 3 Liên (Can Chi Liên, Thiên Can Liên, Địa Chi Liên) trực quan, hiển thị Thập Thần Thiên Tinh & Địa Tinh, Vòng Trường Sinh 12 sao.
+  - Bảng 10 Đại Vận tương tác một chạm, tự động suy diễn bảng 20 năm Lưu Niên tương ứng.
+  - Biểu đồ thống kê Ngũ Hành Tứ Trụ và xuất file ảnh lá số HD chất lượng cao.
+
+## 4. Tinh Bàn Phong Thủy Huyền Không Phi Tinh (Thẩm Thị Huyền Không Học)
 - **URL**: https://luchao.io.vn/hkpt
 - **Trường phái kế thừa**: Thẩm Thị Huyền Không Học (Thẩm Trúc Nhưng).
 - **Mô tả**: Ứng dụng lập tinh bàn Huyền Không Phi Tinh chuẩn xác cho 24 Sơn Hướng, hỗ trợ trọn vẹn từ Vận 1 đến Vận 9 (đặc biệt chuyên sâu cho Hạ Nguyên Vận 9: 2024 - 2043).
@@ -35,7 +47,7 @@
   - Nhận diện các đại cục phong thủy: Vượng Sơn Vượng Hướng, Song Tinh Đáo Hướng, Song Tinh Đáo Sơn, Thượng Sơn Hạ Thủy.
   - Thước la bàn vệ tinh đo độ trực quan trên bản đồ Google Maps và áp tinh bàn lên bản vẽ mặt bằng nhà.
 
-## 4. Gợi Ý & Đánh Giá SIM Phong Thủy Bát Tự (Chu Thần Bân)
+## 5. Gợi Ý & Đánh Giá SIM Phong Thủy Bát Tự (Chu Thần Bân)
 - **URL**: https://luchao.io.vn/simphongthuy
 - **Trường phái kế thừa**: Phương pháp luận phối quẻ Dịch Bốc Chu Thần Bân & Bát Tự Dụng Thần.
 - **Mô tả**: Công cụ chấm điểm và đãi lọc số điện thoại phong thủy chuyên sâu theo bản mệnh Bát Tự (Tứ Trụ) và Dịch Học.
@@ -47,7 +59,7 @@
 
 ---
 
-## 5. Bảng Tra Cứu Nhanh Cho Mô Hình AI (AI Fast Lookup Reference)
+## 6. Bảng Tra Cứu Nhanh Cho Mô Hình AI (AI Fast Lookup Reference)
 
 ### 5.1. Bảng Thiên Can Tứ Hóa (Bắc Phái - Lương Nhược Du)
 | Thiên Can | Hóa Lộc | Hóa Quyền | Hóa Khoa | Hóa Kỵ |

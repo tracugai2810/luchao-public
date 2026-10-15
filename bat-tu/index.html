@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Lập Lá Số Hoa Sơn Bát Tự (Chu Thần Bân) Chuẩn Từng Phút | luchao.io.vn</title>
+  <meta name="description" content="Phần mềm lập lá số Hoa Sơn Bát Tự theo nguyên tác Chu Thần Bân. Ma trận Thập Thần Địa Chi độc lập không tàng can, đảo ngược Tài Tinh, phân tích 3 Liên, tiết khí và giờ Mặt Trời chuẩn xác từng phút.">
+  <meta name="keywords" content="hoa sơn bát tự, bát tự chu thần bân, lập lá số bát tự, tứ trụ tử bình, giờ mặt trời, tiết khí bát tự, bát tự online, luchao.io.vn">
+  <meta name="author" content="luchao.io.vn">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://luchao.io.vn/bat-tu/">
+  <meta property="og:title" content="Lập Lá Số Hoa Sơn Bát Tự (Chu Thần Bân) Chuẩn Từng Phút | luchao.io.vn">
+  <meta property="og:description" content="Lập lá số Bát Tự theo chuẩn Toàn Chân Phái Hoa Sơn - Chu Thần Bân. Bảng Thập Thần Địa Chi trang 73, đảo ngược Tài Tinh, phân tích 3 Liên, tính Lịch Mặt Trời chính xác.">
+  <meta property="og:image" content="https://luchao.io.vn/banner.jpg">
+  <meta property="og:locale" content="vi_VN">
+
+  <!-- Fonts & CDN Libraries -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="../styles.css?v=2.0">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Libraries: lunar-javascript & html2canvas -->
+  <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Bazi Core Engine -->
+  <script src="bazi-engine.js"></script>
+</head>
+<body>
+
+  <!-- Top Portal Multi-Tab Navigation (5 Môn Huyền Học) -->
+  <nav id="portal-nav" class="portal-nav" aria-label="Menu Huyền Học">
+    <!-- Desktop: 5 tabs căn giữa sang trọng -->
+    <div class="portal-desktop-nav">
+      <div class="portal-tabs-track">
+        <a href="/" class="portal-tab-btn" title="Lập Quẻ Kinh Dịch Lục Hào">
+          <span class="portal-tab-icon">🔮</span>
+          <span class="portal-tab-text">Lục Hào</span>
+        </a>
+        <a href="/tu-vi" class="portal-tab-btn" title="Lập Lá Số Tử Vi Bắc Phái">
+          <span class="portal-tab-icon">📜</span>
+          <span class="portal-tab-text">Tử Vi</span>
+        </a>
+        <a href="/bat-tu" class="portal-tab-btn active" title="Lập Lá Số Hoa Sơn Bát Tự">
+          <span class="portal-tab-icon">☯️</span>
+          <span class="portal-tab-text">Bát Tự</span>
+        </a>
+        <a href="/hkpt" class="portal-tab-btn" title="Lập Tinh Bàn Phong Thủy Huyền Không Phi Tinh">
+          <span class="portal-tab-icon">🧭</span>
+          <span class="portal-tab-text">Phong Thủy HKPT</span>
+        </a>
+        <a href="/simphongthuy" class="portal-tab-btn" title="Tra Cứu &amp; Gợi Ý Sim Phong Thủy">
+          <span class="portal-tab-icon">📱</span>
+          <span class="portal-tab-text">Sim Phong Thủy</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile: Tiêu đề môn bên trái + Nút Hamburger bên phải -->
+    <div class="portal-mobile-bar">
+      <a href="/bat-tu" class="portal-mobile-brand" title="Hoa Sơn Bát Tự">
+        <span class="mobile-brand-icon">☯️</span>
+        <span class="mobile-brand-title">Hoa Sơn Bát Tự</span>
+      </a>
+      <button type="button" class="portal-hamburger-btn" id="portal-hamburger-btn" aria-label="Menu chuyển môn" aria-expanded="false">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Off-Canvas Drawer (Trượt mở từ bên phải) -->
+  <div id="portal-drawer-backdrop" class="portal-drawer-backdrop"></div>
+  <div id="portal-drawer" class="portal-drawer" aria-label="Danh mục môn Huyền Học">
+    <div class="portal-drawer-header">
+      <div class="drawer-header-brand">
+        <span class="drawer-header-icon">☯</span>
+        <span class="drawer-header-title">CHỌN MÔN HUYỀN HỌC</span>
+      </div>
+      <button type="button" class="drawer-close-btn" id="portal-drawer-close" aria-label="Đóng menu">✕</button>
+    </div>
+    <div class="portal-drawer-body">
+      <div class="drawer-list">
+        <a href="/" class="drawer-item">
+          <div class="drawer-item-icon">🔮</div>
+          <div class="drawer-item-info">
+            <div class="drawer-item-title">Lục Hào Kinh Dịch</div>
+            <div class="drawer-item-desc">Gieo quẻ 3 đồng xu &amp; Seri tiền</div>
+          </div>
+          <span class="drawer-item-arrow">›</span>
+        </a>
+        <a href="/tu-vi" class="drawer-item">
+          <div class="drawer-item-icon">📜</div>
+          <div class="drawer-item-info">
+            <div class="drawer-item-title">Tử Vi Bắc Phái</div>
+            <div class="drawer-item-desc">Phi tinh tứ hóa 12 cung chức</div>
+          </div>
+          <span class="drawer-item-arrow">›</span>
+        </a>
+        <a href="/bat-tu" class="drawer-item active">
+          <div class="drawer-item-icon">☯️</div>
+          <div class="drawer-item-info">
+            <div class="drawer-item-title">Hoa Sơn Bát Tự</div>
+            <div class="drawer-item-desc">Toàn Chân Phái - Chu Thần Bân</div>
+          </div>
+          <span class="drawer-item-badge">Đang xem</span>
+        </a>
+        <a href="/hkpt" class="drawer-item">
+          <div class="drawer-item-icon">🧭</div>
+          <div class="drawer-item-info">
+            <div class="drawer-item-title">Phong Thủy HKPT</div>
+            <div class="drawer-item-desc">Huyền Không Phi Tinh &amp; Tinh bàn</div>
+          </div>
+          <span class="drawer-item-arrow">›</span>
+        </a>
+        <a href="/simphongthuy" class="drawer-item">
+          <div class="drawer-item-icon">📱</div>
+          <div class="drawer-item-info">
+            <div class="drawer-item-title">Sim Phong Thủy</div>
+            <div class="drawer-item-desc">Tra cứu SĐT theo giờ sinh</div>
+          </div>
+          <span class="drawer-item-arrow">›</span>
+        </a>
+      </div>
+    </div>
+    <div class="portal-drawer-footer">
+      <div class="drawer-contact-card">
+        <span>Admin hỗ trợ:</span>
+        <a href="https://zalo.me/0396154013" target="_blank" rel="noopener noreferrer">💬 Zalo: <strong>0396.154.013</strong></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <main class="bazi-page-wrapper">
+    
+    <!-- Header Banner -->
+    <section class="bazi-header-banner">
+      <div class="bazi-header-title">
+        <span class="icon">☯️</span>
+        <div>
+          <h1>LẬP LÁ SỐ HOA SƠN BÁT TỰ</h1>
+          <p>Học thuật Chu Thần Bân • Thập Thần Địa Chi Độc Lập • Đảo Ngược Tài Tinh • 3 Liên Tương Tác</p>
+        </div>
+      </div>
+      <div class="bazi-badge">Chuẩn Thiên Văn Tiết Khí &amp; Giờ Mặt Trời</div>
+    </section>
+
+    <!-- Form Nhập Liệu -->
+    <section class="bazi-form-card">
+      <form id="bazi-form">
+        <div class="bazi-form-grid">
+          
+          <!-- Họ tên -->
+          <div class="form-group">
+            <label for="bazi-name">Họ và tên</label>
+            <input type="text" id="bazi-name" class="form-input" placeholder="Ví dụ: Đương số" value="Đương số">
+          </div>
+
+          <!-- Giới tính -->
+          <div class="form-group">
+            <label for="bazi-gender">Giới tính</label>
+            <select id="bazi-gender" class="form-select">
+              <option value="nam" selected>Nam (Dương Nam / Âm Nam)</option>
+              <option value="nu">Nữ (Dương Nữ / Âm Nữ)</option>
+            </select>
+          </div>
+
+          <!-- Loại lịch -->
+          <div class="form-group">
+            <label for="bazi-cal-type">Loại lịch</label>
+            <select id="bazi-cal-type" class="form-select">
+              <option value="solar" selected>Dương lịch</option>
+              <option value="lunar">Âm lịch</option>
+            </select>
+          </div>
+
+          <!-- Checkbox tháng nhuận (chỉ hiện khi chọn âm lịch) -->
+          <div class="form-group" id="bazi-leap-container" style="display: none;">
+            <label>&nbsp;</label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #f59e0b; margin-top: 6px;">
+              <input type="checkbox" id="bazi-is-leap"> Tháng nhuận
+            </label>
+          </div>
+
+          <!-- Ngày / Tháng / Năm -->
+          <div class="form-group">
+            <label id="bazi-date-label">Ngày / Tháng / Năm</label>
+            <div class="bazi-date-row">
+              <input type="number" id="bazi-day" class="form-input" placeholder="Ngày" min="1" max="31" value="1">
+              <input type="number" id="bazi-month" class="form-input" placeholder="Tháng" min="1" max="12" value="3">
+              <input type="number" id="bazi-year" class="form-input" placeholder="Năm" min="1900" max="2100" value="1990">
+            </div>
+          </div>
+
+          <!-- Giờ sinh (Giờ : Phút) -->
+          <div class="form-group">
+            <label for="bazi-hour">Giờ sinh (24 giờ)</label>
+            <div class="bazi-time-row">
+              <select id="bazi-hour" class="form-select"></select>
+              <select id="bazi-minute" class="form-select"></select>
+            </div>
+          </div>
+
+          <!-- Múi giờ -->
+          <div class="form-group">
+            <label for="bazi-timezone">Múi giờ</label>
+            <select id="bazi-timezone" class="form-select">
+              <option value="+07:00" selected>VN (+7)</option>
+              <option value="-08:00">Mỹ Tây (-8)</option>
+              <option value="-05:00">Mỹ Đông (-5)</option>
+              <option value="-06:00">Mỹ Trung (-6)</option>
+              <option value="-07:00">Mỹ Núi (-7)</option>
+              <option value="+09:00">Nhật/Hàn (+9)</option>
+              <option value="+08:00">Đài/TQ (+8)</option>
+              <option value="+10:00">Úc (+10)</option>
+              <option value="+01:00">Châu Âu (+1)</option>
+              <option value="+00:00">Anh (UTC 0)</option>
+            </select>
+          </div>
+
+          <!-- Nơi sinh (63 tỉnh thành VN để tính Lịch Mặt Trời) -->
+          <div class="form-group province-search-container" id="bazi-province-container">
+            <label for="bazi-province-input">Nơi sinh (Lịch Mặt Trời VN)</label>
+            <input type="text" id="bazi-province-input" class="form-input" placeholder="Chọn hoặc gõ tên tỉnh/thành..." autocomplete="off">
+            <input type="hidden" id="bazi-province-id" value="">
+            <div id="bazi-province-dropdown" class="province-dropdown"></div>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn-submit-bazi" id="btn-submit-bazi">
+          <span>🔮</span> LẬP LÁ SỐ BÁT TỰ
+        </button>
+      </form>
+    </section>
+
+    <!-- Khung Bảng Lá Số Kết Quả -->
+    <section class="bazi-result-container" id="bazi-result-section">
+      <div class="bazi-chart-card" id="bazi-printable-card">
+        
+        <!-- Watermark -->
+        <div class="bazi-watermark">☯</div>
+
+        <!-- Sheet Header -->
+        <div class="bazi-sheet-header">
+          <div class="sheet-title-group">
+            <h2>LÁ SỐ HOA SƠN BÁT TỰ</h2>
+            <div class="subtitle">Toàn Chân Phái Hoa Sơn Bát Tự Học - Chu Thần Bân</div>
+          </div>
+          <div class="sheet-info-group">
+            <div class="sheet-info-item">
+              <span class="label">Họ và tên:</span>
+              <span class="val" id="res-name">-</span>
+            </div>
+            <div class="sheet-info-item">
+              <span class="label">Giới tính:</span>
+              <span class="val" id="res-gender">-</span>
+            </div>
+            <div class="sheet-info-item">
+              <span class="label">Dương lịch:</span>
+              <span class="val" id="res-solar-date">-</span>
+            </div>
+            <div class="sheet-info-item">
+              <span class="label">Âm lịch:</span>
+              <span class="val" id="res-lunar-date">-</span>
+            </div>
+            <div class="sheet-info-item">
+              <span class="label">Giờ sinh:</span>
+              <span class="val" id="res-birth-time">-</span>
+            </div>
+            <div class="sheet-info-item">
+              <span class="label">Nạp âm Nhật chủ:</span>
+              <span class="val" id="res-nap-am">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BẢNG TỨ TRỤ CHÍNH -->
+        <div class="bazi-table-responsive">
+          <table class="bazi-table">
+            <thead>
+              <tr>
+                <th class="col-label">BÁT TỰ</th>
+                <th class="col-pillar">TRỤ NĂM</th>
+                <th class="col-pillar">TRỤ THÁNG</th>
+                <th class="col-pillar col-nhat-chu">TRỤ NGÀY (MỆNH)</th>
+                <th class="col-pillar">TRỤ GIỜ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Hàng Dương lịch -->
+              <tr>
+                <td class="col-label">DƯƠNG LỊCH</td>
+                <td id="res-solar-year">-</td>
+                <td id="res-solar-month">-</td>
+                <td id="res-solar-day">-</td>
+                <td id="res-solar-hour">-</td>
+              </tr>
+              <!-- Hàng Thiên Tinh (Thập thần Can) -->
+              <tr>
+                <td class="col-label">THIÊN TINH (CAN)</td>
+                <td><span class="thap-than-text" id="res-tt-can-nam">-</span></td>
+                <td><span class="thap-than-text" id="res-tt-can-thang">-</span></td>
+                <td><span class="thap-than-nhat-chu" id="res-tt-can-ngay">NHẬT CHỦ</span></td>
+                <td><span class="thap-than-text" id="res-tt-can-gio">-</span></td>
+              </tr>
+              <!-- Hàng Bát Tự (Can Chi Lớn) -->
+              <tr>
+                <td class="col-label">CAN &amp; CHI</td>
+                <td>
+                  <div class="can-chi-box">
+                    <span class="big-char" id="res-char-can-nam">-</span>
+                    <span class="big-char" id="res-char-chi-nam">-</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="can-chi-box">
+                    <span class="big-char" id="res-char-can-thang">-</span>
+                    <span class="big-char" id="res-char-chi-thang">-</span>
+                  </div>
+                </td>
+                <td style="background: rgba(254, 226, 226, 0.4);">
+                  <div class="can-chi-box">
+                    <span class="big-char" id="res-char-can-ngay">-</span>
+                    <span class="big-char" id="res-char-chi-ngay">-</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="can-chi-box">
+                    <span class="big-char" id="res-char-can-gio">-</span>
+                    <span class="big-char" id="res-char-chi-gio">-</span>
+                  </div>
+                </td>
+              </tr>
+              <!-- Hàng Địa Tinh (Thập thần Chi - Bảng tr. 73) -->
+              <tr>
+                <td class="col-label">ĐỊA TINH (CHI)</td>
+                <td><span class="thap-than-text" id="res-tt-chi-nam">-</span></td>
+                <td><span class="thap-than-text" id="res-tt-chi-thang">-</span></td>
+                <td><span class="thap-than-text" id="res-tt-chi-ngay">-</span></td>
+                <td><span class="thap-than-text" id="res-tt-chi-gio">-</span></td>
+              </tr>
+              <!-- Hàng Can Chi Liên (Quan hệ dọc) -->
+              <tr>
+                <td class="col-label">CAN CHI LIÊN</td>
+                <td><span class="lien-tag" id="res-ccl-nam">-</span></td>
+                <td><span class="lien-tag" id="res-ccl-thang">-</span></td>
+                <td><span class="lien-tag" id="res-ccl-ngay">-</span></td>
+                <td><span class="lien-tag" id="res-ccl-gio">-</span></td>
+              </tr>
+              <!-- Hàng Thần Sát & Không Vong -->
+              <tr>
+                <td class="col-label">THẦN SÁT</td>
+                <td><div class="than-sat-list" id="res-ts-nam">-</div></td>
+                <td><div class="than-sat-list" id="res-ts-thang">-</div></td>
+                <td><div class="than-sat-list" id="res-ts-ngay">-</div></td>
+                <td><div class="than-sat-list" id="res-ts-gio">-</div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BẢNG ĐẠI VẬN 10 CỘT -->
+        <div class="dai-van-header-bar">
+          <span id="res-jieqi-info">Khởi Đại Vận: -</span>
+          <span style="color: #64748B; font-weight: 500; font-size: 0.8rem;">(Click vào cột Đại Vận để đổi 20 năm Lưu Niên)</span>
+        </div>
+
+        <div class="bazi-table-responsive">
+          <table class="dai-van-table" id="res-daivan-table">
+            <thead>
+              <tr id="res-daivan-header-row">
+                <th style="width: 10%;">ĐẠI VẬN</th>
+                <!-- 10 Cột đại vận inject via JS -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="res-daivan-can-chi-row">
+                <td style="font-weight: 700; background: var(--bazi-header-bg);">CAN CHI</td>
+              </tr>
+              <tr id="res-daivan-thap-than-row">
+                <td style="font-weight: 700; background: var(--bazi-header-bg);">THẬP THẦN</td>
+              </tr>
+              <tr id="res-daivan-age-row">
+                <td style="font-weight: 700; background: var(--bazi-header-bg);">ĐỘ TUỔI</td>
+              </tr>
+              <tr id="res-daivan-year-row">
+                <td style="font-weight: 700; background: var(--bazi-header-bg);">NĂM BẮT ĐẦU</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BẢNG LƯU NIÊN (20 NĂM) -->
+        <div style="font-size: 0.9rem; font-weight: 700; color: #1E293B; margin: 16px 0 8px 0; display: flex; justify-content: space-between;">
+          <span>BẢNG 20 NĂM LƯU NIÊN</span>
+          <span style="font-size: 0.8rem; font-weight: 500; color: #D97706;">* Ô viền vàng là Năm hiện tại</span>
+        </div>
+
+        <div class="bazi-table-responsive">
+          <table class="luu-nien-table" id="res-luunien-table">
+            <tbody id="res-luunien-tbody">
+              <!-- Inject via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BẢNG PHÂN TÍCH 3 LIÊN & NGŨ HÀNH -->
+        <div class="bazi-analysis-grid">
+          
+          <!-- Thống kê ngũ hành -->
+          <div class="analysis-card">
+            <h3>📊 Thống Kê Ngũ Hành (8 Chữ)</h3>
+            <div class="element-bars-container" id="res-element-bars"></div>
+            <div style="margin-top: 12px; font-size: 0.88rem; color: #334155;" id="res-element-summary"></div>
+          </div>
+
+          <!-- Thiên Can Liên -->
+          <div class="analysis-card">
+            <h3>⚡ Thiên Can Liên (Niên - Nguyệt - Thời)</h3>
+            <ul class="analysis-list" id="res-thien-can-lien-list"></ul>
+          </div>
+
+          <!-- Địa Chi Liên -->
+          <div class="analysis-card">
+            <h3>🏔️ Địa Chi Liên (4 Trụ)</h3>
+            <ul class="analysis-list" id="res-dia-chi-lien-list"></ul>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="bazi-actions-row">
+        <button type="button" class="btn-bazi-action btn-bazi-download" id="btn-download-chart">
+          📥 Tải Ảnh Lá Số (HD PNG)
+        </button>
+        <button type="button" class="btn-bazi-action btn-bazi-copy" id="btn-copy-text">
+          📋 Sao Chép Văn Bản
+        </button>
+        <button type="button" class="btn-bazi-action btn-bazi-reset" id="btn-reset-form">
+          🔄 Lập Lá Số Mới
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Script tương tác giao diện -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const Engine = window.BaziEngine;
+      if (!Engine) {
+        console.error("BaziEngine chưa được nạp!");
+        return;
+      }
+
+      // 1. Khởi tạo giờ phút dropdown
+      const selHour = document.getElementById("bazi-hour");
+      const selMinute = document.getElementById("bazi-minute");
+      for (let h = 0; h < 24; h++) {
+        const opt = document.createElement("option");
+        opt.value = h;
+        opt.textContent = `${String(h).padStart(2, "0")} Giờ`;
+        if (h === 2) opt.selected = true;
+        selHour.appendChild(opt);
+      }
+      for (let m = 0; m < 60; m += 5) {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = `${String(m).padStart(2, "0")} Phút`;
+        if (m === 0) opt.selected = true;
+        selMinute.appendChild(opt);
+      }
+
+      // 2. Chuyển đổi loại lịch
+      const calTypeSelect = document.getElementById("bazi-cal-type");
+      const leapContainer = document.getElementById("bazi-leap-container");
+      calTypeSelect.addEventListener("change", function () {
+        leapContainer.style.display = this.value === "lunar" ? "block" : "none";
+      });
+
+      // 3. Múi giờ & Ẩn hiện Nơi sinh
+      const tzSelect = document.getElementById("bazi-timezone");
+      const provinceContainer = document.getElementById("bazi-province-container");
+      tzSelect.addEventListener("change", function () {
+        if (this.value === "+07:00") {
+          provinceContainer.style.display = "block";
+        } else {
+          provinceContainer.style.display = "none";
+          document.getElementById("bazi-province-id").value = "";
+          document.getElementById("bazi-province-input").value = "";
+        }
+      });
+
+      // 4. Autocomplete Nơi sinh (63 tỉnh thành)
+      const provInput = document.getElementById("bazi-province-input");
+      const provHidden = document.getElementById("bazi-province-id");
+      const provDropdown = document.getElementById("bazi-province-dropdown");
+
+      function renderProvinceList(filterText = "") {
+        provDropdown.innerHTML = "";
+        const q = filterText.toLowerCase().trim();
+        const filtered = Engine.VN_PROVINCES.filter(p => 
+          p.name.toLowerCase().includes(q) || p.capital.toLowerCase().includes(q)
+        );
+
+        if (filtered.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "province-item";
+          empty.textContent = "Không tìm thấy tỉnh thành";
+          provDropdown.appendChild(empty);
+          return;
+        }
+
+        filtered.forEach(p => {
+          const item = document.createElement("div");
+          item.className = "province-item";
+          item.innerHTML = `<span>${p.name}</span><span class="sub">${p.capital} (${p.longitude}°E)</span>`;
+          item.addEventListener("click", () => {
+            provInput.value = p.name;
+            provHidden.value = p.id;
+            provDropdown.classList.remove("show");
+          });
+          provDropdown.appendChild(item);
+        });
+      }
+
+      provInput.addEventListener("focus", () => {
+        renderProvinceList(provInput.value);
+        provDropdown.classList.add("show");
+      });
+
+      provInput.addEventListener("input", (e) => {
+        renderProvinceList(e.target.value);
+        provDropdown.classList.add("show");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!provinceContainer.contains(e.target)) {
+          provDropdown.classList.remove("show");
+        }
+      });
+
+      // 5. Drawer Navigation
+      const hamBtn = document.getElementById("portal-hamburger-btn");
+      const drawer = document.getElementById("portal-drawer");
+      const backdrop = document.getElementById("portal-drawer-backdrop");
+      const closeBtn = document.getElementById("portal-drawer-close");
+
+      function openDrawer() {
+        drawer.classList.add("open");
+        backdrop.classList.add("open");
+        hamBtn.setAttribute("aria-expanded", "true");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeDrawer() {
+        drawer.classList.remove("open");
+        backdrop.classList.remove("open");
+        hamBtn.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+      }
+
+      if (hamBtn) hamBtn.addEventListener("click", openDrawer);
+      if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
+      if (backdrop) backdrop.addEventListener("click", closeDrawer);
+
+      // Biến lưu kết quả hiện tại
+      let currentBaziResult = null;
+      let selectedDaiVanIndex = 1;
+
+      // 6. Xử lý Lập Lá Số Submit
+      const form = document.getElementById("bazi-form");
+      const resultSection = document.getElementById("bazi-result-section");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("bazi-name").value.trim() || "Đương số";
+        const gender = document.getElementById("bazi-gender").value;
+        const calType = document.getElementById("bazi-cal-type").value;
+        const isLeap = document.getElementById("bazi-is-leap").checked;
+        const day = parseInt(document.getElementById("bazi-day").value, 10);
+        const month = parseInt(document.getElementById("bazi-month").value, 10);
+        const year = parseInt(document.getElementById("bazi-year").value, 10);
+        const hour = parseInt(selHour.value, 10);
+        const minute = parseInt(selMinute.value, 10);
+        const tzStr = tzSelect.value;
+        const tzVal = parseFloat(tzStr.replace("+", ""));
+        const provinceId = provHidden.value;
+
+        // Tính toán Bát Tự
+        currentBaziResult = Engine.calculateBazi({
+          name,
+          gender,
+          calendarType: calType,
+          isLeapMonth: isLeap,
+          day,
+          month,
+          year,
+          hour,
+          minute,
+          timeZone: tzVal,
+          provinceId
+        });
+
+        // Tìm đại vận hiện tại để active
+        const curDv = currentBaziResult.daiVan.list.find(d => d.isCurrent);
+        selectedDaiVanIndex = curDv ? curDv.index : 1;
+
+        // Render ra giao diện
+        renderBaziChart(currentBaziResult);
+
+        // Hiển thị phần kết quả & cuộn mượt
+        resultSection.classList.add("show");
+        resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      // 7. Render Lá Số
+      function renderBaziChart(res) {
+        const inp = res.rawInput;
+        const p = res.fourPillars;
+
+        // Header thông tin
+        document.getElementById("res-name").textContent = inp.name;
+        document.getElementById("res-gender").textContent = inp.gender;
+        document.getElementById("res-solar-date").textContent = inp.birthDateStr;
+        document.getElementById("res-lunar-date").textContent = inp.lunarDateStr;
+
+        // Giờ sinh chuẩn hóa
+        const tzOpt = tzSelect.options[tzSelect.selectedIndex].text;
+        let birthTimeDisplay = inp.birthTimeStr;
+        if (inp.solarAdjustment) {
+          birthTimeDisplay += ` (MT: ${inp.solarAdjustment.adjustedTimeStr})`;
+        } else if (inp.timeZone !== 7) {
+          birthTimeDisplay += ` (${tzOpt})`;
+        }
+        document.getElementById("res-birth-time").textContent = birthTimeDisplay;
+        document.getElementById("res-nap-am").textContent = p.day.napAm || "-";
+
+        // Bảng Tứ Trụ
+        // Hàng Dương lịch
+        document.getElementById("res-solar-year").textContent = p.year.solarDateText;
+        document.getElementById("res-solar-month").textContent = p.month.solarDateText;
+        document.getElementById("res-solar-day").textContent = p.day.solarDateText;
+        document.getElementById("res-solar-hour").textContent = p.hour.solarDateText;
+
+        // Hàng Thiên Tinh
+        document.getElementById("res-tt-can-nam").textContent = p.year.thapThanCan;
+        document.getElementById("res-tt-can-thang").textContent = p.month.thapThanCan;
+        document.getElementById("res-tt-can-ngay").textContent = "NHẬT CHỦ";
+        document.getElementById("res-tt-can-gio").textContent = p.hour.thapThanCan;
+
+        // Hàng Can Chi Lớn & Tô Màu
+        const renderBigChar = (id, text, color) => {
+          const el = document.getElementById(id);
+          el.textContent = text;
+          el.style.color = color;
+        };
+        renderBigChar("res-char-can-nam", p.year.canName, p.year.canColor);
+        renderBigChar("res-char-chi-nam", p.year.chiName, p.year.chiColor);
+        renderBigChar("res-char-can-thang", p.month.canName, p.month.canColor);
+        renderBigChar("res-char-chi-thang", p.month.chiName, p.month.chiColor);
+        renderBigChar("res-char-can-ngay", p.day.canName, p.day.canColor);
+        renderBigChar("res-char-chi-ngay", p.day.chiName, p.day.chiColor);
+        renderBigChar("res-char-can-gio", p.hour.canName, p.hour.canColor);
+        renderBigChar("res-char-chi-gio", p.hour.chiName, p.hour.chiColor);
+
+        // Hàng Địa Tinh
+        document.getElementById("res-tt-chi-nam").textContent = p.year.thapThanChi;
+        document.getElementById("res-tt-chi-thang").textContent = p.month.thapThanChi;
+        document.getElementById("res-tt-chi-ngay").textContent = p.day.thapThanChi;
+        document.getElementById("res-tt-chi-gio").textContent = p.hour.thapThanChi;
+
+        // Hàng Can Chi Liên
+        document.getElementById("res-ccl-nam").textContent = p.year.canChiLien.label;
+        document.getElementById("res-ccl-thang").textContent = p.month.canChiLien.label;
+        document.getElementById("res-ccl-ngay").textContent = p.day.canChiLien.label;
+        document.getElementById("res-ccl-gio").textContent = p.hour.canChiLien.label;
+
+        // Hàng Thần Sát
+        const renderThanSatList = (id, list) => {
+          const el = document.getElementById(id);
+          el.innerHTML = "";
+          if (list.length === 0) {
+            el.textContent = "-";
+            return;
+          }
+          list.forEach(ts => {
+            const span = document.createElement("span");
+            span.className = "than-sat-tag";
+            span.textContent = ts;
+            el.appendChild(span);
+          });
+        };
+        renderThanSatList("res-ts-nam", p.year.thanSat);
+        renderThanSatList("res-ts-thang", p.month.thanSat);
+        renderThanSatList("res-ts-ngay", p.day.thanSat);
+        renderThanSatList("res-ts-gio", p.hour.thanSat);
+
+        // Khởi Đại Vận Info
+        document.getElementById("res-jieqi-info").textContent = res.daiVan.jieQiInfoText;
+
+        // Render Bảng Đại Vận 10 Cột
+        renderDaiVanTable(res.daiVan.list);
+
+        // Render Bảng Lưu Niên theo đại vận đang chọn
+        renderLuuNienTable(res.getLuuNienForDaiVan(selectedDaiVanIndex));
+
+        // Render Phân Tích 3 Liên & Ngũ Hành
+        renderAnalysis(res.analysis);
+      }
+
+      // 8. Render Bảng Đại Vận
+      function renderDaiVanTable(dvList) {
+        const headerRow = document.getElementById("res-daivan-header-row");
+        const canChiRow = document.getElementById("res-daivan-can-chi-row");
+        const ttRow = document.getElementById("res-daivan-thap-than-row");
+        const ageRow = document.getElementById("res-daivan-age-row");
+        const yearRow = document.getElementById("res-daivan-year-row");
+
+        // Giữ lại cột label đầu tiên
+        headerRow.innerHTML = '<th style="width: 10%;">ĐẠI VẬN</th>';
+        canChiRow.innerHTML = '<td style="font-weight: 700; background: var(--bazi-header-bg);">CAN CHI</td>';
+        ttRow.innerHTML = '<td style="font-weight: 700; background: var(--bazi-header-bg);">THẬP THẦN</td>';
+        ageRow.innerHTML = '<td style="font-weight: 700; background: var(--bazi-header-bg);">ĐỘ TUỔI</td>';
+        yearRow.innerHTML = '<td style="font-weight: 700; background: var(--bazi-header-bg);">NĂM ĐẦU</td>';
+
+        dvList.forEach(dv => {
+          const isActive = dv.index === selectedDaiVanIndex;
+          const activeClass = isActive ? " active" : "";
+
+          // Header (Vận 1, Vận 2...)
+          const th = document.createElement("th");
+          th.className = "dv-col" + activeClass;
+          th.textContent = `Vận ${dv.index}`;
+          th.addEventListener("click", () => selectDaiVan(dv.index));
+          headerRow.appendChild(th);
+
+          // Can Chi
+          const tdCc = document.createElement("td");
+          tdCc.className = "dv-col" + activeClass;
+          tdCc.innerHTML = `
+            <div class="dv-char-pair">
+              <span style="color: ${dv.canColor}">${dv.canName}</span>
+              <span style="color: ${dv.chiColor}">${dv.chiName}</span>
+            </div>
+          `;
+          tdCc.addEventListener("click", () => selectDaiVan(dv.index));
+          canChiRow.appendChild(tdCc);
+
+          // Thập Thần (Can / Chi)
+          const tdTt = document.createElement("td");
+          tdTt.className = "dv-col" + activeClass;
+          tdTt.innerHTML = `<span class="dv-thap-than">${dv.thapThanCan} / ${dv.thapThanChi}</span>`;
+          tdTt.addEventListener("click", () => selectDaiVan(dv.index));
+          ttRow.appendChild(tdTt);
+
+          // Độ Tuổi
+          const tdAge = document.createElement("td");
+          tdAge.className = "dv-col" + activeClass;
+          tdAge.innerHTML = `<span class="dv-age-range">${dv.ageRangeText}</span>`;
+          tdAge.addEventListener("click", () => selectDaiVan(dv.index));
+          ageRow.appendChild(tdAge);
+
+          // Năm Bắt Đầu
+          const tdYr = document.createElement("td");
+          tdYr.className = "dv-col" + activeClass;
+          tdYr.innerHTML = `<span class="dv-year-start">${dv.solarYearStart}</span>`;
+          tdYr.addEventListener("click", () => selectDaiVan(dv.index));
+          yearRow.appendChild(tdYr);
+        });
+      }
+
+      // Chọn Đại Vận
+      function selectDaiVan(idx) {
+        selectedDaiVanIndex = idx;
+        renderDaiVanTable(currentBaziResult.daiVan.list);
+        renderLuuNienTable(currentBaziResult.getLuuNienForDaiVan(selectedDaiVanIndex));
+      }
+
+      // 9. Render Bảng Lưu Niên (20 Năm)
+      function renderLuuNienTable(lnList) {
+        const tbody = document.getElementById("res-luunien-tbody");
+        tbody.innerHTML = "";
+
+        const row1 = lnList.filter(l => l.row === 1);
+        const row2 = lnList.filter(l => l.row === 2);
+
+        const buildRowHtml = (list, label) => {
+          const tr = document.createElement("tr");
+          let html = `<td style="font-weight: 700; background: var(--bazi-header-bg); width: 8%;">${label}</td>`;
+          list.forEach(item => {
+            const curClass = item.isCurrent ? " current-year" : "";
+            html += `
+              <td class="${curClass}">
+                <div class="ln-char">
+                  <span style="color: ${item.canColor}">${item.canName}</span>
+                  <span style="color: ${item.chiColor}">${item.chiName}</span>
+                </div>
+                <div class="ln-year">${item.year}</div>
+                <div class="ln-age">${item.age}t • ${item.thapThan}</div>
+              </td>
+            `;
+          });
+          tr.innerHTML = html;
+          return tr;
+        };
+
+        if (row1.length > 0) tbody.appendChild(buildRowHtml(row1, `10 NĂM I`));
+        if (row2.length > 0) tbody.appendChild(buildRowHtml(row2, `10 NĂM II`));
+      }
+
+      // 10. Render Thống Kê & 3 Liên
+      function renderAnalysis(an) {
+        // Thanh ngũ hành
+        const barsContainer = document.getElementById("res-element-bars");
+        barsContainer.innerHTML = "";
+        const maxVal = Math.max(...Object.values(an.elementCounts), 1);
+
+        Engine.ELEMENT_NAMES.forEach(elem => {
+          const cnt = an.elementCounts[elem];
+          const pct = Math.round((cnt / 8) * 100);
+          const row = document.createElement("div");
+          row.className = "element-bar-row";
+          row.innerHTML = `
+            <span class="element-bar-name" style="color: ${Engine.ELEMENT_COLORS[elem]}">${elem}</span>
+            <div class="element-bar-track">
+              <div class="element-bar-fill" style="width: ${pct}%; background: ${Engine.ELEMENT_COLORS[elem]};"></div>
+            </div>
+            <span class="element-bar-val">${cnt}</span>
+          `;
+          barsContainer.appendChild(row);
+        });
+
+        const sumEl = document.getElementById("res-element-summary");
+        sumEl.innerHTML = `<strong>Hành vượng nhất:</strong> <span style="color: ${Engine.ELEMENT_COLORS[an.vuongNhat]}">${an.vuongNhat}</span> | <strong>Khuyết:</strong> ${an.khuyetList.length > 0 ? an.khuyetList.join(", ") : "Không khuyết hành nào"}`;
+
+        // Thiên Can Liên
+        const tclList = document.getElementById("res-thien-can-lien-list");
+        tclList.innerHTML = "";
+        if (an.thienCanLienList.length === 0) {
+          tclList.innerHTML = `<li>Không có tương tác hợp xung đặc biệt giữa 3 can khách thể</li>`;
+        } else {
+          an.thienCanLienList.forEach(t => {
+            const li = document.createElement("li");
+            li.textContent = t.text;
+            tclList.appendChild(li);
+          });
+        }
+
+        // Địa Chi Liên
+        const dclList = document.getElementById("res-dia-chi-lien-list");
+        dclList.innerHTML = "";
+        if (an.diaChiLienList.length === 0) {
+          dclList.innerHTML = `<li>Không có tương tác hội hợp xung khắc đặc biệt giữa 4 chi</li>`;
+        } else {
+          an.diaChiLienList.forEach(t => {
+            const li = document.createElement("li");
+            li.className = t.type;
+            li.textContent = t.text;
+            dclList.appendChild(li);
+          });
+        }
+      }
+
+      // 11. Nút Tải Ảnh HD PNG
+      document.getElementById("btn-download-chart").addEventListener("click", function () {
+        const card = document.getElementById("bazi-printable-card");
+        this.textContent = "⏳ Đang kết xuất ảnh...";
+        this.disabled = true;
+
+        html2canvas(card, {
+          scale: 2,
+          backgroundColor: "#FDF8EE",
+          useCORS: true
+        }).then(canvas => {
+          const link = document.createElement("a");
+          link.download = `la-so-hoa-son-bat-tu-${document.getElementById("res-name").textContent.replace(/\s+/g, "_")}.png`;
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+          this.textContent = "📥 Tải Ảnh Lá Số (HD PNG)";
+          this.disabled = false;
+        }).catch(err => {
+          alert("Lỗi khi tạo ảnh: " + err.message);
+          this.textContent = "📥 Tải Ảnh Lá Số (HD PNG)";
+          this.disabled = false;
+        });
+      });
+
+      // 12. Nút Sao Chép Văn Bản
+      document.getElementById("btn-copy-text").addEventListener("click", function () {
+        if (!currentBaziResult) return;
+        const p = currentBaziResult.fourPillars;
+        const inp = currentBaziResult.rawInput;
+
+        const text = `
+=== LÁ SỐ HOA SƠN BÁT TỰ (CHU THẦN BÂN) ===
+Họ và tên: ${inp.name} (${inp.gender})
+Dương lịch: ${inp.birthDateStr} ${document.getElementById("res-birth-time").textContent}
+Âm lịch: ${inp.lunarDateStr}
+Nạp âm Nhật chủ: ${p.day.napAm}
+
+TỨ TRỤ:
+- Năm: ${p.year.canName} ${p.year.chiName} | Thiên tinh: ${p.year.thapThanCan} | Địa tinh: ${p.year.thapThanChi} | Liên: ${p.year.canChiLien.label}
+- Tháng: ${p.month.canName} ${p.month.chiName} | Thiên tinh: ${p.month.thapThanCan} | Địa tinh: ${p.month.thapThanChi} | Liên: ${p.month.canChiLien.label}
+- Ngày: ${p.day.canName} ${p.day.chiName} | Nhật Chủ | Địa tinh: ${p.day.thapThanChi} | Liên: ${p.day.canChiLien.label}
+- Giờ: ${p.hour.canName} ${p.hour.chiName} | Thiên tinh: ${p.hour.thapThanCan} | Địa tinh: ${p.hour.thapThanChi} | Liên: ${p.hour.canChiLien.label}
+
+KHỞI ĐẠI VẬN: ${currentBaziResult.daiVan.jieQiInfoText}
+Lập tại: https://luchao.io.vn/bat-tu/
+        `.trim();
+
+        navigator.clipboard.writeText(text).then(() => {
+          const originalText = this.textContent;
+          this.textContent = "✅ Đã sao chép vào bộ nhớ tạm!";
+          setTimeout(() => { this.textContent = originalText; }, 2000);
+        }).catch(() => {
+          alert("Không thể sao chép tự động!");
+        });
+      });
+
+      // 13. Nút Reset
+      document.getElementById("btn-reset-form").addEventListener("click", function () {
+        resultSection.classList.remove("show");
+        form.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+
+    });
+  </script>
+
+</body>
+</html>

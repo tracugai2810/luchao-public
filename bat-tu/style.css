@@ -1,0 +1,730 @@
+/* ==========================================================================
+   HOA SƠN BÁT TỰ - CSS STYLES
+   Module: luchao.io.vn/bat-tu
+   Thiết kế giao diện Tứ Trụ chuẩn Ảnh 1 (nguhanh.net) kết hợp theme luchao.io.vn
+   ========================================================================== */
+
+/* --- Biến CSS Bát Tự --- */
+:root {
+  --bazi-bg-paper: #FDF8EE;
+  --bazi-border-outer: #7DA7D9;
+  --bazi-border-inner: #9BBCE0;
+  --bazi-header-bg: #F2F6FA;
+  --bazi-active-cell: #FCE4B8;
+  --bazi-active-border: #D97706;
+
+  /* Màu Ngũ Hành Chuẩn */
+  --elem-kim: #7A7A7A;
+  --elem-moc: #15803D;
+  --elem-thuy: #1E3A8A;
+  --elem-hoa: #DC2626;
+  --elem-tho: #854D0E;
+
+  --text-dark: #1E293B;
+  --text-gray: #475569;
+  --text-muted: #64748B;
+}
+
+/* --- Container chung --- */
+.bazi-page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  color: var(--text-primary);
+}
+
+/* --- Header giới thiệu môn --- */
+.bazi-header-banner {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.bazi-header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bazi-header-title .icon {
+  font-size: 2.2rem;
+}
+
+.bazi-header-title h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #F8FAFC;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.bazi-header-title p {
+  font-size: 0.88rem;
+  color: #94A3B8;
+  margin: 4px 0 0 0;
+}
+
+.bazi-badge {
+  background: rgba(217, 119, 6, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #FBBF24;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* --- Form Nhập Liệu --- */
+.bazi-form-card {
+  background: #151d30;
+  border: 1px solid #2d3a52;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.bazi-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.form-input, .form-select {
+  background: #0c1222;
+  border: 1px solid #2d3a52;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.bazi-date-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr;
+  gap: 8px;
+}
+
+.bazi-time-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* Nơi sinh Autocomplete */
+.province-search-container {
+  position: relative;
+}
+
+.province-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1a2438;
+  border: 1px solid #425173;
+  border-radius: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  display: none;
+}
+
+.province-dropdown.show {
+  display: block;
+}
+
+.province-item {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  display: flex;
+  justify-content: space-between;
+}
+
+.province-item:hover, .province-item.active {
+  background: rgba(217, 119, 6, 0.25);
+  color: #ffffff;
+}
+
+.province-item .sub {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+/* Nút Submit */
+.btn-submit-bazi {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 28px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-submit-bazi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.6);
+}
+
+/* ==========================================================================
+   BẢNG LÁ SỐ BÁT TỰ (STYLE CỔ ĐIỂN NGŨ HÀNH NET)
+   ========================================================================== */
+.bazi-result-container {
+  display: none;
+  margin-top: 24px;
+}
+
+.bazi-result-container.show {
+  display: block;
+}
+
+.bazi-chart-card {
+  background: var(--bazi-bg-paper);
+  border: 2px solid var(--bazi-border-outer);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  color: var(--text-dark);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Watermark */
+.bazi-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 260px;
+  opacity: 0.035;
+  pointer-events: none;
+  user-select: none;
+  font-weight: 900;
+  color: #000;
+  z-index: 0;
+}
+
+/* Header Lá Số */
+.bazi-sheet-header {
+  border-bottom: 2px solid var(--bazi-border-inner);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.sheet-title-group h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sheet-title-group .subtitle {
+  font-size: 0.88rem;
+  color: #64748B;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.sheet-info-group {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 8px 24px;
+  font-size: 0.92rem;
+  color: #1E293B;
+}
+
+.sheet-info-item {
+  display: flex;
+  gap: 8px;
+}
+
+.sheet-info-item .label {
+  font-weight: 700;
+  color: #475569;
+}
+
+.sheet-info-item .val {
+  font-weight: 600;
+}
+
+.sheet-info-item .val-solar-mt {
+  color: #D97706;
+  font-weight: 700;
+}
+
+/* Wrapper thanh cuộn ngang chống tràn */
+.bazi-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 20px;
+  border: 1px solid var(--bazi-border-inner);
+  border-radius: 8px;
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+}
+
+/* Bảng Tứ Trụ */
+.bazi-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+  text-align: center;
+}
+
+.bazi-table th, .bazi-table td {
+  border: 1px solid var(--bazi-border-inner);
+  padding: 10px 8px;
+  vertical-align: middle;
+}
+
+.bazi-table .col-label {
+  width: 18%;
+  background: var(--bazi-header-bg);
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #1E293B;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.bazi-table .col-pillar {
+  width: 20.5%;
+}
+
+.bazi-table th.col-pillar {
+  background: #EBF2FA;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0F172A;
+  padding: 12px 8px;
+}
+
+.bazi-table th.col-nhat-chu {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* Chữ Can Chi Lớn */
+.can-chi-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 0;
+}
+
+.big-char {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.char-elem-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Thập Thần */
+.thap-than-text {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.thap-than-nhat-chu {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #DC2626;
+  letter-spacing: 0.5px;
+}
+
+/* Can Chi Liên & Thần Sát */
+.lien-tag {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #F1F5F9;
+  color: #1E293B;
+}
+
+.than-sat-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.than-sat-tag {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #E2E8F0;
+  color: #334155;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   BẢNG ĐẠI VẬN & LƯU NIÊN
+   ========================================================================== */
+.dai-van-header-bar {
+  background: #E2E8F0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dai-van-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+  text-align: center;
+}
+
+.dai-van-table th, .dai-van-table td {
+  border: 1px solid var(--bazi-border-inner);
+  padding: 8px 4px;
+  vertical-align: middle;
+  font-size: 0.88rem;
+}
+
+.dai-van-table .dv-col {
+  width: 9%;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dai-van-table .dv-col:hover {
+  background: #FFF7ED;
+}
+
+.dai-van-table .dv-col.active {
+  background: var(--bazi-active-cell);
+  box-shadow: inset 0 0 0 2px var(--bazi-active-border);
+}
+
+.dv-char-pair {
+  font-size: 1.35rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.dv-thap-than {
+  font-size: 0.78rem;
+  color: #64748B;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.dv-age-range {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.dv-year-start {
+  font-size: 0.78rem;
+  color: #64748B;
+}
+
+/* Bảng Lưu Niên (20 năm) */
+.luu-nien-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.luu-nien-table td {
+  border: 1px solid var(--bazi-border-inner);
+  padding: 6px 3px;
+  width: 9.5%;
+  font-size: 0.82rem;
+}
+
+.luu-nien-table td.current-year {
+  background: #FEF3C7;
+  box-shadow: inset 0 0 0 1.5px #D97706;
+}
+
+.ln-char {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.ln-year {
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.ln-age {
+  color: #64748B;
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   BẢNG PHÂN TÍCH 3 LIÊN & NGŨ HÀNH
+   ========================================================================== */
+.bazi-analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.analysis-card {
+  background: #ffffff;
+  border: 1px solid var(--bazi-border-inner);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.analysis-card h3 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Thanh Thống kê Ngũ hành */
+.element-bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.element-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.element-bar-name {
+  width: 50px;
+  font-weight: 700;
+}
+
+.element-bar-track {
+  flex: 1;
+  background: #E2E8F0;
+  height: 12px;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.element-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.element-bar-val {
+  width: 24px;
+  text-align: right;
+  font-weight: 700;
+}
+
+.analysis-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.88rem;
+}
+
+.analysis-list li {
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #F8FAFC;
+  border-left: 3px solid #3B82F6;
+}
+
+.analysis-list li.tam-hoi {
+  border-left-color: #10B981;
+}
+
+.analysis-list li.luc-xung {
+  border-left-color: #EF4444;
+}
+
+/* ==========================================================================
+   NÚT TIỆN ÍCH LÁ SỐ
+   ========================================================================== */
+.bazi-actions-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-bazi-action {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-bazi-download {
+  background: #2563EB;
+  color: #ffffff;
+}
+
+.btn-bazi-download:hover {
+  background: #1D4ED8;
+  transform: translateY(-1px);
+}
+
+.btn-bazi-copy {
+  background: #475569;
+  color: #ffffff;
+}
+
+.btn-bazi-copy:hover {
+  background: #334155;
+  transform: translateY(-1px);
+}
+
+.btn-bazi-reset {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #CBD5E1;
+}
+
+.btn-bazi-reset:hover {
+  background: #E2E8F0;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 768px) {
+  .bazi-page-wrapper {
+    padding: 10px;
+  }
+
+  .bazi-header-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .bazi-header-title .icon {
+    font-size: 1.8rem;
+  }
+
+  .bazi-header-title h1 {
+    font-size: 1.25rem;
+  }
+
+  .bazi-form-card {
+    padding: 16px;
+  }
+
+  .bazi-chart-card {
+    padding: 14px;
+  }
+
+  .sheet-title-group h2 {
+    font-size: 1.3rem;
+  }
+
+  .sheet-info-group {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .big-char {
+    font-size: 1.6rem;
+  }
+
+  .btn-bazi-action {
+    width: 100%;
+    justify-content: center;
+  }
+}

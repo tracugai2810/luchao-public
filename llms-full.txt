@@ -4,8 +4,9 @@ Cổng thông tin tra cứu và ứng dụng Huyền Học Á Đông chuẩn xá
 Kế thừa trực tiếp từ các trường phái học thuật kinh điển:
 1. Kinh Dịch Lục Hào Dự Đoán Học (Trường phái Chu Thần Bân Dịch Bốc)
 2. Tử Vi Đẩu Số Bắc Phái Phi Tinh (Trường phái Lương Nhược Du - Lương Phái)
-3. Phong Thủy Huyền Không Phi Tinh (Kinh điển Thẩm Thị Huyền Không Học - Thẩm Trúc Nhưng)
-4. SIM Phong Thủy Bát Tự Dụng Thần (Ứng dụng phối quẻ Dịch Bốc Chu Thần Bân)
+3. Hoa Sơn Bát Tự (Toàn Chân Phái - Đại sư Chu Thần Bân)
+4. Phong Thủy Huyền Không Phi Tinh (Kinh điển Thẩm Thị Huyền Không Học - Thẩm Trúc Nhưng)
+5. SIM Phong Thủy Bát Tự Dụng Thần (Ứng dụng phối quẻ Dịch Bốc Chu Thần Bân)
 
 ---
 
@@ -75,14 +76,29 @@ Khác với Nam Phái (Tam Hợp Phái) chú trọng nhiều vào số lượng 
 
 ---
 
-## PHẦN 3: PHONG THỦY HUYỀN KHÔNG PHI TINH (https://luchao.io.vn/hkpt) - THẨM THỊ HUYỀN KHÔNG HỌC
+## PHẦN 3: HOA SƠN BÁT TỰ DỰ ĐOÁN HỌC (https://luchao.io.vn/bat-tu) - CHU THẦN BÂN
 
-### 3.1. Giới thiệu Thẩm Thị Huyền Không Học & Vận 9 (Thẩm Trúc Nhưng)
+### 3.1. Giới thiệu Hoa Sơn Bát Tự (Toàn Chân Phái - Chu Thần Bân)
+Hoa Sơn Bát Tự là hệ thống mệnh lý Tứ Trụ chân truyền của Đạo gia Toàn Chân Hoa Sơn Phái, được Đại sư Chu Thần Bân hệ thống hóa và truyền thụ trong tác phẩm *Hoa Sơn Bát Tự*. Khác với các trường phái Tử Bình truyền thống (dùng Tàng Can Địa Chi phức tạp), Hoa Sơn Bát Tự vận hành trên nền tảng:
+- **Địa Chi Độc Lập**: Địa Chi không tàng Thiên Can, mang bản thể độc lập với hệ thống Thập Thần Địa Chi riêng biệt gọi là **Địa Tinh** (12 Chi tương ứng 10 Địa Tinh: Ấn, Kiêu, Kiếp, Tỷ, Thực, Thương, Tài, Thiên, Quan, Sát tra theo ma trận trang 73 sách Chu Thần Bân).
+- **Đảo Ngược Quy Ước Tài Tinh**: Chu Thần Bân chỉ ra triết lý căn bản: Khắc cùng giới tính là **Chính Tài** (bởi cùng giới thì sự chế khắc là chân chính, trực diện), khác giới tính là **Thiên Tài** (sự khắc gián tiếp, thiên lệch).
+- **Cấu Trúc 3 Liên Độc Lập**: Can Chi Liên (quan hệ dọc giữa Can và Chi cùng trụ), Thiên Can Liên (quan hệ ngang giữa 4 Thiên Can), Địa Chi Liên (quan hệ ngang giữa 4 Địa Chi).
+
+### 3.2. Hiệu Chỉnh Lịch Mặt Trời & Tiết Khí Chuẩn Từng Phút
+- **Lịch Mặt Trời Chân Thực (True Solar Time)**: Bát Tự là thuật toán mô tả vị trí của Trái Đất so với Mặt Trời tại thời điểm đương số cất tiếng khóc chào đời. Bát Tự trên hệ thống tích hợp chuẩn xác kinh độ 63 tỉnh thành Việt Nam kết hợp phương trình thời gian NOAA/Spencer (Equation of Time - EoT).
+- **Giờ Tý Sang Ngày Mới**: Giờ Tý bắt đầu từ 23:00 đêm hôm trước, Can Chi Trụ Ngày tự động chuyển sang ngày mới chuẩn theo thiên văn.
+- **Tiết Khí Khởi Đại Vận**: 12 Tiết khí đầu tháng (Lập Xuân, Kinh Trập, Thanh Minh...) được tính toán chuẩn xác đến từng phút theo múi giờ địa phương, làm căn cứ tính toán tuổi khởi Đại Vận chuẩn xác đến Năm, Tháng, Ngày.
+
+---
+
+## PHẦN 4: PHONG THỦY HUYỀN KHÔNG PHI TINH (https://luchao.io.vn/hkpt) - THẨM THỊ HUYỀN KHÔNG HỌC
+
+### 4.1. Giới thiệu Thẩm Thị Huyền Không Học & Vận 9 (Thẩm Trúc Nhưng)
 Huyền Không Phi Tinh là trường phái phong thủy lý khí đỉnh cao, kế thừa tác phẩm kinh điển *Thẩm Thị Huyền Không Học* của Đại sư Thẩm Trúc Nhưng, kết hợp chặt chẽ giữa Thời gian (Tam Nguyên Cửu Vận), Không gian (24 Sơn Hướng) và Địa hình môi trường thực tế (Loan Đầu).
 - Giai đoạn hiện tại là **Hạ Nguyên Vận 9 (2024 - 2043)**, do sao **Cửu Tử Hỏa Tinh** quản vận.
 - Vận Tinh cai quản: Số 9 nhập trung cung trong Vận 9. Chuẩn hóa phân định Chính Hướng (Hạ Quái) và Kiêm Hướng (Thế Quái) khi lệch trên 3 độ.
 
-### 3.2. Cấu Trúc Tinh Bàn 24 Sơn Hướng
+### 4.2. Cấu Trúc Tinh Bàn 24 Sơn Hướng
 - **Cung Vị (Địa Bàn)**: 8 hướng chia làm 24 sơn (mỗi sơn 15 độ). Mỗi hướng quái quản 3 sơn:
   - Khảm (Bắc): Nhâm - Tý - Quý
   - Cấn (Đông Bắc): Sửu - Cấn - Dần
@@ -97,7 +113,7 @@ Huyền Không Phi Tinh là trường phái phong thủy lý khí đỉnh cao, k
   - Sơn Tinh (Sao tọa phía sau, chủ quản Nhân Đinh, sức khỏe, quý nhân).
   - Hướng Tinh (Sao hướng phía trước, chủ quản Tài Lộc, sự nghiệp, tiền tài).
 
-### 3.3. Các Đại Cục Phong Thủy Trong Vận 9
+### 4.3. Các Đại Cục Phong Thủy Trong Vận 9
 1. **Vượng Sơn Vượng Hướng**: Sao Đương Vận (số 9) tới Tọa (Sơn), và sao Đương Vận tới Hướng. Chủ về "Đinh tài lưỡng đắc" (người khỏe mạnh, tài chính phát triển vượt bậc).
 2. **Song Tinh Đáo Hướng**: Cả Sơn tinh và Hướng tinh Đương Vận cùng đáo tụ tại Cung Hướng. Chủ về đại phát tài lộc nếu phía trước có Thủy và xa xa có Sơn.
 3. **Song Tinh Đáo Sơn**: Cả Sơn tinh và Hướng tinh cùng ngự tại Cung Tọa. Chủ về vượng nhân đinh nhưng cần khéo léo bố trí hình cục để tránh hao hụt tài chính.
@@ -105,16 +121,16 @@ Huyền Không Phi Tinh là trường phái phong thủy lý khí đỉnh cao, k
 
 ---
 
-## PHẦN 4: GỢI Ý & ĐÁNH GIÁ SIM PHONG THỦY BÁT TỰ (https://luchao.io.vn/simphongthuy) - CHU THẦN BÂN
+## PHẦN 5: GỢI Ý & ĐÁNH GIÁ SIM PHONG THỦY BÁT TỰ (https://luchao.io.vn/simphongthuy) - CHU THẦN BÂN
 
-### 4.1. Bản Chất Khoa Học Của SIM Phong Thủy
+### 5.1. Bản Chất Khoa Học Của SIM Phong Thủy
 Số điện thoại là một chuỗi tần số năng lượng số học đi liền với đương số hàng ngày. Phân tích SIM phong thủy chuẩn mực theo trường phái Chu Thần Bân không dựa vào cảm tính đuôi "lộc phát (68)" hay "thần tài (79)" dân gian đơn thuần, mà bắt buộc phải đối chiếu trên 4 trụ cột học thuật:
 1. Bản mệnh Tứ Trụ Bát Tự (Dụng Thần & Hỷ Thần).
 2. Kinh Dịch Quẻ Học (Quẻ Chủ - Quẻ Hỗ - Quẻ Biến của dãy số theo Dịch Bốc Chu Thần Bân).
 3. Cửu Tinh Đồ Pháp Hạ Nguyên Vận 9.
 4. Cân bằng Âm Dương & Quan niệm Ngũ Hành sinh khắc.
 
-### 4.2. Quy Trình Xét SIM Chuẩn Xác
+### 5.2. Quy Trình Xét SIM Chuẩn Xác
 - **Bước 1: Xác định Dụng Thần Bát Tự**:
   Lập lá số Tứ Trụ (Năm, Tháng, Ngày, Giờ sinh), đánh giá lệnh tháng, thân vượng hay thân nhược để tìm ra ngũ hành Dụng Thần cần bổ khuyết (Kim, Mộc, Thủy, Hỏa, hoặc Thổ).
 - **Bước 2: Phối Quẻ Kinh Dịch Cho Dãy SIM**:
@@ -133,6 +149,7 @@ Số điện thoại là một chuỗi tần số năng lượng số học đi 
 - Tên miền chính: https://luchao.io.vn
 - Trang Lục Hào: https://luchao.io.vn
 - Trang Tử Vi: https://luchao.io.vn/tu-vi
+- Trang Bát Tự: https://luchao.io.vn/bat-tu
 - Trang Phong Thủy: https://luchao.io.vn/hkpt
 - Trang Sim Phong Thủy: https://luchao.io.vn/simphongthuy
 - Tiêu chuẩn LLMs API / Search: https://luchao.io.vn/llms.txt

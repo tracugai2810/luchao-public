@@ -1286,38 +1286,38 @@ input[type="time"].form-input,
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
+  gap: 2px;
   white-space: nowrap;
-  padding: 4px 1px;
-  line-height: 1.3;
+  padding: 5px 1px;
+  line-height: 1.25;
 }
 
 .luu-nien-table .cell-tv-line .tv-item {
   display: inline-flex;
   align-items: baseline;
-  gap: 3px;
+  gap: 4px;
 }
 
 .luu-nien-table .cell-tv-line .tv-can {
-  font-size: 13.5px;
+  font-size: 15.5px; /* Bằng 100% kích thước Can Lưu Niên (15.5px) */
   font-weight: 700;
 }
 
 .luu-nien-table .cell-tv-line .tv-tt {
-  font-size: 13px;
+  font-size: 15px; /* Bằng 100% kích thước Thập Thần Lưu Niên (15px) */
   font-weight: 400;
   color: #334155;
 }
 
 .luu-nien-table .cell-tv-line .tv-arrow {
-  font-size: 10px;
+  font-size: 11px;
   color: #94A3B8;
   line-height: 1;
-  margin: 0;
+  margin: 1px 0;
 }
 
 .col-title-vertical .title-dash {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #64748B;
   line-height: 1;
@@ -1325,12 +1325,30 @@ input[type="time"].form-input,
 }
 
 .col-title-vertical .title-bday {
-  font-size: 12px;
+  font-size: 15px; /* Bằng 100% kích cỡ chữ LƯU NIÊN TIỂU VẬN (15px) */
   font-weight: 700;
   color: #1D4ED8;
-  margin-top: 2px;
-  letter-spacing: -0.2px;
+  margin-top: 3px;
+  letter-spacing: -0.4px;
   white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   4. HÀNG PHÂN CÁCH 2 KHỐI 10 NĂM LƯU NIÊN - TIỂU VẬN
+   --------------------------------------------------------- */
+.luu-nien-table .ln-decade-divider-row {
+  height: 10px;
+  line-height: 10px;
+}
+
+.luu-nien-table .ln-decade-divider-cell {
+  height: 10px;
+  background: #FEF6E8; /* Màu nền giấy kem hoàng gia chuẩn nguhanh.net */
+  border-top: 1.5px solid #3B82F6 !important; /* Đường viền xanh chốt khối 1 */
+  border-bottom: 1.5px solid #3B82F6 !important; /* Đường viền xanh khởi đầu khối 2 */
+  border-left: 1px solid #93C5FD !important;
+  border-right: 1.5px solid #3B82F6 !important;
+  padding: 0 !important;
 }
 
 /* ==========================================================================

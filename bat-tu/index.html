@@ -983,6 +983,7 @@
 
         const row1 = lnList.filter(l => l.row === 1);
         const row2 = lnList.filter(l => l.row === 2);
+        const totalRows = (row1.length > 0 && row2.length > 0) ? 7 : 3;
 
         let bdayTag = "";
         if (currentBaziResult && currentBaziResult.birthdayShortStr) {
@@ -996,7 +997,7 @@
           const trCc = document.createElement("tr");
           if (isFirstDecade) {
             trCc.innerHTML = `
-              <td class="col-title-vertical" rowspan="6">
+              <td class="col-title-vertical" rowspan="${totalRows}">
                 <div class="title-split">
                   <span>LƯU</span>
                   <span>NIÊN</span>
@@ -1044,7 +1045,7 @@
             `;
             trMeta.appendChild(tdMeta);
 
-            // Ô Tiểu Vận: Can 1 Thập thần 1 → Can 2 Thập thần 2 (Chuẩn Hoa Sơn Bát Tự tr. 331-336)
+            // Ô Tiểu Vận: Can 1 Thập thần 1 ↓ Can 2 Thập thần 2 (Chiều dọc chuẩn yêu cầu)
             const tdTv = document.createElement("td");
             tdTv.className = cellClass;
             tdTv.innerHTML = `
@@ -1069,7 +1070,14 @@
         };
 
         if (row1.length > 0) appendDecadeRows(row1, true);
-        if (row2.length > 0) appendDecadeRows(row2, false);
+        if (row2.length > 0) {
+          // Thêm hàng ngăn cách tạo khoảng hở chia ô rõ rệt giữa 2 khối 10 năm
+          const trDivider = document.createElement("tr");
+          trDivider.className = "ln-decade-divider-row";
+          trDivider.innerHTML = '<td colspan="10" class="ln-decade-divider-cell"></td>';
+          tbody.appendChild(trDivider);
+          appendDecadeRows(row2, false);
+        }
       }
 
       // 11. Chuyển đổi DataURL sang Blob

@@ -1293,6 +1293,194 @@
   }
 
   // ==========================================
+  // VI.A.2. TỔNG HỢP 20 TINH SÁT TOÀN CỤC (CHU THẦN BÂN)
+  // Phục vụ bảng tra cứu 2 hàng x 10 cột, tra cứu vận hạn
+  // ==========================================
+  function calculateAll20TinhSat(params) {
+    const {
+      canNam, chiNam,
+      canThang, chiThang,
+      canNgay, chiNgay,
+      canGio, chiGio,
+      gender = "nam"
+    } = params;
+
+    const isMale = (gender === "nam" || gender === "Nam" || gender === "male");
+    const allPillarsChi = [chiNam, chiThang, chiNgay, chiGio];
+    const allPillarPairs = [
+      `${canNam}-${chiNam}`,
+      `${canThang}-${chiThang}`,
+      `${canNgay}-${chiNgay}`,
+      `${canGio}-${chiGio}`
+    ];
+
+    const getTamHopGroup = (baseChi) => {
+      if ([8, 0, 4].includes(baseChi)) return { ma: 2, daoHoa: 9, kiepSat: 5, taiSat: 6, hoaCai: 4, tuongTinh: 0 };
+      if ([5, 9, 1].includes(baseChi)) return { ma: 11, daoHoa: 6, kiepSat: 2, taiSat: 3, hoaCai: 1, tuongTinh: 9 };
+      if ([2, 6, 10].includes(baseChi)) return { ma: 8, daoHoa: 3, kiepSat: 11, taiSat: 0, hoaCai: 10, tuongTinh: 6 };
+      return { ma: 5, daoHoa: 0, kiepSat: 8, taiSat: 9, hoaCai: 7, tuongTinh: 3 };
+    };
+
+    const yearGroup = getTamHopGroup(chiNam);
+    const dayGroup = getTamHopGroup(chiNgay);
+
+    // 1. Quý Nhân: Giáp/Mậu -> Sửu, Mùi; Ất/Kỷ -> Tý, Thân; Bính/Đinh -> Hợi, Dậu; Canh/Tân -> Ngọ, Dần; Nhâm/Quý -> Mão, Tỵ
+    const QUI_NHAN_MAP = {
+      0: [1, 7], 4: [1, 7],
+      1: [0, 8], 5: [0, 8],
+      2: [11, 9], 3: [11, 9],
+      6: [6, 2], 7: [6, 2],
+      8: [3, 5], 9: [3, 5]
+    };
+    const qnTarget = QUI_NHAN_MAP[canNgay] || [];
+    const qnVal = qnTarget.map(c => CHI[c]).join(', ');
+    const qnActive = allPillarsChi.some(c => qnTarget.includes(c));
+
+    // 2. Lộc Thần: Mậu tại Tỵ...
+    const LOC_THAN_MAP = [2, 3, 5, 6, 5, 6, 8, 9, 11, 0];
+    const ltTarget = LOC_THAN_MAP[canNgay];
+    const ltVal = CHI[ltTarget];
+    const ltActive = allPillarsChi.includes(ltTarget);
+
+    // 3. Dương Nhận
+    const DUONG_NHAN_MAP = [3, 2, 6, 5, 6, 5, 9, 8, 0, 11];
+    const dnTarget = DUONG_NHAN_MAP[canNgay];
+    const dnVal = CHI[dnTarget];
+    const dnActive = allPillarsChi.includes(dnTarget);
+
+    // 4. Văn Xương
+    const VAN_XUONG_MAP = [5, 6, 8, 9, 8, 9, 11, 0, 2, 3];
+    const vxTarget = VAN_XUONG_MAP[canNgay];
+    const vxVal = CHI[vxTarget];
+    const vxActive = allPillarsChi.includes(vxTarget);
+
+    // 5. Học Đường (Trường sinh ngũ hành bản mệnh)
+    const HOC_DUONG_MAP = [11, 11, 2, 2, 8, 8, 5, 5, 8, 8];
+    const hdTarget = HOC_DUONG_MAP[canNgay];
+    const hdVal = CHI[hdTarget];
+    const hdActive = allPillarsChi.includes(hdTarget);
+
+    // 6. Tướng Tinh (CHỈ lấy Chi Ngày)
+    const ttTarget = dayGroup.tuongTinh;
+    const ttVal = CHI[ttTarget];
+    const ttActive = allPillarsChi.includes(ttTarget);
+
+    // 7. Đào Hoa (Niên chi & Nhật chi)
+    const dhTargets = Array.from(new Set([yearGroup.daoHoa, dayGroup.daoHoa]));
+    const dhVal = dhTargets.map(c => CHI[c]).join(', ');
+    const dhActive = allPillarsChi.some(c => dhTargets.includes(c));
+
+    // 8. Dịch Mã (Niên chi & Nhật chi)
+    const dmTargets = Array.from(new Set([yearGroup.ma, dayGroup.ma]));
+    const dmVal = dmTargets.map(c => CHI[c]).join(', ');
+    const dmActive = allPillarsChi.some(c => dmTargets.includes(c));
+
+    // 9. Hoa Cái (CHỈ lấy Chi Ngày)
+    const hcTarget = dayGroup.hoaCai;
+    const hcVal = CHI[hcTarget];
+    const hcActive = allPillarsChi.includes(hcTarget);
+
+    // 10. Thiên Hỉ (Nguyệt Chi)
+    let thTarget = -1;
+    if ([2, 3, 4].includes(chiThang)) thTarget = 10;
+    else if ([5, 6, 7].includes(chiThang)) thTarget = 1;
+    else if ([8, 9, 10].includes(chiThang)) thTarget = 4;
+    else thTarget = 7;
+    const thVal = CHI[thTarget];
+    const thActive = allPillarsChi.includes(thTarget);
+
+    // 11. Kiếp Sát (Niên chi & Nhật chi)
+    const ksTargets = Array.from(new Set([yearGroup.kiepSat, dayGroup.kiepSat]));
+    const ksVal = ksTargets.map(c => CHI[c]).join(', ');
+    const ksActive = allPillarsChi.some(c => ksTargets.includes(c));
+
+    // 12. Tai Sát (Niên chi & Nhật chi)
+    const tsTargets = Array.from(new Set([yearGroup.taiSat, dayGroup.taiSat]));
+    const tsVal = tsTargets.map(c => CHI[c]).join(', ');
+    const tsActive = allPillarsChi.some(c => tsTargets.includes(c));
+
+    // 13. Thiên Y (Nguyệt chi lùi 1 vị trí)
+    const tyTarget = (chiThang - 1 + 12) % 12;
+    const tyVal = CHI[tyTarget];
+    const tyActive = allPillarsChi.includes(tyTarget);
+
+    // 14. Cô Thần (Niên chi)
+    let ctTarget = -1, qtTarget = -1;
+    if ([11, 0, 1].includes(chiNam)) { ctTarget = 2; qtTarget = 10; }
+    else if ([2, 3, 4].includes(chiNam)) { ctTarget = 5; qtTarget = 1; }
+    else if ([5, 6, 7].includes(chiNam)) { ctTarget = 8; qtTarget = 4; }
+    else { ctTarget = 11; qtTarget = 7; }
+    const ctVal = CHI[ctTarget];
+    const ctActive = allPillarsChi.includes(ctTarget);
+
+    // 15. Quả Tú (Niên chi)
+    const qtVal = CHI[qtTarget];
+    const qtActive = allPillarsChi.includes(qtTarget);
+
+    // 16. Thiên La / Địa Võng
+    const tldvName = isMale ? "Thiên La" : "Địa Võng";
+    const tldvTargets = isMale ? [4, 5] : [10, 11];
+    const tldvVal = isMale ? "Thìn, Tỵ" : "Tuất, Hợi";
+    const tldvActive = allPillarsChi.some(c => tldvTargets.includes(c));
+
+    // 17. Không Vong (Tuần Không của Trụ Ngày)
+    const kv1 = (chiNgay - canNgay + 22) % 12;
+    const kv2 = (chiNgay - canNgay + 23) % 12;
+    const kvVal = `${CHI[kv1]}, ${CHI[kv2]}`;
+    const kvActive = allPillarsChi.some(c => c === kv1 || c === kv2);
+
+    // 18. Tứ Phế (theo tháng sinh)
+    let tpPairs = [];
+    let tpVal = "-";
+    if ([2, 3].includes(chiThang)) { tpPairs = ["6-8", "7-9"]; tpVal = "Canh Thân, Tân Dậu"; }
+    else if ([5, 6].includes(chiThang)) { tpPairs = ["8-0", "9-11"]; tpVal = "Nhâm Tý, Quý Hợi"; }
+    else if ([8, 9].includes(chiThang)) { tpPairs = ["0-2", "1-3"]; tpVal = "Giáp Dần, Ất Mão"; }
+    else if ([11, 0].includes(chiThang)) { tpPairs = ["2-6", "3-5"]; tpVal = "Bính Ngọ, Đinh Tỵ"; }
+    else { tpPairs = []; tpVal = "Không có"; }
+    const tpActive = tpPairs.some(p => allPillarPairs.includes(p));
+
+    // 19. Khôi Cương (Canh Thìn, Canh Tuất, Nhâm Thìn, Mậu Tuất)
+    const kcPairs = ["6-4", "6-10", "8-4", "4-10"];
+    const kcVal = "Thìn, Tuất";
+    const kcActive = kcPairs.some(p => allPillarPairs.includes(p));
+
+    // 20. Âm Soa Dương Thác (Xét trụ ngày)
+    const amThacPairs = [
+      "2-0", "2-6", "3-1", "3-7", "4-2", "4-8",
+      "7-3", "7-9", "8-4", "8-10", "9-5", "9-11"
+    ];
+    const dayPair = `${canNgay}-${chiNgay}`;
+    const adtActive = amThacPairs.includes(dayPair);
+    const adtVal = adtActive ? "Trụ Ngày" : "Không phạm";
+
+    return [
+      // Hàng 1 (10 Tinh Sát Cát & Phong Thái):
+      { id: "qn", name: "Quý Nhân", val: qnVal, isActive: qnActive },
+      { id: "lt", name: "Lộc Thần", val: ltVal, isActive: ltActive },
+      { id: "dn", name: "Dương Nhận", val: dnVal, isActive: dnActive },
+      { id: "vx", name: "Văn Xương", val: vxVal, isActive: vxActive },
+      { id: "hd", name: "Học Đường", val: hdVal, isActive: hdActive },
+      { id: "tt", name: "Tướng Tinh", val: ttVal, isActive: ttActive },
+      { id: "dh", name: "Đào Hoa", val: dhVal, isActive: dhActive },
+      { id: "dm", name: "Dịch Mã", val: dmVal, isActive: dmActive },
+      { id: "hc", name: "Hoa Cái", val: hcVal, isActive: hcActive },
+      { id: "th", name: "Thiên Hỉ", val: thVal, isActive: thActive },
+
+      // Hàng 2 (10 Tinh Sát Hung, Hạn & Tổ Hợp Đặc Thù):
+      { id: "ks", name: "Kiếp Sát", val: ksVal, isActive: ksActive },
+      { id: "ts", name: "Tai Sát", val: tsVal, isActive: tsActive },
+      { id: "ty", name: "Thiên Y", val: tyVal, isActive: tyActive },
+      { id: "ct", name: "Cô Thần", val: ctVal, isActive: ctActive },
+      { id: "qt", name: "Quả Tú", val: qtVal, isActive: qtActive },
+      { id: "tldv", name: tldvName, val: tldvVal, isActive: tldvActive },
+      { id: "kv", name: "Không Vong", val: kvVal, isActive: kvActive },
+      { id: "tp", name: "Tứ Phế", val: tpVal, isActive: tpActive },
+      { id: "kc", name: "Khôi Cương", val: kcVal, isActive: kcActive },
+      { id: "adt", name: "Âm Dương Thác", val: adtVal, isActive: adtActive }
+    ];
+  }
+
+  // ==========================================
   // VI.B. VÒNG TRƯỜNG SINH, THAI NGUYÊN, MỆNH CUNG, KHÔNG VONG
   // ==========================================
   const TRUONG_SINH_NAMES = [
@@ -1857,6 +2045,15 @@
     const diaChiLienList = analyzeDiaChiLien(chiNam, chiThang, chiNgay, chiGio);
     const vuongSuyInfo = calculateStemVuongSuy(canNam, canThang, canNgay, canGio, chiThang);
 
+    // 10.B. Tổng hợp 20 Tinh Sát Toàn Cục (Chu Thần Bân)
+    const full20TinhSat = calculateAll20TinhSat({
+      canNam, chiNam,
+      canThang, chiThang,
+      canNgay, chiNgay,
+      canGio, chiGio,
+      gender
+    });
+
     // 11. Thống kê Ngũ Hành trên 8 chữ nguyên cục
     const elementCounts = { "Kim": 0, "Mộc": 0, "Thủy": 0, "Hỏa": 0, "Thổ": 0 };
     [canNam, canThang, canNgay, canGio].forEach(c => elementCounts[ELEMENT_NAMES[NGU_HANH_CAN[c]]]++);
@@ -2006,7 +2203,8 @@
         khuyetList,
         vuongSuy: vuongSuyInfo
       },
-      vuongSuy: vuongSuyInfo
+      vuongSuy: vuongSuyInfo,
+      full20TinhSat
     };
   }
 
@@ -2036,6 +2234,7 @@
     isHoaSonKhac,
     calculateThanSat,
     calculateChuThanBanTinhSat,
+    calculateAll20TinhSat,
     getTruongSinh,
     calculateThaiNguyen,
     calculateMenhCung,

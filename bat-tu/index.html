@@ -67,14 +67,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=7.2">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=7.3">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=7.2"></script>
+  <script src="/bat-tu/bazi-engine.js?v=7.3"></script>
 
   <script>
     // Tự động kiểm tra và cập nhật Service Worker, xóa cache cũ ngay tức thì
@@ -438,14 +438,6 @@
                   <td class="col-cell" id="res-vs-can-ngay">-</td>
                   <td class="col-cell" id="res-vs-can-gio">-</td>
                 </tr>
-                <!-- Hàng 6: Tinh Sát (Chu Thần Bân) -->
-                <tr>
-                  <td class="col-title"><div class="title-split"><span>TINH</span><span>SÁT</span></div></td>
-                  <td class="col-cell cell-tinhsat" id="res-ts-nam">-</td>
-                  <td class="col-cell cell-tinhsat" id="res-ts-thang">-</td>
-                  <td class="col-cell cell-tinhsat cell-nhat-chu-col" id="res-ts-ngay">-</td>
-                  <td class="col-cell cell-tinhsat" id="res-ts-gio">-</td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -518,6 +510,41 @@
                   <td class="tc-cell tc-vs" id="res-tc-vs-7">-</td>
                   <td class="tc-cell tc-vs" id="res-tc-vs-8">-</td>
                   <td class="tc-cell tc-vs" id="res-tc-vs-9">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- BẢNG 20 TINH SÁT TOÀN CỤC (CHU THẦN BÂN) -->
+          <div class="bazi-table-responsive table-tinhsat-box">
+            <table class="tinh-sat-table" id="res-tinhsat-table">
+              <tbody>
+                <tr>
+                  <td class="col-title-vertical" rowspan="2">
+                    <div class="title-split"><span>TINH</span><span>SÁT</span></div>
+                  </td>
+                  <td class="ts-cell" id="res-ts-cell-0"><div class="ts-name">Quý Nhân</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-1"><div class="ts-name">Lộc Thần</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-2"><div class="ts-name">Dương Nhận</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-3"><div class="ts-name">Văn Xương</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-4"><div class="ts-name">Học Đường</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-5"><div class="ts-name">Tướng Tinh</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-6"><div class="ts-name">Đào Hoa</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-7"><div class="ts-name">Dịch Mã</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-8"><div class="ts-name">Hoa Cái</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-9"><div class="ts-name">Thiên Hỉ</div><div class="ts-val">-</div></td>
+                </tr>
+                <tr>
+                  <td class="ts-cell" id="res-ts-cell-10"><div class="ts-name">Kiếp Sát</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-11"><div class="ts-name">Tai Sát</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-12"><div class="ts-name">Thiên Y</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-13"><div class="ts-name">Cô Thần</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-14"><div class="ts-name">Quả Tú</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-15"><div class="ts-name">Thiên La</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-16"><div class="ts-name">Không Vong</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-17"><div class="ts-name">Tứ Phế</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-18"><div class="ts-name">Khôi Cương</div><div class="ts-val">-</div></td>
+                  <td class="ts-cell" id="res-ts-cell-19"><div class="ts-name">Âm Dương Thác</div><div class="ts-val">-</div></td>
                 </tr>
               </tbody>
             </table>
@@ -796,6 +823,9 @@
         if (u.get("y")) document.getElementById("bazi-year").value = u.get("y");
         if (u.get("time")) document.getElementById("bazi-time").value = u.get("time");
         if (u.get("g")) document.getElementById("bazi-gender").value = u.get("g");
+        if (u.get("cd")) document.getElementById("bazi-calc-day").value = u.get("cd");
+        if (u.get("cm")) document.getElementById("bazi-calc-month").value = u.get("cm");
+        if (u.get("cy")) document.getElementById("bazi-calc-year").value = u.get("cy");
         setTimeout(() => runBaziCalculation(new Event("submit")), 150);
       }
 
@@ -925,21 +955,23 @@
           }
         }
 
-        // Hàng 6: Tinh Sát (18 Tinh Sát & Tuần Không Chu Thần Bân)
-        const renderTinhSatCell = (elId, list) => {
-          const el = document.getElementById(elId);
-          if (!el) return;
-          const cleanList = Array.from(new Set(list || []));
-          if (cleanList.length === 0) {
-            el.innerHTML = '<span class="tinhsat-empty">-</span>';
-            return;
-          }
-          el.innerHTML = `<div class="tinhsat-box">${cleanList.map(s => `<span class="tinhsat-tag">${s}</span>`).join('')}</div>`;
-        };
-        renderTinhSatCell("res-ts-nam", p.year.tinhSat || p.year.thanSat);
-        renderTinhSatCell("res-ts-thang", p.month.tinhSat || p.month.thanSat);
-        renderTinhSatCell("res-ts-ngay", p.day.tinhSat || p.day.thanSat);
-        renderTinhSatCell("res-ts-gio", p.hour.tinhSat || p.hour.thanSat);
+        // Bảng 20 Tinh Sát Toàn Cục (Chu Thần Bân) - 2 hàng x 10 cột
+        if (res.full20TinhSat && res.full20TinhSat.length === 20) {
+          res.full20TinhSat.forEach((item, idx) => {
+            const cell = document.getElementById(`res-ts-cell-${idx}`);
+            if (cell) {
+              if (item.isActive) {
+                cell.classList.add("is-active");
+              } else {
+                cell.classList.remove("is-active");
+              }
+              const nameEl = cell.querySelector(".ts-name");
+              const valEl = cell.querySelector(".ts-val");
+              if (nameEl) nameEl.textContent = item.name;
+              if (valEl) valEl.textContent = item.val || "-";
+            }
+          });
+        }
 
         // Render thông tin tính đại vận (Ảnh 1)
         const dvInfo = res.daiVan;

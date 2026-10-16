@@ -1403,7 +1403,7 @@ input[type="time"].form-input,
    3. BẢNG 10 THIÊN CAN (VƯỢNG SUY)
    ========================================================================== */
 .table-thiencan-box {
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
 .thien-can-table {
@@ -1444,6 +1444,89 @@ input[type="time"].form-input,
   color: #1E293B;
   line-height: 1.25;
   padding: 5px 1px;
+}
+
+/* ==========================================================================
+   4. BẢNG 20 TINH SÁT TOÀN CỤC (CHU THẦN BÂN)
+   ========================================================================== */
+.table-tinhsat-box {
+  margin-bottom: 14px;
+}
+
+.tinh-sat-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  background: #FEF6E8;
+  border: 1.5px solid #3B82F6;
+  table-layout: fixed;
+}
+
+.tinh-sat-table td {
+  border: 1px solid #93C5FD;
+  vertical-align: middle;
+  background: #FEF6E8;
+  padding: 6px 1px;
+}
+
+.tinh-sat-table td.col-title-vertical {
+  width: 5.6%;
+  background: #FEF6E8;
+  font-weight: 700;
+  color: #1E293B;
+  text-align: center;
+  vertical-align: middle;
+  padding: 6px 1px;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.tinh-sat-table td.ts-cell {
+  width: 9.44%;
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 6px 1px;
+  background: #FEF6E8;
+  transition: all 0.2s ease;
+}
+
+.tinh-sat-table .ts-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tinh-sat-table .ts-val {
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: #64748B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 3px;
+}
+
+/* PHƯƠNG ÁN A: Tinh Sát có mặt trong Bát Tự (Active Pastel Amber Tint) */
+.tinh-sat-table td.ts-cell.is-active {
+  background-color: #FEF3C7 !important; /* Vàng hổ phách pastel nhã nhặn */
+}
+
+.tinh-sat-table td.ts-cell.is-active .ts-name {
+  color: #92400E !important; /* Nâu hổ phách đậm quý tộc */
+  font-weight: 800;
+}
+
+.tinh-sat-table td.ts-cell.is-active .ts-val {
+  color: #B45309 !important; /* Hổ phách ấm */
+  font-weight: 600;
 }
 
 /* Chân bảng Lá Số / Footer Sheet */

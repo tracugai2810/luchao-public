@@ -1087,65 +1087,205 @@
   }
 
   // ==========================================
-  // VI. THẦN SÁT & KHÔNG VONG
+  // VI. THẦN SÁT (TINH SÁT) & TUẦN KHÔNG (CHU THẦN BÂN - CHƯƠNG 23 & 18)
   // ==========================================
-  function calculateThanSat(canNgay, canNam, chiNgay, chiNam, targetChi) {
+  /**
+   * Tính Tinh Sát (Thần Sát) chuẩn 100% theo sách Bát Tự Chu Thần Bân:
+   * Gồm đúng 18 Tinh Sát thực dụng nhất + Tuần Không (Không Vong) theo Nhật trụ.
+   */
+  function calculateChuThanBanTinhSat(params) {
+    const {
+      canNgay, chiNgay,
+      canNam, chiNam,
+      canThang, chiThang,
+      gender = "nam",
+      targetCan, targetChi,
+      pillarType // "year" | "month" | "day" | "hour" | "daivan" | "luunien"
+    } = params;
+
     const list = [];
 
-    // 1. Không Vong (tính theo Nhật trụ và Niên trụ)
-    // kv1 = (chi - can + 10 + 12) % 12, kv2 = (chi - can + 11 + 12) % 12
-    const kvNgay1 = (chiNgay - canNgay + 22) % 12;
-    const kvNgay2 = (chiNgay - canNgay + 23) % 12;
-    if (targetChi === kvNgay1 || targetChi === kvNgay2) {
-      list.push("Không Vong");
-    }
-
-    // 2. Lộc Thần & Dương Nhận (theo Nhật Can)
-    const LOC_THAN = [2, 3, 5, 6, 5, 6, 8, 9, 11, 0];
-    const DUONG_NHAN = [3, 2, 6, 5, 6, 5, 9, 8, 0, 11];
-    if (targetChi === LOC_THAN[canNgay]) list.push("Lộc Thần");
-    if (targetChi === DUONG_NHAN[canNgay]) list.push("Dương Nhận");
-
-    // 3. Thiên Ất Quý Nhân (theo Nhật Can & Niên Can)
-    const THIEN_AT = {
-      0: [1, 7], 4: [1, 7], 6: [1, 7], // Giáp Mậu Canh: Sửu Mùi
-      1: [0, 8], 5: [0, 8],             // Ất Kỷ: Tý Thân
-      2: [11, 9], 3: [11, 9],           // Bính Đinh: Hợi Dậu
-      8: [3, 5], 9: [3, 5],             // Nhâm Quý: Mão Tỵ
-      7: [2, 6]                         // Tân: Dần Ngọ
+    // 1. Quý Nhân (Thiên Ất Quý Nhân) - Chu Thần Bân trang 338:
+    // "Giáp Mậu tịnh ngưu dương (Sửu: 1, Mùi: 7)
+    //  Ất Kỷ chuột khỉ hương (Tý: 0, Thân: 8)
+    //  Bính Đinh heo gà vị (Hợi: 11, Dậu: 9)
+    //  Nhâm Quý thỏ rắn tàng (Mão: 3, Tỵ: 5)
+    //  Canh Tân gặp mã hổ (Ngọ: 6, Dần: 2)"
+    const QUI_NHAN = {
+      0: [1, 7], 4: [1, 7], // Giáp, Mậu -> Sửu, Mùi
+      1: [0, 8], 5: [0, 8], // Ất, Kỷ -> Tý, Thân
+      2: [11, 9], 3: [11, 9], // Bính, Đinh -> Hợi, Dậu
+      6: [6, 2], 7: [6, 2], // Canh, Tân -> Ngọ, Dần
+      8: [3, 5], 9: [3, 5]  // Nhâm, Quý -> Mão, Tỵ
     };
-    if (THIEN_AT[canNgay]?.includes(targetChi) || THIEN_AT[canNam]?.includes(targetChi)) {
-      list.push("Thiên Ất");
+    if (QUI_NHAN[canNgay] && QUI_NHAN[canNgay].includes(targetChi)) {
+      list.push("Quý Nhân");
     }
 
-    // 4. Văn Xương Quý Nhân (theo Nhật Can & Niên Can)
+    // 2. Thực Lộc (Lộc Thần) - Chu Thần Bân trang 339:
+    const LOC_THAN = [2, 3, 5, 6, 5, 6, 8, 9, 11, 0];
+    if (targetChi === LOC_THAN[canNgay]) {
+      list.push("Lộc Thần");
+    }
+
+    // 3. Dương Nhận - Chu Thần Bân trang 340:
+    // Dương can vượng tại Lâm Quan tiến 1 (Đế vượng); Âm can nghịch lùi:
+    // Giáp: Mão (3), Ất: Dần (2), Bính/Mậu: Ngọ (6), Đinh/Kỷ: Tỵ (5),
+    // Canh: Dậu (9), Tân: Thân (8), Nhâm: Tý (0), Quý: Hợi (11)
+    const DUONG_NHAN = [3, 2, 6, 5, 6, 5, 9, 8, 0, 11];
+    if (targetChi === DUONG_NHAN[canNgay]) {
+      list.push("Dương Nhận");
+    }
+
+    // 4. Văn Xương - Chu Thần Bân trang 346:
+    // Giáp: Tỵ (5), Ất: Ngọ (6), Bính/Mậu: Thân (8), Đinh/Kỷ: Dậu (9),
+    // Canh: Hợi (11), Tân: Tý (0), Nhâm: Dần (2), Quý: Mão (3)
     const VAN_XUONG = [5, 6, 8, 9, 8, 9, 11, 0, 2, 3];
-    if (targetChi === VAN_XUONG[canNgay] || targetChi === VAN_XUONG[canNam]) {
+    if (targetChi === VAN_XUONG[canNgay]) {
       list.push("Văn Xương");
     }
 
-    // 5. Đào Hoa, Hoa Cái, Dịch Mã, Tướng Tinh (theo Tam Hợp Niên Chi & Nhật Chi)
-    // Nhóm tam hợp chi:
-    // [8, 0, 4] (Thân Tý Thìn) -> Đào Hoa: Dậu (9), Hoa Cái: Thìn (4), Dịch Mã: Dần (2), Tướng Tinh: Tý (0)
-    // [2, 6, 10] (Dần Ngọ Tuất) -> Đào Hoa: Mão (3), Hoa Cái: Tuất (10), Dịch Mã: Thân (8), Tướng Tinh: Ngọ (6)
-    // [5, 9, 1] (Tỵ Dậu Sửu) -> Đào Hoa: Ngọ (6), Hoa Cái: Sửu (1), Dịch Mã: Hợi (11), Tướng Tinh: Dậu (9)
-    // [11, 3, 7] (Hợi Mão Mùi) -> Đào Hoa: Tý (0), Hoa Cái: Mùi (7), Dịch Mã: Tỵ (5), Tướng Tinh: Mão (3)
-    const checkTamHopGroup = (baseChi) => {
-      if ([8, 0, 4].includes(baseChi)) return { daoHoa: 9, hoaCai: 4, dichMa: 2, tuongTinh: 0 };
-      if ([2, 6, 10].includes(baseChi)) return { daoHoa: 3, hoaCai: 10, dichMa: 8, tuongTinh: 6 };
-      if ([5, 9, 1].includes(baseChi)) return { daoHoa: 6, hoaCai: 1, dichMa: 11, tuongTinh: 9 };
-      return { daoHoa: 0, hoaCai: 7, dichMa: 5, tuongTinh: 3 };
+    // 5. Học Đường - Chu Thần Bân trang 346:
+    // Vị trí trường sinh theo ngũ hành bản mệnh (Nhật can):
+    // Kim (Canh, Tân): Tỵ (5) | Mộc (Giáp, Ất): Hợi (11)
+    // Thủy (Nhâm, Quý): Thân (8) | Thổ (Mậu, Kỷ): Thân (8) | Hỏa (Bính, Đinh): Dần (2)
+    const HOC_DUONG = [11, 11, 2, 2, 8, 8, 5, 5, 8, 8];
+    if (targetChi === HOC_DUONG[canNgay]) {
+      list.push("Học Đường");
+    }
+
+    // Nhóm Tam Hợp (lấy Niên chi hoặc Nhật chi) - Chu Thần Bân trang 341-345:
+    // 6. Dịch Mã: Thân Tý Thìn -> Dần (2); Tỵ Dậu Sửu -> Hợi (11); Dần Ngọ Tuất -> Thân (8); Hợi Mão Mùi -> Tỵ (5)
+    // 7. Đào Hoa: Thân Tý Thìn -> Dậu (9); Tỵ Dậu Sửu -> Ngọ (6); Dần Ngọ Tuất -> Mão (3); Hợi Mão Mùi -> Tý (0)
+    // 8. Kiếp Sát: Thân Tý Thìn -> Tỵ (5); Tỵ Dậu Sửu -> Dần (2); Dần Ngọ Tuất -> Hợi (11); Hợi Mão Mùi -> Thân (8)
+    // 9. Tai Sát: Thân Tý Thìn -> Ngọ (6); Tỵ Dậu Sửu -> Mão (3); Dần Ngọ Tuất -> Tý (0); Hợi Mão Mùi -> Dậu (9)
+    // 10. Hoa Cái: Thân Tý Thìn -> Thìn (4); Tỵ Dậu Sửu -> Sửu (1); Dần Ngọ Tuất -> Tuất (10); Hợi Mão Mùi -> Mùi (7)
+    // 11. Tướng Tinh: Thân Tý Thìn -> Tý (0); Tỵ Dậu Sửu -> Dậu (9); Dần Ngọ Tuất -> Ngọ (6); Hợi Mão Mùi -> Mão (3)
+    const getTamHopGroup = (baseChi) => {
+      if ([8, 0, 4].includes(baseChi)) return { ma: 2, daoHoa: 9, kiepSat: 5, taiSat: 6, hoaCai: 4, tuongTinh: 0 };
+      if ([5, 9, 1].includes(baseChi)) return { ma: 11, daoHoa: 6, kiepSat: 2, taiSat: 3, hoaCai: 1, tuongTinh: 9 };
+      if ([2, 6, 10].includes(baseChi)) return { ma: 8, daoHoa: 3, kiepSat: 11, taiSat: 0, hoaCai: 10, tuongTinh: 6 };
+      return { ma: 5, daoHoa: 0, kiepSat: 8, taiSat: 9, hoaCai: 7, tuongTinh: 3 };
     };
 
-    [chiNam, chiNgay].forEach(bc => {
-      const g = checkTamHopGroup(bc);
-      if (targetChi === g.daoHoa && !list.includes("Đào Hoa")) list.push("Đào Hoa");
-      if (targetChi === g.hoaCai && !list.includes("Hoa Cái")) list.push("Hoa Cái");
-      if (targetChi === g.dichMa && !list.includes("Dịch Mã")) list.push("Dịch Mã");
-      if (targetChi === g.tuongTinh && !list.includes("Tướng Tinh")) list.push("Tướng Tinh");
+    const bases = [chiNam, chiNgay];
+    let hasMa = false, hasDaoHoa = false, hasKiepSat = false, hasTaiSat = false, hasHoaCai = false, hasTuongTinh = false;
+    bases.forEach(bc => {
+      const g = getTamHopGroup(bc);
+      if (targetChi === g.ma) hasMa = true;
+      if (targetChi === g.daoHoa) hasDaoHoa = true;
+      if (targetChi === g.kiepSat) hasKiepSat = true;
+      if (targetChi === g.taiSat) hasTaiSat = true;
+      if (targetChi === g.hoaCai) hasHoaCai = true;
+      if (targetChi === g.tuongTinh) hasTuongTinh = true;
     });
 
+    if (hasMa) list.push("Dịch Mã");
+    if (hasDaoHoa) list.push("Đào Hoa");
+    if (hasKiepSat) list.push("Kiếp Sát");
+    if (hasTaiSat) list.push("Tai Sát");
+    if (hasHoaCai) list.push("Hoa Cái");
+    if (hasTuongTinh) list.push("Tướng Tinh");
+
+    // 12. Thiên Y - Chu Thần Bân trang 347: Nguyệt lệnh lùi 1 cung
+    const thienYChi = (chiThang - 1 + 12) % 12;
+    if (targetChi === thienYChi) {
+      list.push("Thiên Y");
+    }
+
+    // 13. Thiên Hỉ - Chu Thần Bân trang 347: Thổ lệnh của mùa trực xung
+    let thienHiChi = -1;
+    if ([2, 3, 4].includes(chiThang)) thienHiChi = 10;       // Mùa Xuân -> Tuất (10)
+    else if ([5, 6, 7].includes(chiThang)) thienHiChi = 1;  // Mùa Hạ -> Sửu (1)
+    else if ([8, 9, 10].includes(chiThang)) thienHiChi = 4; // Mùa Thu -> Thìn (4)
+    else thienHiChi = 7;                                     // Mùa Đông -> Mùi (7)
+    if (targetChi === thienHiChi) {
+      list.push("Thiên Hỉ");
+    }
+
+    // 14. Cô Thần, Quả Tú - Chu Thần Bân trang 348:
+    // Hợi Tý Sửu -> Cô tại Dần (2), Quả tại Tuất (10)
+    // Dần Mão Thìn -> Cô tại Tỵ (5), Quả tại Sửu (1)
+    // Tỵ Ngọ Mùi -> Cô tại Thân (8), Quả tại Thìn (4)
+    // Thân Dậu Tuất -> Cô tại Hợi (11), Quả tại Mùi (7)
+    let coThanChi = -1, quaTuChi = -1;
+    if ([11, 0, 1].includes(chiNam)) { coThanChi = 2; quaTuChi = 10; }
+    else if ([2, 3, 4].includes(chiNam)) { coThanChi = 5; quaTuChi = 1; }
+    else if ([5, 6, 7].includes(chiNam)) { coThanChi = 8; quaTuChi = 4; }
+    else { coThanChi = 11; quaTuChi = 7; }
+
+    if (targetChi === coThanChi) list.push("Cô Thần");
+    if (targetChi === quaTuChi) list.push("Quả Tú");
+
+    // 15. Thiên La, Địa Võng - Chu Thần Bân trang 350:
+    // Nam mệnh trong trụ gặp Thìn (4), Tỵ (5) là Thiên La
+    // Nữ mệnh trong trụ gặp Tuất (10), Hợi (11) là Địa Võng
+    const isMale = (gender === "nam" || gender === "Nam" || gender === "male");
+    if (isMale) {
+      if (targetChi === 4 || targetChi === 5) list.push("Thiên La");
+    } else {
+      if (targetChi === 10 || targetChi === 11) list.push("Địa Võng");
+    }
+
+    // 16. Âm Soa Dương Thác - Chu Thần Bân trang 349:
+    // Xét tại Trụ Ngày mang 1 trong 12 cặp Can Chi
+    if (pillarType === "day") {
+      const amThacList = [
+        "2-0", "2-6",   // Bính Tý, Bính Ngọ
+        "3-1", "3-7",   // Đinh Sửu, Đinh Mùi
+        "4-2", "4-8",   // Mậu Dần, Mậu Thân
+        "7-3", "7-9",   // Tân Mão, Tân Dậu
+        "8-4", "8-10",  // Nhâm Thìn, Nhâm Tuất
+        "9-5", "9-11"   // Quý Tỵ, Quý Hợi
+      ];
+      if (amThacList.includes(`${targetCan}-${targetChi}`)) {
+        list.push("Âm Dương Thác");
+      }
+    }
+
+    // 17. Khôi Cương - Chu Thần Bân trang 349:
+    // Xuất hiện trong 4 trụ: Canh Thìn (6-4), Canh Tuất (6-10), Nhâm Thìn (8-4), Mậu Tuất (4-10)
+    const khoiCuongList = ["6-4", "6-10", "8-4", "4-10"];
+    if (khoiCuongList.includes(`${targetCan}-${targetChi}`)) {
+      list.push("Khôi Cương");
+    }
+
+    // 18. Tứ Phế - Chu Thần Bân trang 350:
+    // Sinh tháng Dần, Mão (2, 3): gặp Canh Thân (6-8), Tân Dậu (7-9)
+    // Sinh tháng Tỵ, Ngọ (5, 6): gặp Nhâm Tý (8-0), Quý Hợi (9-11)
+    // Sinh tháng Thân, Dậu (8, 9): gặp Giáp Dần (0-2), Ất Mão (1-3)
+    // Sinh tháng Hợi, Tý (11, 0): gặp Bính Ngọ (2-6), Đinh Tỵ (3-5)
+    let isTuPhe = false;
+    const pairStr = `${targetCan}-${targetChi}`;
+    if ([2, 3].includes(chiThang) && (pairStr === "6-8" || pairStr === "7-9")) isTuPhe = true;
+    else if ([5, 6].includes(chiThang) && (pairStr === "8-0" || pairStr === "9-11")) isTuPhe = true;
+    else if ([8, 9].includes(chiThang) && (pairStr === "0-2" || pairStr === "1-3")) isTuPhe = true;
+    else if ([11, 0].includes(chiThang) && (pairStr === "2-6" || pairStr === "3-5")) isTuPhe = true;
+    if (isTuPhe) {
+      list.push("Tứ Phế");
+    }
+
+    // 19. Tuần Không (Không Vong) - Chu Thần Bân Chương 18 (trang 278):
+    // Lấy Nhật Trụ làm chủ thể duy nhất để tính toán Tuần Không
+    const kv1 = (chiNgay - canNgay + 22) % 12;
+    const kv2 = (chiNgay - canNgay + 23) % 12;
+    if (targetChi === kv1 || targetChi === kv2) {
+      list.push("Không Vong");
+    }
+
     return list;
+  }
+
+  // Wrapper tương thích ngược
+  function calculateThanSat(canNgay, canNam, chiNgay, chiNam, targetChi) {
+    return calculateChuThanBanTinhSat({
+      canNgay, chiNgay,
+      canNam, chiNam,
+      canThang: 0, chiThang: 0,
+      gender: "nam",
+      targetCan: 0, targetChi,
+      pillarType: "other"
+    });
   }
 
   // ==========================================
@@ -1505,11 +1645,11 @@
     const cclNgay = checkCanChiLien(canNgay, chiNgay);
     const cclGio = checkCanChiLien(canGio, chiGio);
 
-    // Thần Sát
-    const tsNam = calculateThanSat(canNgay, canNam, chiNgay, chiNam, chiNam);
-    const tsThang = calculateThanSat(canNgay, canNam, chiNgay, chiNam, chiThang);
-    const tsNgay = calculateThanSat(canNgay, canNam, chiNgay, chiNam, chiNgay);
-    const tsGio = calculateThanSat(canNgay, canNam, chiNgay, chiNam, chiGio);
+    // Thần Sát (Tinh Sát Chu Thần Bân - Chương 23 & 18)
+    const tsNam = calculateChuThanBanTinhSat({ canNgay, chiNgay, canNam, chiNam, canThang, chiThang, gender, targetCan: canNam, targetChi: chiNam, pillarType: "year" });
+    const tsThang = calculateChuThanBanTinhSat({ canNgay, chiNgay, canNam, chiNam, canThang, chiThang, gender, targetCan: canThang, targetChi: chiThang, pillarType: "month" });
+    const tsNgay = calculateChuThanBanTinhSat({ canNgay, chiNgay, canNam, chiNam, canThang, chiThang, gender, targetCan: canNgay, targetChi: chiNgay, pillarType: "day" });
+    const tsGio = calculateChuThanBanTinhSat({ canNgay, chiNgay, canNam, chiNam, canThang, chiThang, gender, targetCan: canGio, targetChi: chiGio, pillarType: "hour" });
 
     // Nạp Âm 4 Trụ
     const getNapAm = (can, chi) => {
@@ -1766,7 +1906,8 @@
           truongSinh: tsSinhNam,
           napAm: napAmNam,
           canChiLien: cclNam,
-          thanSat: tsNam
+          thanSat: tsNam,
+          tinhSat: tsNam
         },
         month: {
           label: "THÁNG",
@@ -1784,7 +1925,8 @@
           truongSinh: tsSinhThang,
           napAm: napAmThang,
           canChiLien: cclThang,
-          thanSat: tsThang
+          thanSat: tsThang,
+          tinhSat: tsThang
         },
         day: {
           label: "NGÀY",
@@ -1802,7 +1944,8 @@
           truongSinh: tsSinhNgay,
           napAm: napAmNgay,
           canChiLien: cclNgay,
-          thanSat: tsNgay
+          thanSat: tsNgay,
+          tinhSat: tsNgay
         },
         hour: {
           label: "GIỜ",
@@ -1820,7 +1963,8 @@
           truongSinh: tsSinhGio,
           napAm: napAmGio,
           canChiLien: cclGio,
-          thanSat: tsGio
+          thanSat: tsGio,
+          tinhSat: tsGio
         }
       },
       daiVan: {
@@ -1887,6 +2031,7 @@
     isHoaSonSinh,
     isHoaSonKhac,
     calculateThanSat,
+    calculateChuThanBanTinhSat,
     getTruongSinh,
     calculateThaiNguyen,
     calculateMenhCung,

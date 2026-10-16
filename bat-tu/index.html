@@ -67,14 +67,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=6.5">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=7.0">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=6.5"></script>
+  <script src="/bat-tu/bazi-engine.js?v=7.0"></script>
 
   <script>
     // Tự động kiểm tra và cập nhật Service Worker, xóa cache cũ ngay tức thì
@@ -437,6 +437,14 @@
                   <td class="col-cell" id="res-vs-can-thang">-</td>
                   <td class="col-cell" id="res-vs-can-ngay">-</td>
                   <td class="col-cell" id="res-vs-can-gio">-</td>
+                </tr>
+                <!-- Hàng 6: Tinh Sát (Chu Thần Bân) -->
+                <tr>
+                  <td class="col-title"><div class="title-split"><span>TINH</span><span>SÁT</span></div></td>
+                  <td class="col-cell cell-tinhsat" id="res-ts-nam">-</td>
+                  <td class="col-cell cell-tinhsat" id="res-ts-thang">-</td>
+                  <td class="col-cell cell-tinhsat cell-nhat-chu-col" id="res-ts-ngay">-</td>
+                  <td class="col-cell cell-tinhsat" id="res-ts-gio">-</td>
                 </tr>
               </tbody>
             </table>
@@ -916,6 +924,21 @@
             });
           }
         }
+
+        // Hàng 6: Tinh Sát (18 Tinh Sát & Tuần Không Chu Thần Bân)
+        const renderTinhSatCell = (elId, list) => {
+          const el = document.getElementById(elId);
+          if (!el) return;
+          if (!list || list.length === 0) {
+            el.innerHTML = '<span class="tinhsat-empty">-</span>';
+            return;
+          }
+          el.innerHTML = `<div class="tinhsat-box">${list.map(s => `<span class="tinhsat-tag">${s}</span>`).join('')}</div>`;
+        };
+        renderTinhSatCell("res-ts-nam", p.year.tinhSat || p.year.thanSat);
+        renderTinhSatCell("res-ts-thang", p.month.tinhSat || p.month.thanSat);
+        renderTinhSatCell("res-ts-ngay", p.day.tinhSat || p.day.thanSat);
+        renderTinhSatCell("res-ts-gio", p.hour.tinhSat || p.hour.thanSat);
 
         // Render thông tin tính đại vận (Ảnh 1)
         const dvInfo = res.daiVan;

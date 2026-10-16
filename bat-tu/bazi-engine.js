@@ -1542,7 +1542,7 @@
     let tietKhiRangeText = "";
     let jieQiInfoText = "";
 
-    const birthUtcMs = Date.UTC(solarYear, solarMonth - 1, solarDay, effHour, effMinute) - (timeZone * 3600000);
+    const birthUtcMs = Date.UTC(effYear, effMonth - 1, effDay, effHour, effMinute) - (timeZone * 3600000);
 
     if (pillars.prevJieQiObj && pillars.nextJieQiObj) {
       const jqTarget = direction === 1 ? pillars.nextJieQiObj : pillars.prevJieQiObj;

@@ -1583,7 +1583,8 @@
     const startSolarYear = startDateObj.getFullYear();
     const startSolarDateStr = `${String(startSolarDay).padStart(2, '0')}/${String(startSolarMonth).padStart(2, '0')}/${startSolarYear}`;
 
-    const startAgeDisplay = startMonths >= 6 ? startYears + 1 : Math.max(1, startYears);
+    // Chuẩn Chu Thần Bân (Chương 21, tr. 318): "Tuế là một năm tròn", mỗi 10 năm chuyển một vận
+    const baseStartAge = startYears;
 
     // Lập 10 Cột Đại Vận
     const daiVanList = [];
@@ -1591,9 +1592,9 @@
     for (let i = 1; i <= 10; i++) {
       const dvCan = (canThang + i * direction + 100) % 10;
       const dvChi = (chiThang + i * direction + 120) % 12;
-      const ageFrom = startAgeDisplay + (i - 1) * 10;
+      const ageFrom = baseStartAge + (i - 1) * 10;
       const ageTo = ageFrom + 9;
-      const solarYearStart = solarYear + (ageFrom - 1);
+      const solarYearStart = startSolarYear + (i - 1) * 10;
 
       const ttCan = THAP_THAN_THIEN_CAN[canNgay][dvCan];
       const ttChi = THAP_THAN_DIA_CHI[canNgay][dvChi];
@@ -1827,7 +1828,7 @@
       },
       daiVan: {
         jieQiInfoText,
-        startAgeDisplay,
+        startAgeDisplay: baseStartAge,
         soTinhDaiVan: soTinhDaiVanStr,
         startYears,
         startMonths,

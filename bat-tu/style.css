@@ -1077,35 +1077,41 @@ input[type="time"].form-input,
   text-transform: uppercase; /* In hoa toàn bộ chữ Bát Tự */
 }
 
-/* Hàng Tinh Sát (Chu Thần Bân) trong Bảng Tứ Trụ - Đồng nhất font, không bôi màu */
+/* Hàng Tinh Sát (Chu Thần Bân) trong Bảng Tứ Trụ - Xếp trên dưới, đồng nhất kích cỡ & khoảng cách */
 .bazi-main-table .cell-tinhsat {
-  padding: 8px 3px;
+  padding: 14px 4px;
   vertical-align: middle;
+  height: auto;
+  box-sizing: border-box;
 }
 
 .tinhsat-box {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px 6px;
-  line-height: 1.35;
-  padding: 2px;
+  gap: 5px;
+  line-height: 1.25;
+  padding: 0;
+  width: 100%;
 }
 
 .tinhsat-tag {
-  display: inline-block;
-  font-size: 15.5px;
+  display: block;
+  font-size: 19.5px;
   font-weight: 600;
   color: #0F172A;
   letter-spacing: 0.1px;
   white-space: nowrap;
+  word-break: keep-all;
 }
 
 .tinhsat-empty {
   font-size: 19.5px;
   font-weight: 600;
   color: #0F172A;
+  display: block;
+  line-height: 1.25;
 }
 
 /* BẢNG ĐẠI VẬN 10 CỘT */

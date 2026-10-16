@@ -67,7 +67,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=7.0">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=7.1">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
@@ -929,11 +929,12 @@
         const renderTinhSatCell = (elId, list) => {
           const el = document.getElementById(elId);
           if (!el) return;
-          if (!list || list.length === 0) {
+          const cleanList = Array.from(new Set(list || []));
+          if (cleanList.length === 0) {
             el.innerHTML = '<span class="tinhsat-empty">-</span>';
             return;
           }
-          el.innerHTML = `<div class="tinhsat-box">${list.map(s => `<span class="tinhsat-tag">${s}</span>`).join('')}</div>`;
+          el.innerHTML = `<div class="tinhsat-box">${cleanList.map(s => `<span class="tinhsat-tag">${s}</span>`).join('')}</div>`;
         };
         renderTinhSatCell("res-ts-nam", p.year.tinhSat || p.year.thanSat);
         renderTinhSatCell("res-ts-thang", p.month.tinhSat || p.month.thanSat);

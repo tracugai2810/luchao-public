@@ -1432,10 +1432,10 @@
     // 18. Tứ Phế (theo tháng sinh)
     let tpPairs = [];
     let tpVal = "-";
-    if ([2, 3].includes(chiThang)) { tpPairs = ["6-8", "7-9"]; tpVal = "Canh Thân, Tân Dậu"; }
-    else if ([5, 6].includes(chiThang)) { tpPairs = ["8-0", "9-11"]; tpVal = "Nhâm Tý, Quý Hợi"; }
-    else if ([8, 9].includes(chiThang)) { tpPairs = ["0-2", "1-3"]; tpVal = "Giáp Dần, Ất Mão"; }
-    else if ([11, 0].includes(chiThang)) { tpPairs = ["2-6", "3-5"]; tpVal = "Bính Ngọ, Đinh Tỵ"; }
+    if ([2, 3].includes(chiThang)) { tpPairs = ["6-8", "7-9"]; tpVal = "Canh Thân<br>Tân Dậu"; }
+    else if ([5, 6].includes(chiThang)) { tpPairs = ["8-0", "9-11"]; tpVal = "Nhâm Tý<br>Quý Hợi"; }
+    else if ([8, 9].includes(chiThang)) { tpPairs = ["0-2", "1-3"]; tpVal = "Giáp Dần<br>Ất Mão"; }
+    else if ([11, 0].includes(chiThang)) { tpPairs = ["2-6", "3-5"]; tpVal = "Bính Ngọ<br>Đinh Tỵ"; }
     else { tpPairs = []; tpVal = "Không có"; }
     const tpActive = tpPairs.some(p => allPillarPairs.includes(p));
 
@@ -1476,7 +1476,7 @@
       { id: "kv", name: "Không Vong", val: kvVal, isActive: kvActive },
       { id: "tp", name: "Tứ Phế", val: tpVal, isActive: tpActive },
       { id: "kc", name: "Khôi Cương", val: kcVal, isActive: kcActive },
-      { id: "adt", name: "Âm Dương Thác", val: adtVal, isActive: adtActive }
+      { id: "adt", name: "Âm Dương<br>Thác", val: adtVal, isActive: adtActive }
     ];
   }
 

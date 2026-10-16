@@ -1164,15 +1164,14 @@ input[type="time"].form-input,
   background: #E0F2FE !important;
 }
 
-/* Năm Chuyển Vận mà ĐỒNG THỜI là Năm Đang Xét (Xem Hạn) - Gradient Vàng hổ phách chuyển Xanh lam */
-.luu-nien-table td.ln-cell.target-year.transition-year,
-.luu-nien-table td.ln-cell.current-year.transition-year {
-  background: linear-gradient(135deg, #FDE68A 45%, #BAE6FD 100%) !important;
+/* Năm Đang Xét (Xem Hạn) - Màu Vàng hổ phách */
+.luu-nien-table td.ln-cell.target-year {
+  background: #FDE68A !important;
 }
 
-.luu-nien-table td.ln-cell.target-year,
-.luu-nien-table td.ln-cell.current-year {
-  background: #FDE68A !important;
+/* Năm Chuyển Vận mà ĐỒNG THỜI là Năm Đang Xét (Xem Hạn) - Gradient Vàng hổ phách chuyển Xanh lam */
+.luu-nien-table td.ln-cell.target-year.transition-year {
+  background: linear-gradient(135deg, #FDE68A 45%, #BAE6FD 100%) !important;
 }
 
 /* Base stack layout */

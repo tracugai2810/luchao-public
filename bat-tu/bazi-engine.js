@@ -1429,29 +1429,45 @@
     const kvVal = `${CHI[kv1]}, ${CHI[kv2]}`;
     const kvActive = allPillarsChi.some(c => c === kv1 || c === kv2);
 
-    // 18. Tứ Phế (theo tháng sinh)
+    // 18. Tứ Phế (theo tháng sinh: có thì hiển thị Can Chi phạm, không có thì hiển thị '-')
     let tpPairs = [];
+    if ([2, 3].includes(chiThang)) tpPairs = ["6-8", "7-9"]; // Canh Thân, Tân Dậu
+    else if ([5, 6].includes(chiThang)) tpPairs = ["8-0", "9-11"]; // Nhâm Tý, Quý Hợi
+    else if ([8, 9].includes(chiThang)) tpPairs = ["0-2", "1-3"]; // Giáp Dần, Ất Mão
+    else if ([11, 0].includes(chiThang)) tpPairs = ["2-6", "3-5"]; // Bính Ngọ, Đinh Tỵ
+
+    const dayPair = `${canNgay}-${chiNgay}`;
     let tpVal = "-";
-    if ([2, 3].includes(chiThang)) { tpPairs = ["6-8", "7-9"]; tpVal = "Canh Thân<br>Tân Dậu"; }
-    else if ([5, 6].includes(chiThang)) { tpPairs = ["8-0", "9-11"]; tpVal = "Nhâm Tý<br>Quý Hợi"; }
-    else if ([8, 9].includes(chiThang)) { tpPairs = ["0-2", "1-3"]; tpVal = "Giáp Dần<br>Ất Mão"; }
-    else if ([11, 0].includes(chiThang)) { tpPairs = ["2-6", "3-5"]; tpVal = "Bính Ngọ<br>Đinh Tỵ"; }
-    else { tpPairs = []; tpVal = "Không có"; }
-    const tpActive = tpPairs.some(p => allPillarPairs.includes(p));
+    let tpActive = false;
+    if (tpPairs.includes(dayPair)) {
+      tpActive = true;
+      tpVal = `${CAN[canNgay]} ${CHI[chiNgay]}`;
+    } else {
+      const matched = tpPairs.filter(p => allPillarPairs.includes(p));
+      if (matched.length > 0) {
+        tpActive = true;
+        tpVal = matched.map(p => {
+          const [c, ch] = p.split("-").map(Number);
+          return `${CAN[c]} ${CHI[ch]}`;
+        }).join("<br>");
+      } else {
+        tpActive = false;
+        tpVal = "-";
+      }
+    }
 
     // 19. Khôi Cương (Canh Thìn, Canh Tuất, Nhâm Thìn, Mậu Tuất)
     const kcPairs = ["6-4", "6-10", "8-4", "4-10"];
     const kcVal = "Thìn, Tuất";
     const kcActive = kcPairs.some(p => allPillarPairs.includes(p));
 
-    // 20. Âm Soa Dương Thác (Xét trụ ngày)
+    // 20. Âm Soa Dương Thác (Xét trụ ngày: phạm thì điền Can Chi ngày đó, không phạm thì hiển thị '-')
     const amThacPairs = [
       "2-0", "2-6", "3-1", "3-7", "4-2", "4-8",
       "7-3", "7-9", "8-4", "8-10", "9-5", "9-11"
     ];
-    const dayPair = `${canNgay}-${chiNgay}`;
     const adtActive = amThacPairs.includes(dayPair);
-    const adtVal = adtActive ? "Trụ Ngày" : "Không phạm";
+    const adtVal = adtActive ? `${CAN[canNgay]} ${CHI[chiNgay]}` : "-";
 
     return [
       // Hàng 1 (10 Tinh Sát Cát & Phong Thái):

@@ -1154,13 +1154,13 @@
       list.push("Học Đường");
     }
 
-    // Nhóm Tam Hợp (lấy Niên chi hoặc Nhật chi) - Chu Thần Bân trang 341-345:
-    // 6. Dịch Mã: Thân Tý Thìn -> Dần (2); Tỵ Dậu Sửu -> Hợi (11); Dần Ngọ Tuất -> Thân (8); Hợi Mão Mùi -> Tỵ (5)
-    // 7. Đào Hoa: Thân Tý Thìn -> Dậu (9); Tỵ Dậu Sửu -> Ngọ (6); Dần Ngọ Tuất -> Mão (3); Hợi Mão Mùi -> Tý (0)
-    // 8. Kiếp Sát: Thân Tý Thìn -> Tỵ (5); Tỵ Dậu Sửu -> Dần (2); Dần Ngọ Tuất -> Hợi (11); Hợi Mão Mùi -> Thân (8)
-    // 9. Tai Sát: Thân Tý Thìn -> Ngọ (6); Tỵ Dậu Sửu -> Mão (3); Dần Ngọ Tuất -> Tý (0); Hợi Mão Mùi -> Dậu (9)
-    // 10. Hoa Cái: Thân Tý Thìn -> Thìn (4); Tỵ Dậu Sửu -> Sửu (1); Dần Ngọ Tuất -> Tuất (10); Hợi Mão Mùi -> Mùi (7)
-    // 11. Tướng Tinh: Thân Tý Thìn -> Tý (0); Tỵ Dậu Sửu -> Dậu (9); Dần Ngọ Tuất -> Ngọ (6); Hợi Mão Mùi -> Mão (3)
+    // Nhóm Tam Hợp (Chu Thần Bân trang 341-345):
+    // 6. Dịch Mã (Trang 341: lấy Niên chi, Nhật chi): Thân Tý Thìn -> Dần (2); Tỵ Dậu Sửu -> Hợi (11); Dần Ngọ Tuất -> Thân (8); Hợi Mão Mùi -> Tỵ (5)
+    // 7. Đào Hoa (Trang 341: lấy Niên chi, Nhật chi): Thân Tý Thìn -> Dậu (9); Tỵ Dậu Sửu -> Ngọ (6); Dần Ngọ Tuất -> Mão (3); Hợi Mão Mùi -> Tý (0)
+    // 8. Kiếp Sát (Trang 343: lấy Niên chi, Nhật chi): Thân Tý Thìn -> Tỵ (5); Tỵ Dậu Sửu -> Dần (2); Dần Ngọ Tuất -> Hợi (11); Hợi Mão Mùi -> Thân (8)
+    // 9. Tai Sát (Trang 344: lấy Niên chi, Nhật chi): Thân Tý Thìn -> Ngọ (6); Tỵ Dậu Sửu -> Mão (3); Dần Ngọ Tuất -> Tý (0); Hợi Mão Mùi -> Dậu (9)
+    // 10. Hoa Cái (Trang 342: CHỈ lấy Nhật chi): Thân Tý Thìn -> Thìn (4); Tỵ Dậu Sửu -> Sửu (1); Dần Ngọ Tuất -> Tuất (10); Hợi Mão Mùi -> Mùi (7)
+    // 11. Tướng Tinh (Trang 345: CHỈ lấy Nhật chi): Thân Tý Thìn -> Tý (0); Tỵ Dậu Sửu -> Dậu (9); Dần Ngọ Tuất -> Ngọ (6); Hợi Mão Mùi -> Mão (3)
     const getTamHopGroup = (baseChi) => {
       if ([8, 0, 4].includes(baseChi)) return { ma: 2, daoHoa: 9, kiepSat: 5, taiSat: 6, hoaCai: 4, tuongTinh: 0 };
       if ([5, 9, 1].includes(baseChi)) return { ma: 11, daoHoa: 6, kiepSat: 2, taiSat: 3, hoaCai: 1, tuongTinh: 9 };
@@ -1168,17 +1168,21 @@
       return { ma: 5, daoHoa: 0, kiepSat: 8, taiSat: 9, hoaCai: 7, tuongTinh: 3 };
     };
 
+    // Dịch Mã, Đào Hoa, Kiếp Sát, Tai Sát: lấy cả Niên chi và Nhật chi (Trang 341, 343, 344)
     const bases = [chiNam, chiNgay];
-    let hasMa = false, hasDaoHoa = false, hasKiepSat = false, hasTaiSat = false, hasHoaCai = false, hasTuongTinh = false;
+    let hasMa = false, hasDaoHoa = false, hasKiepSat = false, hasTaiSat = false;
     bases.forEach(bc => {
       const g = getTamHopGroup(bc);
       if (targetChi === g.ma) hasMa = true;
       if (targetChi === g.daoHoa) hasDaoHoa = true;
       if (targetChi === g.kiepSat) hasKiepSat = true;
       if (targetChi === g.taiSat) hasTaiSat = true;
-      if (targetChi === g.hoaCai) hasHoaCai = true;
-      if (targetChi === g.tuongTinh) hasTuongTinh = true;
     });
+
+    // Hoa Cái & Tướng Tinh: CHỈ lấy Nhật chi để tính (Trang 342 & 345 sách Hoa Sơn Bát Tự Học)
+    const dayGroup = getTamHopGroup(chiNgay);
+    const hasHoaCai = (targetChi === dayGroup.hoaCai);
+    const hasTuongTinh = (targetChi === dayGroup.tuongTinh);
 
     if (hasMa) list.push("Dịch Mã");
     if (hasDaoHoa) list.push("Đào Hoa");

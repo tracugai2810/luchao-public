@@ -1494,20 +1494,20 @@ input[type="time"].form-input,
 }
 
 .tinh-sat-table .ts-name {
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 700;
   line-height: 1.2;
-  color: #334155;
+  color: #0F172A;
   display: block;
   text-align: center;
   word-break: keep-all;
 }
 
 .tinh-sat-table .ts-val {
-  font-size: 13.5px;
+  font-size: 15px; /* Đồng nhất kích cỡ chuẩn 15px với Thập Thần */
   font-weight: 400;
   line-height: 1.2;
-  color: #64748B;
+  color: #1E293B; /* Đồng nhất màu mực sắc nét chuẩn với Thập Thần (#1E293B) */
   display: block;
   text-align: center;
   margin-top: 3px;

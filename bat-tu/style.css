@@ -1159,6 +1159,17 @@ input[type="time"].form-input,
   background: #FDE68A;
 }
 
+/* Năm Chuyển Vận (Đổi Đại Vận 10 năm) - Màu Xanh lam pastel dịu mát */
+.luu-nien-table td.ln-cell.transition-year {
+  background: #E0F2FE !important;
+}
+
+/* Năm Chuyển Vận mà ĐỒNG THỜI là Năm Đang Xét (Xem Hạn) - Gradient Vàng hổ phách chuyển Xanh lam */
+.luu-nien-table td.ln-cell.target-year.transition-year,
+.luu-nien-table td.ln-cell.current-year.transition-year {
+  background: linear-gradient(135deg, #FDE68A 45%, #BAE6FD 100%) !important;
+}
+
 .luu-nien-table td.ln-cell.target-year,
 .luu-nien-table td.ln-cell.current-year {
   background: #FDE68A !important;

@@ -1573,6 +1573,16 @@
       tietKhiRangeText = "";
     }
 
+    // Tính ngày Dương lịch chính xác bắt đầu nhập Đại Vận 1 (Chu Thần Bân tr. 318)
+    const startDateObj = new Date(solarYear, solarMonth - 1, solarDay);
+    startDateObj.setFullYear(startDateObj.getFullYear() + startYears);
+    startDateObj.setMonth(startDateObj.getMonth() + startMonths);
+    startDateObj.setDate(startDateObj.getDate() + startDays);
+    const startSolarDay = startDateObj.getDate();
+    const startSolarMonth = startDateObj.getMonth() + 1;
+    const startSolarYear = startDateObj.getFullYear();
+    const startSolarDateStr = `${String(startSolarDay).padStart(2, '0')}/${String(startSolarMonth).padStart(2, '0')}/${startSolarYear}`;
+
     const startAgeDisplay = startMonths >= 6 ? startYears + 1 : Math.max(1, startYears);
 
     // Lập 10 Cột Đại Vận
@@ -1627,7 +1637,7 @@
       // Gốc khởi Tiểu Vận là Trụ Giờ (Thời trụ)
       const hourJiazi = (6 * canGio - 5 * chiGio + 60) % 60;
 
-      const calcYearData = (yr, age, row) => {
+      const calcYearData = (yr, age, row, isTransitionYear = false) => {
         const jiaziYr = ((yr - 1924) % 60 + 60) % 60;
         const yCan = jiaziYr % 10;
         const yChi = jiaziYr % 12;
@@ -1676,6 +1686,7 @@
           tvThapThan2,
           isCurrent,
           isTarget,
+          isTransitionYear,
           row
         };
       };
@@ -1685,7 +1696,7 @@
       for (let y = 0; y < 10; y++) {
         const yr = dv.solarYearStart + y;
         const age = dv.ageFrom + y;
-        years.push(calcYearData(yr, age, 1));
+        years.push(calcYearData(yr, age, 1, y === 0));
       }
 
       // 10 năm đại vận kế tiếp (nếu có)
@@ -1693,7 +1704,7 @@
         for (let y = 0; y < 10; y++) {
           const yr = nextDv.solarYearStart + y;
           const age = nextDv.ageFrom + y;
-          years.push(calcYearData(yr, age, 2));
+          years.push(calcYearData(yr, age, 2, y === 0));
         }
       }
 
@@ -1821,6 +1832,7 @@
         startYears,
         startMonths,
         startDays,
+        startSolarDateStr,
         tietKhiRangeText,
         prevJieQi: pillars.prevJieQiObj,
         nextJieQi: pillars.nextJieQiObj,

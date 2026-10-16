@@ -67,14 +67,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=6.4">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=6.5">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Bazi Core Engine -->
-  <script src="/bat-tu/bazi-engine.js?v=6.4"></script>
+  <script src="/bat-tu/bazi-engine.js?v=6.5"></script>
 
   <script>
     // Tự động kiểm tra và cập nhật Service Worker, xóa cache cũ ngay tức thì
@@ -842,7 +842,11 @@
         }
 
         const birthBaziYear = p.year ? (parseInt(p.year.solarDateText, 10) || inp.year) : inp.year;
-        const calcAge = Math.max(1, cYear - birthBaziYear + 1);
+        const calcAge = (res.calcAge !== undefined)
+          ? res.calcAge
+          : ((res.daiVan && res.daiVan.targetAge !== undefined)
+              ? res.daiVan.targetAge
+              : Math.max(0, cYear - birthBaziYear));
         const elCalcAge = document.getElementById("res-calc-age");
         if (elCalcAge) {
           elCalcAge.textContent = `${calcAge} tuổi`;
@@ -996,14 +1000,10 @@
         updateImageSnapshot();
       }
 
-      // 9. Render Bảng Lưu Niên - Tiểu Vận (20 Năm - Gộp 1 cột tiêu đề duy nhất cho cả 20 năm, 6 hàng)
+      // 9. Render Bảng Lưu Niên - Tiểu Vận (10 Năm của Đại Vận được chọn - 3 hàng chuẩn gọn, cân đối)
       function renderLuuNienTable(lnList) {
         const tbody = document.getElementById("res-luunien-tbody");
         tbody.innerHTML = "";
-
-        const row1 = lnList.filter(l => l.row === 1);
-        const row2 = lnList.filter(l => l.row === 2);
-        const totalRows = (row1.length > 0 && row2.length > 0) ? 7 : 3;
 
         let bdayTag = "";
         if (currentBaziResult && currentBaziResult.birthdayShortStr) {
@@ -1013,91 +1013,78 @@
           if (parts.length >= 2) bdayTag = `(${parts[0]}/${parts[1]})`;
         }
 
-        const appendDecadeRows = (list, isFirstDecade) => {
-          const trCc = document.createElement("tr");
-          if (isFirstDecade) {
-            trCc.innerHTML = `
-              <td class="col-title-vertical" rowspan="${totalRows}">
-                <div class="title-split">
-                  <span>LƯU</span>
-                  <span>NIÊN</span>
-                  <span class="title-dash">—</span>
-                  <span>TIỂU</span>
-                  <span>VẬN</span>
-                  ${bdayTag ? `<span class="title-bday">${bdayTag}</span>` : ""}
-                </div>
-              </td>
-            `;
-          }
-          const trMeta = document.createElement("tr");
-          const trTv = document.createElement("tr");
+        const trCc = document.createElement("tr");
+        trCc.innerHTML = `
+          <td class="col-title-vertical" rowspan="3">
+            <div class="title-split">
+              <span>LƯU</span>
+              <span>NIÊN</span>
+              <span class="title-dash">—</span>
+              <span>TIỂU</span>
+              <span>VẬN</span>
+              ${bdayTag ? `<span class="title-bday">${bdayTag}</span>` : ""}
+            </div>
+          </td>
+        `;
 
-          list.forEach(item => {
-            let cellClass = "ln-cell";
-            if (item.isTransitionYear) cellClass += " transition-year";
-            if (item.isTarget) cellClass += " target-year";
+        const trMeta = document.createElement("tr");
+        const trTv = document.createElement("tr");
 
-            // Ô Can Chi: Can trên, Chi dưới (Bỏ dấu gạch ngang)
-            const tdCc = document.createElement("td");
-            tdCc.className = cellClass;
-            tdCc.innerHTML = `
-              <div class="cell-pair-stack">
-                <div class="cell-pair-line">
-                  <span class="char-name" style="color: ${item.canColor}">${item.canName}</span>
-                  <span class="char-tt">${item.thapThanCan}</span>
-                </div>
-                <div class="cell-pair-line">
-                  <span class="char-name" style="color: ${item.chiColor}">${item.chiName}</span>
-                  <span class="char-tt">${item.thapThanChi}</span>
-                </div>
+        lnList.forEach(item => {
+          let cellClass = "ln-cell";
+          if (item.isTransitionYear) cellClass += " transition-year";
+          if (item.isTarget) cellClass += " target-year";
+
+          // Ô Can Chi: Can trên, Chi dưới (Bỏ dấu gạch ngang)
+          const tdCc = document.createElement("td");
+          tdCc.className = cellClass;
+          tdCc.innerHTML = `
+            <div class="cell-pair-stack">
+              <div class="cell-pair-line">
+                <span class="char-name" style="color: ${item.canColor}">${item.canName}</span>
+                <span class="char-tt">${item.thapThanCan}</span>
               </div>
-            `;
-            trCc.appendChild(tdCc);
-
-            // Ô Năm & Tuổi: Năm trên, Tuổi dưới (Kích cỡ đồng bộ Đại Vận)
-            const tdMeta = document.createElement("td");
-            tdMeta.className = cellClass;
-            tdMeta.innerHTML = `
-              <div class="cell-meta-stack">
-                <span class="meta-year">${item.year}</span>
-                <span class="meta-age">${item.age}t</span>
+              <div class="cell-pair-line">
+                <span class="char-name" style="color: ${item.chiColor}">${item.chiName}</span>
+                <span class="char-tt">${item.thapThanChi}</span>
               </div>
-            `;
-            trMeta.appendChild(tdMeta);
+            </div>
+          `;
+          trCc.appendChild(tdCc);
 
-            // Ô Tiểu Vận: Can 1 Thập thần 1 ↓ Can 2 Thập thần 2 (Chiều dọc chuẩn yêu cầu)
-            const tdTv = document.createElement("td");
-            tdTv.className = cellClass;
-            tdTv.innerHTML = `
-              <div class="cell-tv-line">
-                <span class="tv-item">
-                  <span class="tv-can" style="color: ${item.tvCanColor1}">${item.tvCanName1}</span>
-                  <span class="tv-tt">${item.tvThapThan1}</span>
-                </span>
-                <span class="tv-arrow">↓</span>
-                <span class="tv-item">
-                  <span class="tv-can" style="color: ${item.tvCanColor2}">${item.tvCanName2}</span>
-                  <span class="tv-tt">${item.tvThapThan2}</span>
-                </span>
-              </div>
-            `;
-            trTv.appendChild(tdTv);
-          });
+          // Ô Năm & Tuổi: Năm trên, Tuổi dưới (Kích cỡ đồng bộ Đại Vận)
+          const tdMeta = document.createElement("td");
+          tdMeta.className = cellClass;
+          tdMeta.innerHTML = `
+            <div class="cell-meta-stack">
+              <span class="meta-year">${item.year}</span>
+              <span class="meta-age">${item.age}t</span>
+            </div>
+          `;
+          trMeta.appendChild(tdMeta);
 
-          tbody.appendChild(trCc);
-          tbody.appendChild(trMeta);
-          tbody.appendChild(trTv);
-        };
+          // Ô Tiểu Vận: Can 1 Thập thần 1 ↓ Can 2 Thập thần 2 (Chiều dọc chuẩn yêu cầu)
+          const tdTv = document.createElement("td");
+          tdTv.className = cellClass;
+          tdTv.innerHTML = `
+            <div class="cell-tv-line">
+              <span class="tv-item">
+                <span class="tv-can" style="color: ${item.tvCanColor1}">${item.tvCanName1}</span>
+                <span class="tv-tt">${item.tvThapThan1}</span>
+              </span>
+              <span class="tv-arrow">↓</span>
+              <span class="tv-item">
+                <span class="tv-can" style="color: ${item.tvCanColor2}">${item.tvCanName2}</span>
+                <span class="tv-tt">${item.tvThapThan2}</span>
+              </span>
+            </div>
+          `;
+          trTv.appendChild(tdTv);
+        });
 
-        if (row1.length > 0) appendDecadeRows(row1, true);
-        if (row2.length > 0) {
-          // Thêm hàng ngăn cách tạo khoảng hở chia ô rõ rệt giữa 2 khối 10 năm
-          const trDivider = document.createElement("tr");
-          trDivider.className = "ln-decade-divider-row";
-          trDivider.innerHTML = '<td colspan="10" class="ln-decade-divider-cell"></td>';
-          tbody.appendChild(trDivider);
-          appendDecadeRows(row2, false);
-        }
+        tbody.appendChild(trCc);
+        tbody.appendChild(trMeta);
+        tbody.appendChild(trTv);
       }
 
       // 11. Chuyển đổi DataURL sang Blob

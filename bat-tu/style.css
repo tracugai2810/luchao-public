@@ -1004,20 +1004,21 @@ input[type="time"].form-input,
   padding: 8px 2px;
 }
 
-/* Kiểu xếp chữ trên dưới 1 chữ (Ảnh 4) */
+/* Kiểu xếp chữ trên dưới 1 chữ */
 .title-split {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  line-height: 1.25;
+  gap: 2px;
+  line-height: 1.18;
 }
 
 .title-split span {
   display: block;
   font-weight: 700 !important;
   color: #0F172A !important;
+  font-size: 14.5px;
 }
 
 .bazi-main-table .col-cell {
@@ -1327,19 +1328,19 @@ input[type="time"].form-input,
 }
 
 .col-title-vertical .title-dash {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: #64748B;
   line-height: 1;
-  margin: 2px 0;
+  margin: 1px 0;
 }
 
 .col-title-vertical .title-bday {
-  font-size: 15px; /* Bằng 100% kích cỡ chữ LƯU NIÊN TIỂU VẬN (15px) */
+  font-size: 13.5px;
   font-weight: 700;
   color: #1D4ED8;
-  margin-top: 3px;
-  letter-spacing: -0.4px;
+  margin-top: 2px;
+  letter-spacing: -0.3px;
   white-space: nowrap;
 }
 

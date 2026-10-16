@@ -1625,10 +1625,15 @@
       });
     }
 
-    // 9. Hàm lấy 20 Năm Lưu Niên theo Đại Vận được chọn (Kèm Tiểu Vận chuẩn Hoa Sơn Bát Tự - tr. 331-336)
+    // Tính tuổi xem hạn (Target Age) đồng bộ 100% với cột Lưu Niên / Đại Vận
+    const targetDv = daiVanList.find(d => d.isTarget) || daiVanList[0];
+    const targetAge = (calcYear >= startSolarYear)
+      ? (targetDv.ageFrom + (calcYear - targetDv.solarYearStart))
+      : Math.max(0, calcYear - solarYear);
+
+    // 9. Hàm lấy 10 Năm Lưu Niên theo Đại Vận được chọn (Kèm Tiểu Vận chuẩn Hoa Sơn Bát Tự - tr. 331-336)
     const getLuuNienForDaiVan = (dvIndex, customCalcYear) => {
       const dv = daiVanList.find(d => d.index === dvIndex) || daiVanList[0];
-      const nextDv = daiVanList.find(d => d.index === dvIndex + 1);
       const targetY = (customCalcYear !== undefined && customCalcYear !== null && !isNaN(parseInt(customCalcYear, 10)))
         ? parseInt(customCalcYear, 10)
         : calcYear;
@@ -1700,15 +1705,6 @@
         years.push(calcYearData(yr, age, 1, y === 0));
       }
 
-      // 10 năm đại vận kế tiếp (nếu có)
-      if (nextDv) {
-        for (let y = 0; y < 10; y++) {
-          const yr = nextDv.solarYearStart + y;
-          const age = nextDv.ageFrom + y;
-          years.push(calcYearData(yr, age, 2, y === 0));
-        }
-      }
-
       return years;
     };
 
@@ -1744,6 +1740,7 @@
         calcDay,
         calcMonth,
         calcYear,
+        calcAge: targetAge,
         calcDateStr: (calcDay && calcMonth) ? `${String(calcDay).padStart(2, '0')}/${String(calcMonth).padStart(2, '0')}/${calcYear}` : `${calcYear}`,
         birthDateStr: `${String(solarDay).padStart(2, '0')}/${String(solarMonth).padStart(2, '0')}/${solarYear}`,
         birthTimeStr: `${String(rawHour).padStart(2, '0')}:${String(rawMinute).padStart(2, '0')}`,
@@ -1837,9 +1834,11 @@
         tietKhiRangeText,
         prevJieQi: pillars.prevJieQiObj,
         nextJieQi: pillars.nextJieQiObj,
-        targetDaiVanIndex: (daiVanList.find(d => d.isTarget) || daiVanList[0]).index,
+        targetDaiVanIndex: targetDv.index,
+        targetAge,
         list: daiVanList
       },
+      calcAge: targetAge,
       extraInfo: {
         thaiNguyen,
         menhCung,

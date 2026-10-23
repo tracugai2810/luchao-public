@@ -67,7 +67,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
-  <link rel="stylesheet" href="/bat-tu/style.css?v=7.4">
+  <link rel="stylesheet" href="/bat-tu/style.css?v=7.5">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
@@ -209,6 +209,47 @@
 
     <!-- Form Nhập Liệu -->
     <section class="bazi-form-card">
+      <!-- Khung Nhập Nhanh AI (Text & Ảnh Lá Số) -->
+      <div class="bazi-ai-parse-box" id="bazi-ai-dropzone">
+        <div class="bazi-ai-header">
+          <span class="bazi-ai-badge">⚡ Nhập nhanh AI</span>
+          <span class="bazi-ai-model-tag">Gemini 3.1 Flash Lite</span>
+        </div>
+        <div class="bazi-ai-body">
+          <textarea
+            id="bazi-ai-textarea"
+            class="bazi-ai-textarea"
+            rows="2"
+            placeholder="Dán thông tin thô (ví dụ: Anh Nam, sinh 15/08/1990 lúc 9h tối dương lịch...) hoặc dán ảnh lá số (Ctrl+V) / chọn ảnh..."
+          ></textarea>
+          <div id="bazi-ai-img-preview" class="bazi-ai-img-preview" style="display: none;">
+            <div class="bazi-ai-thumb-wrap">
+              <img id="bazi-ai-thumb-img" src="" alt="Ảnh lá số đính kèm">
+              <div class="bazi-ai-thumb-meta">
+                <span id="bazi-ai-thumb-name" class="bazi-ai-thumb-name">Ảnh lá số</span>
+                <span class="bazi-ai-thumb-sub">✓ Sẵn sàng bóc tách bằng AI</span>
+              </div>
+            </div>
+            <button type="button" id="bazi-ai-remove-img" class="bazi-ai-remove-img" title="Xóa ảnh đính kèm" aria-label="Xóa ảnh đính kèm">✕</button>
+          </div>
+        </div>
+        <div class="bazi-ai-actions">
+          <input type="file" id="bazi-ai-file-input" accept="image/*" style="display: none;">
+          <button type="button" id="bazi-ai-upload-btn" class="bazi-ai-upload-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <span>📷 Chọn ảnh / Dán ảnh</span>
+          </button>
+          <button type="button" id="bazi-ai-parse-btn" class="bazi-ai-parse-btn" disabled>
+            <span>✨ Bóc tách &amp; Điền form</span>
+          </button>
+        </div>
+        <p id="bazi-ai-error" class="bazi-ai-error" style="display: none;" role="alert"></p>
+      </div>
+
+      <div class="bazi-form-divider">
+        <span>HOẶC KIỂM TRA / CHỈNH SỬA BÊN DƯỚI:</span>
+      </div>
+
       <form id="bazi-form">
         <div class="bazi-form-grid">
           
@@ -735,6 +776,287 @@
       if (hamBtn) hamBtn.addEventListener("click", openDrawer);
       if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
       if (backdrop) backdrop.addEventListener("click", closeDrawer);
+
+      // 5b. Xử lý Nhập nhanh AI (Text + Ảnh Lá Số) bằng Gemini 3.1 Flash Lite
+      const aiDropzone = document.getElementById("bazi-ai-dropzone");
+      const aiTextarea = document.getElementById("bazi-ai-textarea");
+      const aiFileInput = document.getElementById("bazi-ai-file-input");
+      const aiUploadBtn = document.getElementById("bazi-ai-upload-btn");
+      const aiParseBtn = document.getElementById("bazi-ai-parse-btn");
+      const aiImgPreview = document.getElementById("bazi-ai-img-preview");
+      const aiThumbImg = document.getElementById("bazi-ai-thumb-img");
+      const aiThumbName = document.getElementById("bazi-ai-thumb-name");
+      const aiRemoveImgBtn = document.getElementById("bazi-ai-remove-img");
+      const aiErrorEl = document.getElementById("bazi-ai-error");
+
+      let aiAttachedImage = null; // { base64, mimeType, dataUrl, name }
+      let isAiParsing = false;
+
+      function updateAiParseBtnState() {
+        if (!aiParseBtn) return;
+        const hasText = aiTextarea && aiTextarea.value.trim().length > 0;
+        const hasImg = Boolean(aiAttachedImage && aiAttachedImage.base64);
+        aiParseBtn.disabled = isAiParsing || (!hasText && !hasImg);
+      }
+
+      function showAiError(msg) {
+        if (!aiErrorEl) return;
+        if (!msg) {
+          aiErrorEl.style.display = "none";
+          aiErrorEl.textContent = "";
+        } else {
+          aiErrorEl.textContent = msg;
+          aiErrorEl.style.display = "block";
+        }
+      }
+
+      function compressImageFile(file) {
+        return new Promise((resolve, reject) => {
+          if (!file || !file.type.startsWith("image/")) {
+            reject(new Error("Vui lòng chọn file hình ảnh hợp lệ."));
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const img = new Image();
+            img.onload = () => {
+              const MAX_DIM = 1400;
+              let w = img.width;
+              let h = img.height;
+              if (w > MAX_DIM || h > MAX_DIM) {
+                if (w > h) {
+                  h = Math.round((h * MAX_DIM) / w);
+                  w = MAX_DIM;
+                } else {
+                  w = Math.round((w * MAX_DIM) / h);
+                  h = MAX_DIM;
+                }
+              }
+              const canvas = document.createElement("canvas");
+              canvas.width = w;
+              canvas.height = h;
+              const ctx = canvas.getContext("2d");
+              if (!ctx) {
+                reject(new Error("Không thể xử lý ảnh."));
+                return;
+              }
+              ctx.fillStyle = "#FFFFFF";
+              ctx.fillRect(0, 0, w, h);
+              ctx.drawImage(img, 0, 0, w, h);
+              const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+              const base64 = dataUrl.split(",")[1];
+              resolve({
+                dataUrl,
+                base64,
+                mimeType: "image/jpeg",
+                name: file.name || "anh-la-so.jpg"
+              });
+            };
+            img.onerror = () => reject(new Error("Không đọc được file ảnh."));
+            img.src = ev.target.result;
+          };
+          reader.onerror = () => reject(new Error("Lỗi khi đọc file ảnh."));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function attachAiImageFile(file) {
+        showAiError("");
+        try {
+          const processed = await compressImageFile(file);
+          aiAttachedImage = processed;
+          if (aiThumbImg) aiThumbImg.src = processed.dataUrl;
+          if (aiThumbName) aiThumbName.textContent = processed.name;
+          if (aiImgPreview) aiImgPreview.style.display = "flex";
+          updateAiParseBtnState();
+        } catch (err) {
+          showAiError(err.message || "Không thể đính kèm ảnh.");
+        }
+      }
+
+      function clearAiImage() {
+        aiAttachedImage = null;
+        if (aiFileInput) aiFileInput.value = "";
+        if (aiThumbImg) aiThumbImg.src = "";
+        if (aiImgPreview) aiImgPreview.style.display = "none";
+        updateAiParseBtnState();
+      }
+
+      if (aiTextarea) {
+        aiTextarea.addEventListener("input", () => {
+          showAiError("");
+          updateAiParseBtnState();
+        });
+        aiTextarea.addEventListener("paste", (e) => {
+          const items = e.clipboardData && e.clipboardData.items;
+          if (!items) return;
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf("image") !== -1) {
+              const file = items[i].getAsFile();
+              if (file) {
+                e.preventDefault();
+                attachAiImageFile(file);
+                break;
+              }
+            }
+          }
+        });
+      }
+
+      if (aiUploadBtn && aiFileInput) {
+        aiUploadBtn.addEventListener("click", () => aiFileInput.click());
+        aiFileInput.addEventListener("change", (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) attachAiImageFile(file);
+        });
+      }
+
+      if (aiRemoveImgBtn) {
+        aiRemoveImgBtn.addEventListener("click", clearAiImage);
+      }
+
+      if (aiDropzone) {
+        aiDropzone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          aiDropzone.classList.add("drag-over");
+        });
+        aiDropzone.addEventListener("dragleave", () => {
+          aiDropzone.classList.remove("drag-over");
+        });
+        aiDropzone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          aiDropzone.classList.remove("drag-over");
+          const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+          if (file && file.type.startsWith("image/")) {
+            attachAiImageFile(file);
+          }
+        });
+      }
+
+      const TZ_NUM_TO_STR = {
+        "7": "+07:00",
+        "-8": "-08:00",
+        "-5": "-05:00",
+        "-6": "-06:00",
+        "-7": "-07:00",
+        "9": "+09:00",
+        "8": "+08:00",
+        "10": "+10:00",
+        "1": "+01:00",
+        "0": "+00:00"
+      };
+
+      if (aiParseBtn) {
+        aiParseBtn.addEventListener("click", async () => {
+          const rawText = aiTextarea ? aiTextarea.value.trim() : "";
+          if (!rawText && !aiAttachedImage) return;
+
+          isAiParsing = true;
+          showAiError("");
+          aiParseBtn.disabled = true;
+          const origBtnHtml = aiParseBtn.innerHTML;
+          aiParseBtn.innerHTML = "<span>⏳ Đang phân tích...</span>";
+
+          try {
+            const payload = { rawText };
+            if (aiAttachedImage) {
+              payload.imageBase64 = aiAttachedImage.base64;
+              payload.mimeType = aiAttachedImage.mimeType;
+            }
+
+            const resp = await fetch("/api/parse-birth-data", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            });
+            const result = await resp.json();
+
+            if (!resp.ok || !result.success) {
+              throw new Error(result.error || "Không thể phân tích dữ liệu.");
+            }
+
+            const d = result.data || {};
+            if (typeof d.fullName === "string" && d.fullName.trim()) {
+              document.getElementById("bazi-name").value = d.fullName.trim();
+            }
+            if (d.gender === "Nữ" || d.gender === "nu") {
+              document.getElementById("bazi-gender").value = "nu";
+            } else if (d.gender === "Nam" || d.gender === "nam") {
+              document.getElementById("bazi-gender").value = "nam";
+            }
+
+            const nextCalType = d.calendarType === "lunar" ? "lunar" : "solar";
+            if (calTypeSelect) {
+              calTypeSelect.value = nextCalType;
+              if (leapContainer) {
+                leapContainer.style.display = nextCalType === "lunar" ? "block" : "none";
+              }
+            }
+            const leapCheckbox = document.getElementById("bazi-is-leap");
+            if (leapCheckbox) {
+              leapCheckbox.checked = Boolean(d.isLeapMonth);
+            }
+
+            if (typeof d.birthDay === "number" && d.birthDay >= 1 && d.birthDay <= 31) {
+              document.getElementById("bazi-day").value = d.birthDay;
+            }
+            if (typeof d.birthMonth === "number" && d.birthMonth >= 1 && d.birthMonth <= 12) {
+              document.getElementById("bazi-month").value = d.birthMonth;
+            }
+            if (typeof d.birthYear === "number" && d.birthYear >= 1800 && d.birthYear <= 2199) {
+              document.getElementById("bazi-year").value = d.birthYear;
+            }
+            if (typeof d.birthTime === "string" && /^\d{2}:\d{2}$/.test(d.birthTime)) {
+              document.getElementById("bazi-time").value = d.birthTime;
+            }
+
+            const tzNum = typeof d.timeZone === "number" ? d.timeZone : 7;
+            const tzMapped = TZ_NUM_TO_STR[String(tzNum)] || "+07:00";
+            if (tzSelect) {
+              tzSelect.value = tzMapped;
+              if (tzMapped === "+07:00") {
+                provinceContainer.style.display = "block";
+              } else {
+                provinceContainer.style.display = "none";
+                provHidden.value = "";
+                provInput.value = "";
+              }
+            }
+
+            if (tzMapped === "+07:00" && typeof d.provinceId === "string") {
+              if (d.provinceId) {
+                const foundProv = Engine.VN_PROVINCES.find(p => p.id === d.provinceId);
+                if (foundProv) {
+                  provHidden.value = foundProv.id;
+                  provInput.value = foundProv.name;
+                }
+              } else {
+                provHidden.value = "";
+                provInput.value = "";
+              }
+            }
+
+            // Nếu có năm/tháng/ngày xem hạn thì điền vào ô
+            if (typeof d.calcYear === "number" && d.calcYear >= 1900 && d.calcYear <= 2100) {
+              if (inCalcYear) inCalcYear.value = d.calcYear;
+            }
+            if (typeof d.calcMonth === "number" && d.calcMonth >= 1 && d.calcMonth <= 12) {
+              if (inCalcMonth) inCalcMonth.value = d.calcMonth;
+            }
+            if (typeof d.calcDay === "number" && d.calcDay >= 1 && d.calcDay <= 31) {
+              if (inCalcDay) inCalcDay.value = d.calcDay;
+            }
+
+            showBaziToast("Đã bóc tách dữ liệu thành công!");
+          } catch (err) {
+            showAiError(err.message || "Lỗi khi gọi AI phân tích.");
+          } finally {
+            isAiParsing = false;
+            aiParseBtn.innerHTML = origBtnHtml;
+            updateAiParseBtnState();
+          }
+        });
+      }
 
       // Biến lưu kết quả hiện tại
       let currentBaziResult = null;

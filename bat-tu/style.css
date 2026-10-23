@@ -1804,3 +1804,259 @@ input[type="time"].form-input,
     justify-content: center;
   }
 }
+
+
+/* ==========================================================================
+   KHUNG NHẬP NHANH AI (TEXT & ẢNH LÁ SỐ) - ĐỒNG BỘ HOA SƠN BÁT TỰ
+   ========================================================================== */
+.bazi-ai-parse-box {
+  background: linear-gradient(135deg, #FFFDF9 0%, #FEF6E8 100%);
+  border: 1.5px dashed #D97706;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bazi-ai-parse-box.drag-over {
+  border-color: #B45309;
+  background: #FEF3C7;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18);
+}
+
+.bazi-ai-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.bazi-ai-badge {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #B45309;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bazi-ai-model-tag {
+  font-size: 0.74rem;
+  color: #78350F;
+  background: #FDE68A;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  padding: 2px 9px;
+  border-radius: 9999px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.bazi-ai-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bazi-ai-textarea {
+  width: 100%;
+  border: 1.5px solid #E2D8C3;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  resize: vertical;
+  min-height: 58px;
+  background: #FFFFFF;
+  color: #0F172A;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bazi-ai-textarea:focus {
+  border-color: #D97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+
+.bazi-ai-img-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #FFFFFF;
+  border: 1px solid #F59E0B;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.bazi-ai-thumb-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bazi-ai-thumb-wrap img {
+  width: 46px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+  flex-shrink: 0;
+  background: #F8FAFC;
+}
+
+.bazi-ai-thumb-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bazi-ai-thumb-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0F172A;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bazi-ai-thumb-sub {
+  font-size: 0.75rem;
+  color: #059669;
+  font-weight: 600;
+}
+
+.bazi-ai-remove-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #FECACA;
+  background: #FEF2F2;
+  color: #DC2626;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.bazi-ai-remove-img:hover {
+  background: #FEE2E2;
+}
+
+.bazi-ai-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.bazi-ai-upload-btn {
+  background: #FFFFFF;
+  color: #92400E;
+  border: 1.5px solid #F59E0B;
+  border-radius: 8px;
+  padding: 8px 14px;
+  min-height: 40px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.18s ease;
+}
+
+.bazi-ai-upload-btn:hover {
+  background: #FEF3C7;
+  border-color: #D97706;
+}
+
+.bazi-ai-parse-btn {
+  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  min-height: 40px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
+  transition: all 0.18s ease;
+  margin-left: auto;
+}
+
+.bazi-ai-parse-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+  transform: translateY(-1px);
+}
+
+.bazi-ai-parse-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.bazi-ai-error {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: #DC2626;
+  font-weight: 600;
+}
+
+.bazi-form-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 4px 0 18px;
+}
+
+.bazi-form-divider::before,
+.bazi-form-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dashed #CBD5E1;
+}
+
+.bazi-form-divider span {
+  padding: 0 12px;
+  font-size: 0.74rem;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .bazi-ai-parse-box {
+    padding: 12px 12px;
+  }
+  .bazi-ai-textarea {
+    font-size: 16px;
+  }
+  .bazi-ai-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bazi-ai-upload-btn,
+  .bazi-ai-parse-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    margin-left: 0;
+  }
+}

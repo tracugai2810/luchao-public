@@ -870,31 +870,6 @@ input[type="time"].form-input,
 /* ==========================================================================
    SHEET TỨ TRỤ MỆNH BÀN (CHUẨN ẢNH THỰC TẾ)
    ========================================================================== */
-.bazi-watermark-bg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 960px;
-  opacity: 0.085;
-  pointer-events: none;
-  z-index: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.bazi-watermark-bg img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.bazi-chart-card > :not(.bazi-watermark-bg) {
-  position: relative;
-  z-index: 1;
-}
-
 .bazi-chart-card {
   width: 1280px;
   min-width: 1280px;

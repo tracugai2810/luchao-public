@@ -799,6 +799,7 @@ function renderCaptureHTML(data) {
     const target = document.getElementById('captureTarget');
     const questionText = data.userQuestion || '';
     target.innerHTML = `
+        <div class="capture-watermark"><img src="dambc.png" alt="" /></div>
         <div class="info-header">
             <div class="info-content">
                 <div class="info-line"><strong>Ngày giờ:</strong> ${data.formattedDate} &nbsp;&nbsp;&nbsp;&nbsp; <strong>Phương pháp:</strong> ${methodText}</div>

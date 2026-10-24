@@ -413,6 +413,7 @@ function buildHexCardHTML(item) {
 
     return `
         <div id="hexCardCapture" class="hex-card-view">
+            <div class="sim-watermark-bg"><img src="dambc.png" alt="" /></div>
             <!-- Header Thông Tin -->
             <div class="info-header">
                 <div class="info-content">

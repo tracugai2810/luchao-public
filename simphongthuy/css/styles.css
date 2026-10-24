@@ -736,6 +736,8 @@ button.modal-close:active, .modal-close:active {
 
 .hex-card-view {
     background-color: #fefee5;
+    position: relative;
+    overflow: hidden;
     color: #000000;
     font-size: 15px;
     min-width: 860px;
@@ -861,7 +863,7 @@ button.modal-close:active, .modal-close:active {
     width: 100%;
     border-collapse: collapse;
     font-size: 15px;
-    background: #fefee5;
+    background: transparent;
     margin-bottom: 15px;
     table-layout: auto;
 }
@@ -1575,4 +1577,29 @@ button.modal-close:active, .modal-close:active {
     .portal-drawer-backdrop {
         display: none !important;
     }
+}
+
+.hex-card-view .sim-watermark-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 760px;
+    opacity: 0.10;
+    pointer-events: none;
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hex-card-view .sim-watermark-bg img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.hex-card-view > :not(.sim-watermark-bg) {
+    position: relative;
+    z-index: 1;
 }

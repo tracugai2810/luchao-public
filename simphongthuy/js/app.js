@@ -176,10 +176,6 @@ function executeEvalCurrentSim() {
                         <span class="badge badge-score">${evaluation.score}/100 - ${evaluation.grade}</span>
                         <span class="badge badge-hex">Quẻ Chủ: ${hexData.mainName} → ${hexData.changedName}</span>
                     </div>
-
-                    <ul class="sim-reasons-list">
-                        ${evaluation.reasons.map(r => `<li>${r}</li>`).join('')}
-                    </ul>
                 </div>
 
                 <div class="sim-actions">
@@ -250,7 +246,7 @@ function renderResults(results) {
 
     results.forEach((item, index) => {
         const formattedSim = formatSimNumber(item.sim);
-        const { score, grade, reasons } = item.evaluation;
+        const { score, grade } = item.evaluation;
         const hex = item.hexData;
 
         html += `
@@ -264,10 +260,6 @@ function renderResults(results) {
                         <span class="badge badge-score">${score}/100 - ${grade}</span>
                         <span class="badge badge-hex">Quẻ Chủ: ${hex.mainName} → ${hex.changedName}</span>
                     </div>
-
-                    <ul class="sim-reasons-list">
-                        ${reasons.map(r => `<li>${r}</li>`).join('')}
-                    </ul>
                 </div>
 
                 <div class="sim-actions">
@@ -475,14 +467,6 @@ function buildHexCardHTML(item) {
                     ${rowsHtml}
                 </tbody>
             </table>
-
-            <!-- Đánh giá Phong Thủy Chi Tiết -->
-            <div class="eval-box">
-                <h4>🎯 Đánh giá Cát Tường: ${evaluation.score}/100 - ${evaluation.grade}</h4>
-                <ul>
-                    ${evaluation.reasons.map(r => `<li>${r}</li>`).join('')}
-                </ul>
-            </div>
 
             <!-- Watermark Chú Thích Bản Quyền -->
             <div class="hex-watermark-note">

@@ -32,3 +32,282 @@
 .form-divider::before,.form-divider::after{content:"";flex:1;border-bottom:1px solid #e2e8f0}
 .form-divider span{padding:0 8px}
 @media (max-width:640px){.ai-textarea{font-size:16px}.ai-parse-actions{grid-template-columns:1fr}}
+
+
+/* --- PHI TINH TỨ HÓA (LƯƠNG PHÁI) --- */
+.phi-control-panel {
+  margin-top: 18px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 14px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.phi-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.phi-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phi-panel-icon {
+  font-size: 1.25rem;
+  color: #c24642;
+  line-height: 1;
+}
+
+.phi-panel-title h4 {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.phi-panel-subtitle {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin: 2px 0 0;
+  font-weight: 500;
+}
+
+.phi-clear-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.phi-clear-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.phi-mode-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.phi-mode-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.phi-mode-tab:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.phi-mode-tab.tab-loc.active {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #b91c1c;
+  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.15);
+}
+
+.phi-mode-tab.tab-ky.active {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.2);
+}
+
+.tab-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tab-dot.loc {
+  background: #dc2626;
+}
+
+.tab-dot.ky {
+  background: #111111;
+}
+
+.phi-mode-tab.tab-ky.active .tab-dot.ky {
+  background: #38bdf8;
+}
+
+.tab-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.tab-color-tag {
+  font-size: 0.68rem;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.tab-color-tag.loc {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.phi-mode-tab.tab-loc.active .tab-color-tag.loc {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.tab-color-tag.ky {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.phi-mode-tab.tab-ky.active .tab-color-tag.ky {
+  background: #334155;
+  color: #f8fafc;
+}
+
+.tab-count-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.tab-active-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #dc2626;
+  position: absolute;
+  top: 4px;
+  right: 6px;
+}
+
+.phi-mode-desc {
+  font-size: 0.73rem;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.phi-mode-desc strong {
+  color: #0f172a;
+}
+
+.phi-palace-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.phi-palace-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 3px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.12s ease;
+  min-height: 48px;
+}
+
+.phi-palace-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.phi-palace-btn .p-name {
+  font-size: 0.77rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.phi-palace-btn .p-canchi {
+  font-size: 0.65rem;
+  color: #64748b;
+  margin-top: 2px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* Selected in Loc mode (red) */
+.phi-palace-btn.loc.selected {
+  background: #fee2e2;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 1px #dc2626, 0 2px 4px rgba(220, 38, 38, 0.15);
+}
+
+.phi-palace-btn.loc.selected .p-name {
+  color: #991b1b;
+  font-weight: 800;
+}
+
+.phi-palace-btn.loc.selected .p-canchi {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+/* Selected in Ky mode (black / dark slate) */
+.phi-palace-btn.ky.selected {
+  background: #0f172a;
+  border-color: #0f172a;
+  box-shadow: 0 0 0 1px #0f172a, 0 2px 6px rgba(15, 23, 42, 0.25);
+}
+
+.phi-palace-btn.ky.selected .p-name {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.phi-palace-btn.ky.selected .p-canchi {
+  color: #94a3b8;
+  font-weight: 600;
+}

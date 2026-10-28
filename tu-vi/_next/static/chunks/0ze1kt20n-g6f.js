@@ -448,10 +448,7 @@ ${n.ky.xuyenLienText}
   (0,h.jsxs)("div",{className:"phi-panel-header",children:[
     (0,h.jsxs)("div",{className:"phi-panel-title",children:[
       (0,h.jsx)("span",{className:"phi-panel-icon",children:"☸"}),
-      (0,h.jsxs)("div",{children:[
-        (0,h.jsx)("h4",{children:"PHI TINH TỨ HÓA (LƯƠNG PHÁI)"}),
-        (0,h.jsx)("p",{className:"phi-panel-subtitle",children:"Tự động vẽ đường phi hóa & chuyển kỵ trực tiếp trên lá số"})
-      ]})
+      (0,h.jsx)("h4",{children:"PHI TINH TỨ HÓA"})
     ]}),
     ((phiTab==="loc"&&selectedLoc!==null) || (phiTab==="ky"&&selectedKy.length>0)) ? (0,h.jsx)("button",{type:"button",className:"phi-clear-btn",onClick:() => { if(phiTab==="loc") setSelectedLoc(null); else setSelectedKy([]); },children:phiTab==="loc"?"✕ Xóa Lộc":"✕ Xóa Kỵ"}) : null
   ]}),

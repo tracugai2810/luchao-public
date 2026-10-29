@@ -155,15 +155,15 @@ function renderSvgFlightArrow(path, layoutInfo) {
 
   let tanX = endX - cpX, tanY = endY - cpY;
   let angle = Math.atan2(tanY, tanX);
-  let len = 9.5, alpha = 0.38;
+  let len = 11.5, alpha = 0.40;
   let lx = (endX - len * Math.cos(angle - alpha)).toFixed(1);
   let ly = (endY - len * Math.sin(angle - alpha)).toFixed(1);
-  let nxBase = (endX - (len - 2.5) * Math.cos(angle)).toFixed(1);
-  let nyBase = (endY - (len - 2.5) * Math.sin(angle)).toFixed(1);
+  let nxBase = (endX - (len - 3.0) * Math.cos(angle)).toFixed(1);
+  let nyBase = (endY - (len - 3.0) * Math.sin(angle)).toFixed(1);
   let rx = (endX - len * Math.cos(angle + alpha)).toFixed(1);
   let ry = (endY - len * Math.sin(angle + alpha)).toFixed(1);
 
-  return `<g><circle cx="${startX.toFixed(1)}" cy="${startY.toFixed(1)}" r="3.5" fill="${strokeColor}" stroke="#ffffff" stroke-width="1.2" /><path d="M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${cpX.toFixed(1)} ${cpY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}" stroke="${strokeColor}" stroke-width="${strokeWidth}" fill="none" stroke-linecap="round" stroke-linejoin="round" ${dash} /><polygon points="${endX.toFixed(1)},${endY.toFixed(1)} ${lx},${ly} ${nxBase},${nyBase} ${rx},${ry}" fill="${strokeColor}" stroke="#ffffff" stroke-width="0.8" /></g>`;
+  return `<g><circle cx="${startX.toFixed(1)}" cy="${startY.toFixed(1)}" r="4.2" fill="${strokeColor}" stroke="#ffffff" stroke-width="1.2" /><path d="M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${cpX.toFixed(1)} ${cpY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}" stroke="${strokeColor}" stroke-width="${strokeWidth}" fill="none" stroke-linecap="round" stroke-linejoin="round" ${dash} /><polygon points="${endX.toFixed(1)},${endY.toFixed(1)} ${lx},${ly} ${nxBase},${nyBase} ${rx},${ry}" fill="${strokeColor}" stroke="#ffffff" stroke-width="1.0" /></g>`;
 }
 
 function minCurve(v) { return Math.min(55, v); }
@@ -572,7 +572,6 @@ return`
     <g>
       <text x="${h}" y="262" font-size="22" font-weight="700" text-anchor="middle" fill="#111111">Họ v\xe0 t\xean: ${f(n.fullName)}</text>
       <text x="${h}" y="302" font-size="20.5" font-weight="400" text-anchor="middle" fill="#111111">Giới t\xednh: ${f(n.genderLabel)}</text>
-      <text x="${h}" y="342" font-size="20.5" font-weight="400" text-anchor="middle" fill="#111111">Cục ${f(n.elementPhaseLabel)}</text>
 
       <text x="354" y="390" font-size="18.5" font-weight="700" fill="#111111">Năm:</text>
       <text x="452" y="390" font-size="18.5" font-weight="400" fill="#111111">${n.solarDate.year}</text>

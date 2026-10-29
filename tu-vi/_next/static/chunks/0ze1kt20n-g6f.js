@@ -131,10 +131,14 @@ function renderSvgFlightArrow(path, layoutInfo) {
 
   let strokeColor = "#111111";
   if (path.color === "red") strokeColor = "#dc2626";
+  else if (path.color === "purple") strokeColor = "#7c3aed";
+  else if (path.color === "green") strokeColor = "#059669";
+  else if (path.color === "orange") strokeColor = "#ea580c";
+  else if (path.color === "teal") strokeColor = "#0d9488";
   else if (path.color === "yellow") strokeColor = "#d97706";
   else if (path.color === "blue") strokeColor = "#2563eb";
 
-  let strokeWidth = (path.type === "loc" || path.type === "ky" || path.type === "loc_chuyen_ky" || path.type === "chuyen_ky") ? 1.8 : 1.5;
+  let strokeWidth = (path.type === "loc" || path.type === "truy_loc" || path.type === "ky" || path.type === "loc_chuyen_ky" || path.type === "chuyen_ky") ? 1.8 : 1.5;
   let dash = path.dashed ? 'stroke-dasharray="6,4"' : '';
 
   let tanX = endX - cpX, tanY = endY - cpY;
@@ -193,7 +197,18 @@ function computeKyFlightPaths(palaces, startIndices) {
     }
 
     let target1 = ky1.toIndex;
+    let currentStar = ky1.star;
     addKyPath(startIdx, target1, "ky");
+
+    // Truy Kỵ duy nhất ở bước đầu tiên:
+    for (let i = 0; i < 12; i++) {
+      if (i === startIdx) continue;
+      let pOther = palaces[i];
+      if (pOther.phiHoa?.Ky?.toIndex === target1 && pOther.phiHoa?.Ky?.star === currentStar) {
+        addKyPath(i, target1, "ky");
+      }
+    }
+
     let lastStop = target1;
 
     let pTarget1 = palaces[target1];
@@ -214,8 +229,14 @@ function computeKyFlightPaths(palaces, startIndices) {
     finalBranches.push(palaces[lastStop].branch);
   });
 
-  return { paths: Array.from(pathMap.values()), startBranches, finalBranches };
+  return {
+    paths: Array.from(pathMap.values()),
+    startBranches: Array.from(new Set(startBranches)),
+    finalBranches: Array.from(new Set(finalBranches))
+  };
 }
+
+const STAGE_COLORS = ["red", "purple", "green", "orange", "teal"];
 
 function computeLocFlightPaths(palaces, startIdx) {
   let paths = [];
@@ -245,16 +266,19 @@ function computeLocFlightPaths(palaces, startIdx) {
   let currentStar = loc1.star;
   let currentOriginIdx = startIdx;
 
-  if (currentTargetIdx !== startIdx) {
-    // Cung phi Lộc: màu đỏ nét liền
-    addPath(startIdx, currentTargetIdx, "loc", "red", false);
+  let stage = 0;
+  let currentColor = STAGE_COLORS[stage];
 
-    // Cung truy Lộc (đỏ liền), truy Quyền (vàng liền), truy Khoa (xanh biển liền) bước 1
+  if (currentTargetIdx !== startIdx) {
+    // Cung phi Lộc: màu thức 1 nét liền
+    addPath(startIdx, currentTargetIdx, "loc", currentColor, false);
+
+    // Cung cùng can phi cùng hoặc cùng sao truy lộc ở bước đầu: cùng màu thức 1
     for (let i = 0; i < 12; i++) {
       if (i === currentOriginIdx) continue;
       let p = palaces[i];
       if (p.phiHoa?.Loc?.toIndex === currentTargetIdx && p.phiHoa?.Loc?.star === currentStar) {
-        addPath(i, currentTargetIdx, "truy_loc", "red", false);
+        addPath(i, currentTargetIdx, "truy_loc", currentColor, false);
       }
       if (p.phiHoa?.Quyen?.toIndex === currentTargetIdx && p.phiHoa?.Quyen?.star === currentStar) {
         addPath(i, currentTargetIdx, "truy_quyen", "yellow", false);
@@ -275,7 +299,7 @@ function computeLocFlightPaths(palaces, startIdx) {
     if (!kyData || typeof kyData.toIndex !== "number" || kyData.toIndex < 0 || kyData.toIndex >= 12) break;
     let nextTarget = kyData.toIndex;
 
-    // Tu Hoa Ky Xuat tai ban cung: quet Truy Loc, Truy Quyen, Truy Khoa cua con sao tu hoa Ky nhap vao ban cung truoc khi dung
+    // Tu Hoa Ky Xuat tai ban cung
     if (nextTarget === stepIdx) {
       let nextStar = kyData.star;
       let hasSinhNienLoc = palaces[stepIdx].stars?.some(s => s.sinhNien === "Lộc" && s.name === nextStar);
@@ -291,7 +315,10 @@ function computeLocFlightPaths(palaces, startIdx) {
         if (p.phiHoa?.Khoa?.toIndex === stepIdx && p.phiHoa?.Khoa?.star === nextStar) truyKhoa.push(i);
       }
 
-      truyLoc.forEach(pIdx => addPath(pIdx, stepIdx, "truy_loc", "red", false));
+      let nextStage = stage + 1;
+      let nextColor = STAGE_COLORS[Math.min(nextStage, STAGE_COLORS.length - 1)];
+
+      truyLoc.forEach(pIdx => addPath(pIdx, stepIdx, "truy_loc", nextColor, false));
       let hasLocTiepUng = hasSinhNienLoc || truyLoc.length > 0;
       if (hasLocTiepUng) {
         truyQuyen.forEach(pIdx => addPath(pIdx, stepIdx, "truy_quyen", "yellow", false));
@@ -301,6 +328,13 @@ function computeLocFlightPaths(palaces, startIdx) {
     }
 
     if (visited.includes(nextTarget)) break;
+
+    // Chuyển Kỵ mang Lộc: thuộc thức hiện tại
+    addPath(stepIdx, nextTarget, "loc_chuyen_ky", currentColor, true);
+
+    // Sang thức tiếp theo cho bước truy Lộc và chuyển Kỵ tiếp
+    stage++;
+    currentColor = STAGE_COLORS[Math.min(stage, STAGE_COLORS.length - 1)];
 
     let nextStar = kyData.star;
     let hasSinhNienLoc = palaces[nextTarget].stars?.some(s => s.sinhNien === "Lộc" && s.name === nextStar);
@@ -316,11 +350,8 @@ function computeLocFlightPaths(palaces, startIdx) {
       if (p.phiHoa?.Khoa?.toIndex === nextTarget && p.phiHoa?.Khoa?.star === nextStar) truyKhoa.push(i);
     }
 
-    // Cung chuyển Kỵ mang Lộc: màu đỏ nét đứt
-    addPath(stepIdx, nextTarget, "loc_chuyen_ky", "red", true);
-
-    // Cung truy Lộc (đỏ liền)
-    truyLoc.forEach(pIdx => addPath(pIdx, nextTarget, "truy_loc", "red", false));
+    // Cung truy Lộc: thuộc thức mới
+    truyLoc.forEach(pIdx => addPath(pIdx, nextTarget, "truy_loc", currentColor, false));
 
     // Quy tắc Lương Phái: Truy Quyền, Khoa CHỈ áp dụng khi có Truy Lộc (hoặc Niên Lộc) cùng sao tiếp ứng, tuyệt đối không truy quyền/khoa độc lập
     let hasLocTiepUng = hasSinhNienLoc || truyLoc.length > 0;
@@ -330,7 +361,6 @@ function computeLocFlightPaths(palaces, startIdx) {
     }
 
     stepIdx = nextTarget;
-    // Điều kiện dừng: không có Truy Lộc hoặc Sinh Niên Lộc cùng tinh diệu trợ lực
     if (!hasLocTiepUng) break;
     visited.push(nextTarget);
   }
@@ -338,6 +368,7 @@ function computeLocFlightPaths(palaces, startIdx) {
   finalBranch = palaces[stepIdx].branch;
   return { paths, startBranch, finalBranch };
 }
+
 function B(n, flightData){let h;
   let palaceBgs = n.palaces.map(D_bg).join("");
   let palaceTexts = n.palaces.map(D_text).join("");

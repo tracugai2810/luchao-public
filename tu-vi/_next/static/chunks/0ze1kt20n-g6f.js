@@ -62,7 +62,7 @@ function renderSvgFlightArrow(path, idxInGroup, totalInGroup) {
 
   let laneShift = 0;
   if ((totalInGroup || 1) > 1) {
-    laneShift = ((idxInGroup || 0) - (totalInGroup - 1) / 2) * 16;
+    laneShift = ((idxInGroup || 0) - (totalInGroup - 1) / 2) * 22;
   }
 
   let startX, startY, endX, endY, cpX, cpY;
@@ -88,26 +88,26 @@ function renderSvgFlightArrow(path, idxInGroup, totalInGroup) {
     cpX = mx + inX * actualCurve;
     cpY = my + inY * actualCurve;
   } else {
-    startX = cx1 + ux * 40 - uy * laneShift * 0.2;
-    startY = cy1 + uy * 40 + ux * laneShift * 0.2;
+    let nxRaw = -uy;
+    let nyRaw = ux;
+    let dot = nxRaw * (560 - (cx1 + cx2) / 2) + nyRaw * (420 - (cy1 + cy2) / 2);
+    let nx = dot >= 0 ? nxRaw : -nxRaw;
+    let ny = dot >= 0 ? nyRaw : -nyRaw;
+
+    startX = cx1 + ux * 40 + nx * laneShift * 0.35;
+    startY = cy1 + uy * 40 + ny * laneShift * 0.35;
     let y1 = layoutFrom.row * 210;
     startY = Math.max(y1 + 55, Math.min(y1 + 150, startY));
 
-    endX = cx2 - ux * 45 - uy * laneShift * 0.2;
-    endY = cy2 - uy * 45 + ux * laneShift * 0.2;
+    endX = cx2 - ux * 45 + nx * laneShift * 0.35;
+    endY = cy2 - uy * 45 + ny * laneShift * 0.35;
     let y2 = layoutTo.row * 210;
     endY = Math.max(y2 + 55, Math.min(y2 + 150, endY));
 
     let mx = (startX + endX) / 2;
     let my = (startY + endY) / 2;
-    let dSub = Math.hypot(endX - startX, endY - startY);
-    let nx = -(endY - startY) / dSub;
-    let ny = (endX - startX) / dSub;
 
-    let dot = nx * (560 - mx) + ny * (420 - my);
-    if (dot < 0) { nx = -nx; ny = -ny; }
-
-    let baseCurve = Math.min(42, Math.max(22, dist * 0.08));
+    let baseCurve = Math.max(38, Math.min(55, dist * 0.09));
     let actualCurve = baseCurve + laneShift;
     cpX = mx + nx * actualCurve;
     cpY = my + ny * actualCurve;
@@ -256,7 +256,33 @@ function computeLocFlightPaths(palaces, startIdx) {
     let kyData = pCurr.phiHoa?.Ky;
     if (!kyData || typeof kyData.toIndex !== "number" || kyData.toIndex < 0 || kyData.toIndex >= 12) break;
     let nextTarget = kyData.toIndex;
-    if (nextTarget === stepIdx || visited.includes(nextTarget)) break;
+
+    // Tu Hoa Ky Xuat tai ban cung: quet Truy Loc, Truy Quyen, Truy Khoa cua con sao tu hoa Ky nhap vao ban cung truoc khi dung
+    if (nextTarget === stepIdx) {
+      let nextStar = kyData.star;
+      let hasSinhNienLoc = palaces[stepIdx].stars?.some(s => s.sinhNien === "Lộc" && s.name === nextStar);
+      let truyLoc = [];
+      let truyQuyen = [];
+      let truyKhoa = [];
+
+      for (let i = 0; i < 12; i++) {
+        if (i === stepIdx) continue;
+        let p = palaces[i];
+        if (p.phiHoa?.Loc?.toIndex === stepIdx && p.phiHoa?.Loc?.star === nextStar) truyLoc.push(i);
+        if (p.phiHoa?.Quyen?.toIndex === stepIdx && p.phiHoa?.Quyen?.star === nextStar) truyQuyen.push(i);
+        if (p.phiHoa?.Khoa?.toIndex === stepIdx && p.phiHoa?.Khoa?.star === nextStar) truyKhoa.push(i);
+      }
+
+      truyLoc.forEach(pIdx => addPath(pIdx, stepIdx, "truy_loc", "red", false));
+      let hasLocTiepUng = hasSinhNienLoc || truyLoc.length > 0;
+      if (hasLocTiepUng) {
+        truyQuyen.forEach(pIdx => addPath(pIdx, stepIdx, "truy_quyen", "yellow", false));
+        truyKhoa.forEach(pIdx => addPath(pIdx, stepIdx, "truy_khoa", "blue", false));
+      }
+      break;
+    }
+
+    if (visited.includes(nextTarget)) break;
 
     let nextStar = kyData.star;
     let hasSinhNienLoc = palaces[nextTarget].stars?.some(s => s.sinhNien === "Lộc" && s.name === nextStar);
@@ -302,12 +328,12 @@ function B(n, flightData){let h;
   let fBranches = flightData?.finalBranches || (flightData?.finalBranch ? [flightData.finalBranch] : []);
   let pairCounts = {};
   fPaths.forEach(p => {
-    let key = p.fromBranch + "->" + p.toBranch;
+    let key = [p.fromBranch, p.toBranch].sort().join("<->");
     pairCounts[key] = (pairCounts[key] || 0) + 1;
   });
   let pairIndices = {};
   let renderedArrows = fPaths.map(p => {
-    let key = p.fromBranch + "->" + p.toBranch;
+    let key = [p.fromBranch, p.toBranch].sort().join("<->");
     let idx = pairIndices[key] || 0;
     pairIndices[key] = idx + 1;
     return renderSvgFlightArrow(p, idx, pairCounts[key]);

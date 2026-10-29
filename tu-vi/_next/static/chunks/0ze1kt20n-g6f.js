@@ -26,7 +26,7 @@ function renderPalaceHighlight(branch, isStart, isFinal) {
   return "";
 }
 
-function renderSvgFlightArrow(path, corridorInfo, totalInGroup) {
+function renderSvgFlightArrow(path, layoutInfo) {
   let k = {Tý:{row:3,col:2},Sửu:{row:3,col:1},Dần:{row:3,col:0},Mão:{row:2,col:0},Thìn:{row:1,col:0},Tị:{row:0,col:0},Ngọ:{row:0,col:1},Mùi:{row:0,col:2},Thân:{row:0,col:3},Dậu:{row:1,col:3},Tuất:{row:2,col:3},Hợi:{row:3,col:3}};
   let layoutFrom = k[path.fromBranch];
   let layoutTo = k[path.toBranch];
@@ -63,8 +63,10 @@ function renderSvgFlightArrow(path, corridorInfo, totalInGroup) {
     }
   }
 
-  let cInfo = (typeof corridorInfo === "object" && corridorInfo !== null) ? corridorInfo : { laneIdx: corridorInfo || 0, totalInLane: totalInGroup || 1, sideSign: 1 };
+  let lInfo = (typeof layoutInfo === "object" && layoutInfo !== null) ? layoutInfo : { sideSign: 1, laneShift: 0, hasDestSlot: false, shiftX: 0, shiftY: 0 };
   let startX, startY, endX, endY, cpX, cpY;
+  let shiftX = lInfo.shiftX || 0;
+  let shiftY = lInfo.shiftY || 0;
 
   if (isAdjacent) {
     let dRaw = Math.hypot(cx2 - cx1, cy2 - cy1);
@@ -74,19 +76,19 @@ function renderSvgFlightArrow(path, corridorInfo, totalInGroup) {
     let inX = dotRaw >= 0 ? nxRaw : -nxRaw;
     let inY = dotRaw >= 0 ? nyRaw : -nyRaw;
 
-    let laneShift = ((cInfo.laneIdx || 0) - (cInfo.totalInLane - 1) / 2) * 16;
+    let laneShift = lInfo.laneShift || 0;
     let sideShift = isClockwise ? (14 + laneShift) : -(14 + laneShift);
     startX = cx1 + ux * 25 + inX * sideShift;
     startY = cy1 + uy * 25 + inY * sideShift;
-    endX = cx2 - ux * 30 + inX * sideShift;
-    endY = cy2 - uy * 30 + inY * sideShift;
+    endX = cx2 - ux * 30 + inX * sideShift + shiftX;
+    endY = cy2 - uy * 30 + inY * sideShift + shiftY;
 
     let mx = (startX + endX) / 2;
     let my = (startY + endY) / 2;
 
     let actualCurve = isClockwise ? (42 + laneShift) : -(42 + laneShift);
-    cpX = mx + inX * actualCurve;
-    cpY = my + inY * actualCurve;
+    cpX = mx + inX * actualCurve + shiftX * 0.5;
+    cpY = my + inY * actualCurve + shiftY * 0.5;
   } else {
     let nxRaw = -uy;
     let nyRaw = ux;
@@ -94,8 +96,8 @@ function renderSvgFlightArrow(path, corridorInfo, totalInGroup) {
     let inX = dot >= 0 ? nxRaw : -nxRaw;
     let inY = dot >= 0 ? nyRaw : -nyRaw;
 
-    let sign = cInfo.sideSign || 1;
-    let laneShift = ((cInfo.laneIdx || 0) - (cInfo.totalInLane - 1) / 2) * 16;
+    let sign = lInfo.sideSign || 1;
+    let laneShift = lInfo.laneShift || 0;
 
     let sideOffset = sign * (12 + laneShift * 0.3);
     startX = cx1 + ux * 40 + inX * sideOffset;
@@ -103,18 +105,28 @@ function renderSvgFlightArrow(path, corridorInfo, totalInGroup) {
     let y1 = layoutFrom.row * 210;
     startY = Math.max(y1 + 45, Math.min(y1 + 165, startY));
 
-    endX = cx2 - ux * 45 + inX * sideOffset;
-    endY = cy2 - uy * 45 + inY * sideOffset;
+    if (lInfo.hasDestSlot) {
+      if (lInfo.slotSector === 'V') {
+        endX = cx2 - ux * 45;
+        endY = cy2 + shiftY;
+      } else {
+        endX = cx2 + shiftX;
+        endY = cy2 - uy * 45;
+      }
+    } else {
+      endX = cx2 - ux * 45 + inX * sideOffset;
+      endY = cy2 - uy * 45 + inY * sideOffset;
+    }
     let y2 = layoutTo.row * 210;
     endY = Math.max(y2 + 45, Math.min(y2 + 165, endY));
 
     let mx = (startX + endX) / 2;
     let my = (startY + endY) / 2;
 
-    let baseCurve = Math.max(38, Math.min(55, dist * 0.09));
+    let baseCurve = Math.max(38, minCurve(dist * 0.09));
     let actualCurve = sign * (baseCurve + laneShift);
-    cpX = mx + inX * actualCurve;
-    cpY = my + inY * actualCurve;
+    cpX = mx + inX * actualCurve + shiftX * 0.5;
+    cpY = my + inY * actualCurve + shiftY * 0.5;
   }
 
   let strokeColor = "#111111";
@@ -137,6 +149,8 @@ function renderSvgFlightArrow(path, corridorInfo, totalInGroup) {
 
   return `<g><circle cx="${startX.toFixed(1)}" cy="${startY.toFixed(1)}" r="3" fill="${strokeColor}" /><path d="M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${cpX.toFixed(1)} ${cpY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}" stroke="${strokeColor}" stroke-width="${strokeWidth}" fill="none" stroke-linecap="round" stroke-linejoin="round" ${dash} /><polygon points="${endX.toFixed(1)},${endY.toFixed(1)} ${lx},${ly} ${nxBase},${nyBase} ${rx},${ry}" fill="${strokeColor}" /></g>`;
 }
+
+function minCurve(v) { return Math.min(55, v); }
 
 function computeKyFlightPaths(palaces, startIndices) {
   let pathMap = new Map();
@@ -331,6 +345,45 @@ function B(n, flightData){let h;
   let sBranches = flightData?.startBranches || (flightData?.startBranch ? [flightData.startBranch] : []);
   let fBranches = flightData?.finalBranches || (flightData?.finalBranch ? [flightData.finalBranch] : []);
   let perimeter = ['Tị', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi', 'Tý', 'Sửu', 'Dần', 'Mão', 'Thìn'];
+  let kLayout = {Tý:{row:3,col:2},Sửu:{row:3,col:1},Dần:{row:3,col:0},Mão:{row:2,col:0},Thìn:{row:1,col:0},Tị:{row:0,col:0},Ngọ:{row:0,col:1},Mùi:{row:0,col:2},Thân:{row:0,col:3},Dậu:{row:1,col:3},Tuất:{row:2,col:3},Hợi:{row:3,col:3}};
+
+  let destGroups = {};
+  fPaths.forEach((p, index) => {
+    let layoutFrom = kLayout[p.fromBranch];
+    let layoutTo = kLayout[p.toBranch];
+    if (!layoutFrom || !layoutTo) return;
+    let dx = layoutTo.col - layoutFrom.col;
+    let dy = layoutTo.row - layoutFrom.row;
+    let sector = Math.abs(dx) >= Math.abs(dy) ? (dx > 0 ? "FROM_LEFT" : "FROM_RIGHT") : (dy > 0 ? "FROM_TOP" : "FROM_BOTTOM");
+    let destKey = p.toBranch + ":" + sector;
+    if (!destGroups[destKey]) destGroups[destKey] = [];
+    let cx1 = layoutFrom.col * 280 + 140;
+    let cy1 = layoutFrom.row * 210 + 105;
+    destGroups[destKey].push({ p, index, cx1, cy1 });
+  });
+
+  let destOffsets = new Array(fPaths.length);
+  Object.keys(destGroups).forEach(key => {
+    let group = destGroups[key];
+    if (group.length === 1) {
+      destOffsets[group[0].index] = { hasDestSlot: false, shiftX: 0, shiftY: 0 };
+      return;
+    }
+    if (key.includes("FROM_RIGHT") || key.includes("FROM_LEFT")) {
+      group.sort((a, b) => a.cy1 - b.cy1);
+      group.forEach((item, slotIdx) => {
+        let shift = (slotIdx - (group.length - 1) / 2) * 26;
+        destOffsets[item.index] = { hasDestSlot: true, slotSector: 'V', shiftX: 0, shiftY: shift };
+      });
+    } else {
+      group.sort((a, b) => a.cx1 - b.cx1);
+      group.forEach((item, slotIdx) => {
+        let shift = (slotIdx - (group.length - 1) / 2) * 26;
+        destOffsets[item.index] = { hasDestSlot: true, slotSector: 'H', shiftX: shift, shiftY: 0 };
+      });
+    }
+  });
+
   let corridorMap = {};
   fPaths.forEach((p, index) => {
     let key = [p.fromBranch, p.toBranch].sort().join("<->");
@@ -343,7 +396,7 @@ function B(n, flightData){let h;
   Object.keys(corridorMap).forEach(key => {
     let list = corridorMap[key];
     if (list.length === 1) {
-      corridorInfos[list[0].index] = { sideSign: 1, laneIdx: 0, totalInLane: 1 };
+      corridorInfos[list[0].index] = { sideSign: 1, laneShift: 0 };
     } else {
       let [bA, bB] = key.split("<->");
       let fwd = list.filter(item => item.path.fromBranch === bA);
@@ -355,36 +408,69 @@ function B(n, flightData){let h;
         let fwdCw = ((iB - iA + 12) % 12) <= 6;
 
         fwd.forEach((item, laneIdx) => {
+          let shift = (laneIdx - (fwd.length - 1) / 2) * 20;
           corridorInfos[item.index] = {
             sideSign: fwdCw ? 1 : -1,
-            laneIdx: laneIdx,
-            totalInLane: fwd.length
+            laneShift: shift
           };
         });
         bwd.forEach((item, laneIdx) => {
+          let shift = (laneIdx - (bwd.length - 1) / 2) * 20;
           corridorInfos[item.index] = {
             sideSign: fwdCw ? -1 : 1,
-            laneIdx: laneIdx,
-            totalInLane: bwd.length
+            laneShift: shift
           };
         });
       } else {
         list.forEach((item, idx) => {
           let side = (idx % 2 === 0) ? 1 : -1;
           let lane = Math.floor(idx / 2);
-          let totalLanes = Math.ceil(list.length / 2);
+          let shift = (lane - (Math.ceil(list.length / 2) - 1) / 2) * 20;
           corridorInfos[item.index] = {
             sideSign: side,
-            laneIdx: lane,
-            totalInLane: totalLanes
+            laneShift: shift
           };
         });
       }
     }
   });
 
+  let edgeGroups = { LEFT_COL: [], RIGHT_COL: [], TOP_ROW: [], BOTTOM_ROW: [] };
+  fPaths.forEach((p, index) => {
+    let lFrom = kLayout[p.fromBranch];
+    let lTo = kLayout[p.toBranch];
+    if (!lFrom || !lTo) return;
+    if (lFrom.col === 0 && lTo.col === 0) edgeGroups.LEFT_COL.push({ p, index });
+    else if (lFrom.col === 3 && lTo.col === 3) edgeGroups.RIGHT_COL.push({ p, index });
+    else if (lFrom.row === 0 && lTo.row === 0) edgeGroups.TOP_ROW.push({ p, index });
+    else if (lFrom.row === 3 && lTo.row === 3) edgeGroups.BOTTOM_ROW.push({ p, index });
+  });
+
+  Object.keys(edgeGroups).forEach(edgeName => {
+    let list = edgeGroups[edgeName];
+    if (list.length > 1) {
+      list.forEach((item, idx) => {
+        let side = (idx % 2 === 0) ? 1 : -1;
+        let shift = (Math.floor(idx / 2)) * 20;
+        corridorInfos[item.index] = {
+          sideSign: side,
+          laneShift: shift
+        };
+      });
+    }
+  });
+
   let renderedArrows = fPaths.map((p, idx) => {
-    return renderSvgFlightArrow(p, corridorInfos[idx]);
+    let cInfo = corridorInfos[idx] || { sideSign: 1, laneShift: 0 };
+    let dInfo = destOffsets[idx] || { hasDestSlot: false, shiftX: 0, shiftY: 0 };
+    return renderSvgFlightArrow(p, {
+      sideSign: cInfo.sideSign,
+      laneShift: cInfo.laneShift,
+      hasDestSlot: dInfo.hasDestSlot,
+      slotSector: dInfo.slotSector,
+      shiftX: dInfo.shiftX,
+      shiftY: dInfo.shiftY
+    });
   }).join("");
   let allBranches = Array.from(new Set([...sBranches, ...fBranches]));
   let renderedHighlights = allBranches.map(branch => {

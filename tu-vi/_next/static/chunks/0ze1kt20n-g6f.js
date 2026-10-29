@@ -26,7 +26,7 @@ function renderPalaceHighlight(branch, isStart, isFinal) {
   return "";
 }
 
-function renderSvgFlightArrow(path, idxInGroup, totalInGroup) {
+function renderSvgFlightArrow(path, corridorInfo, totalInGroup) {
   let k = {Tý:{row:3,col:2},Sửu:{row:3,col:1},Dần:{row:3,col:0},Mão:{row:2,col:0},Thìn:{row:1,col:0},Tị:{row:0,col:0},Ngọ:{row:0,col:1},Mùi:{row:0,col:2},Thân:{row:0,col:3},Dậu:{row:1,col:3},Tuất:{row:2,col:3},Hợi:{row:3,col:3}};
   let layoutFrom = k[path.fromBranch];
   let layoutTo = k[path.toBranch];
@@ -51,20 +51,19 @@ function renderSvgFlightArrow(path, idxInGroup, totalInGroup) {
   let isAdjacent = false;
   let isClockwise = false;
   if (iFrom !== -1 && iTo !== -1) {
-    if ((iFrom + 1) % 12 === iTo) {
+    let cw = (iTo - iFrom + 12) % 12;
+    if (cw === 1) {
       isAdjacent = true;
       isClockwise = true;
-    } else if ((iTo + 1) % 12 === iFrom) {
+    } else if (cw === 11) {
       isAdjacent = true;
       isClockwise = false;
+    } else {
+      isClockwise = (cw <= 6);
     }
   }
 
-  let laneShift = 0;
-  if ((totalInGroup || 1) > 1) {
-    laneShift = ((idxInGroup || 0) - (totalInGroup - 1) / 2) * 22;
-  }
-
+  let cInfo = (typeof corridorInfo === "object" && corridorInfo !== null) ? corridorInfo : { laneIdx: corridorInfo || 0, totalInLane: totalInGroup || 1, sideSign: 1 };
   let startX, startY, endX, endY, cpX, cpY;
 
   if (isAdjacent) {
@@ -75,7 +74,8 @@ function renderSvgFlightArrow(path, idxInGroup, totalInGroup) {
     let inX = dotRaw >= 0 ? nxRaw : -nxRaw;
     let inY = dotRaw >= 0 ? nyRaw : -nyRaw;
 
-    let sideShift = isClockwise ? 14 : -14;
+    let laneShift = ((cInfo.laneIdx || 0) - (cInfo.totalInLane - 1) / 2) * 16;
+    let sideShift = isClockwise ? (14 + laneShift) : -(14 + laneShift);
     startX = cx1 + ux * 25 + inX * sideShift;
     startY = cy1 + uy * 25 + inY * sideShift;
     endX = cx2 - ux * 30 + inX * sideShift;
@@ -91,26 +91,30 @@ function renderSvgFlightArrow(path, idxInGroup, totalInGroup) {
     let nxRaw = -uy;
     let nyRaw = ux;
     let dot = nxRaw * (560 - (cx1 + cx2) / 2) + nyRaw * (420 - (cy1 + cy2) / 2);
-    let nx = dot >= 0 ? nxRaw : -nxRaw;
-    let ny = dot >= 0 ? nyRaw : -nyRaw;
+    let inX = dot >= 0 ? nxRaw : -nxRaw;
+    let inY = dot >= 0 ? nyRaw : -nyRaw;
 
-    startX = cx1 + ux * 40 + nx * laneShift * 0.35;
-    startY = cy1 + uy * 40 + ny * laneShift * 0.35;
+    let sign = cInfo.sideSign || 1;
+    let laneShift = ((cInfo.laneIdx || 0) - (cInfo.totalInLane - 1) / 2) * 16;
+
+    let sideOffset = sign * (12 + laneShift * 0.3);
+    startX = cx1 + ux * 40 + inX * sideOffset;
+    startY = cy1 + uy * 40 + inY * sideOffset;
     let y1 = layoutFrom.row * 210;
-    startY = Math.max(y1 + 55, Math.min(y1 + 150, startY));
+    startY = Math.max(y1 + 45, Math.min(y1 + 165, startY));
 
-    endX = cx2 - ux * 45 + nx * laneShift * 0.35;
-    endY = cy2 - uy * 45 + ny * laneShift * 0.35;
+    endX = cx2 - ux * 45 + inX * sideOffset;
+    endY = cy2 - uy * 45 + inY * sideOffset;
     let y2 = layoutTo.row * 210;
-    endY = Math.max(y2 + 55, Math.min(y2 + 150, endY));
+    endY = Math.max(y2 + 45, Math.min(y2 + 165, endY));
 
     let mx = (startX + endX) / 2;
     let my = (startY + endY) / 2;
 
     let baseCurve = Math.max(38, Math.min(55, dist * 0.09));
-    let actualCurve = baseCurve + laneShift;
-    cpX = mx + nx * actualCurve;
-    cpY = my + ny * actualCurve;
+    let actualCurve = sign * (baseCurve + laneShift);
+    cpX = mx + inX * actualCurve;
+    cpY = my + inY * actualCurve;
   }
 
   let strokeColor = "#111111";
@@ -326,17 +330,61 @@ function B(n, flightData){let h;
   let fPaths = flightData?.paths || (Array.isArray(flightData) ? flightData : []);
   let sBranches = flightData?.startBranches || (flightData?.startBranch ? [flightData.startBranch] : []);
   let fBranches = flightData?.finalBranches || (flightData?.finalBranch ? [flightData.finalBranch] : []);
-  let pairCounts = {};
-  fPaths.forEach(p => {
+  let perimeter = ['Tị', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi', 'Tý', 'Sửu', 'Dần', 'Mão', 'Thìn'];
+  let corridorMap = {};
+  fPaths.forEach((p, index) => {
     let key = [p.fromBranch, p.toBranch].sort().join("<->");
-    pairCounts[key] = (pairCounts[key] || 0) + 1;
+    if (!corridorMap[key]) corridorMap[key] = [];
+    corridorMap[key].push({ path: p, index });
   });
-  let pairIndices = {};
-  let renderedArrows = fPaths.map(p => {
-    let key = [p.fromBranch, p.toBranch].sort().join("<->");
-    let idx = pairIndices[key] || 0;
-    pairIndices[key] = idx + 1;
-    return renderSvgFlightArrow(p, idx, pairCounts[key]);
+
+  let corridorInfos = new Array(fPaths.length);
+
+  Object.keys(corridorMap).forEach(key => {
+    let list = corridorMap[key];
+    if (list.length === 1) {
+      corridorInfos[list[0].index] = { sideSign: 1, laneIdx: 0, totalInLane: 1 };
+    } else {
+      let [bA, bB] = key.split("<->");
+      let fwd = list.filter(item => item.path.fromBranch === bA);
+      let bwd = list.filter(item => item.path.fromBranch === bB);
+
+      if (fwd.length > 0 && bwd.length > 0) {
+        let iA = perimeter.indexOf(bA);
+        let iB = perimeter.indexOf(bB);
+        let fwdCw = ((iB - iA + 12) % 12) <= 6;
+
+        fwd.forEach((item, laneIdx) => {
+          corridorInfos[item.index] = {
+            sideSign: fwdCw ? 1 : -1,
+            laneIdx: laneIdx,
+            totalInLane: fwd.length
+          };
+        });
+        bwd.forEach((item, laneIdx) => {
+          corridorInfos[item.index] = {
+            sideSign: fwdCw ? -1 : 1,
+            laneIdx: laneIdx,
+            totalInLane: bwd.length
+          };
+        });
+      } else {
+        list.forEach((item, idx) => {
+          let side = (idx % 2 === 0) ? 1 : -1;
+          let lane = Math.floor(idx / 2);
+          let totalLanes = Math.ceil(list.length / 2);
+          corridorInfos[item.index] = {
+            sideSign: side,
+            laneIdx: lane,
+            totalInLane: totalLanes
+          };
+        });
+      }
+    }
+  });
+
+  let renderedArrows = fPaths.map((p, idx) => {
+    return renderSvgFlightArrow(p, corridorInfos[idx]);
   }).join("");
   let allBranches = Array.from(new Set([...sBranches, ...fBranches]));
   let renderedHighlights = allBranches.map(branch => {

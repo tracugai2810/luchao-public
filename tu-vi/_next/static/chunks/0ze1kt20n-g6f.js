@@ -26,6 +26,13 @@ function renderPalaceHighlight(branch, isStart, isFinal) {
   return "";
 }
 
+function getStarClearance(ux, uy, isEnd) {
+  let extra = isEnd ? 10 : 8;
+  let rx = 46 + extra; // 56px cho điểm đến, 54px cho điểm đi
+  let ry = 24 + extra; // 34px cho điểm đến, 32px cho điểm đi
+  return Math.hypot(rx * ux, ry * uy);
+}
+
 function renderSvgFlightArrow(path, layoutInfo) {
   let k = {Tý:{row:3,col:2},Sửu:{row:3,col:1},Dần:{row:3,col:0},Mão:{row:2,col:0},Thìn:{row:1,col:0},Tị:{row:0,col:0},Ngọ:{row:0,col:1},Mùi:{row:0,col:2},Thân:{row:0,col:3},Dậu:{row:1,col:3},Tuất:{row:2,col:3},Hợi:{row:3,col:3}};
   let layoutFrom = k[path.fromBranch];
@@ -77,19 +84,20 @@ function renderSvgFlightArrow(path, layoutInfo) {
     let inX = dotRaw >= 0 ? nxRaw : -nxRaw;
     let inY = dotRaw >= 0 ? nyRaw : -nyRaw;
 
-    // Đẩy điểm bắt đầu và điểm kết thúc ra xa tâm cung (78px), bảo đảm cách khối chữ chính tinh >= 25px
-    let safeOffset = 78;
-    let laneOffset = laneShift * 0.35;
+    // Khoảng cách tiếp cận chính tinh: chỉ cách chữ 8-12px, vươn dài tự nhiên
+    let rStart = getStarClearance(ux, uy, false);
+    let rEnd = getStarClearance(ux, uy, true);
 
-    startX = cx1 + ux * (safeOffset - laneOffset) + inX * (22 + laneShift);
-    startY = cy1 + uy * (safeOffset - laneOffset) + inY * (22 + laneShift);
-    endX = cx2 - ux * (safeOffset + 4 + laneOffset) + inX * (22 + laneShift) + shiftX;
-    endY = cy2 - uy * (safeOffset + 4 + laneOffset) + inY * (22 + laneShift) + shiftY;
+    let sideShift = (isClockwise ? 1 : -1) * (14 + laneShift * 0.7);
+    startX = cx1 + ux * rStart + inX * sideShift;
+    startY = cy1 + uy * rStart + inY * sideShift;
+    endX = cx2 - ux * rEnd + inX * sideShift + shiftX;
+    endY = cy2 - uy * rEnd + inY * sideShift + shiftY;
 
     let mx = (startX + endX) / 2;
     let my = (startY + endY) / 2;
 
-    let curveHeight = 36 + Math.abs(laneShift) * 0.7;
+    let curveHeight = 30 + Math.abs(laneShift) * 0.7;
     let curveSign = isClockwise ? 1 : -1;
     cpX = mx + inX * (curveSign * curveHeight) + shiftX * 0.5;
     cpY = my + inY * (curveSign * curveHeight) + shiftY * 0.5;
@@ -101,34 +109,33 @@ function renderSvgFlightArrow(path, layoutInfo) {
     let inY = dot >= 0 ? nyRaw : -nyRaw;
 
     let sign = lInfo.sideSign || 1;
-    let sideOffset = sign * (14 + laneShift * 0.35);
+    let sideOffset = sign * (10 + laneShift * 0.3);
 
-    // Điểm khởi đầu dừng cách tâm cung 78px để không chạm vào khối chính tinh
-    startX = cx1 + ux * 78 + inX * sideOffset;
-    startY = cy1 + uy * 78 + inY * sideOffset;
-    let y1 = layoutFrom.row * 210;
-    startY = Math.max(y1 + 42, Math.min(y1 + 168, startY));
+    let rStart = getStarClearance(ux, uy, false);
+    let rEnd = getStarClearance(ux, uy, true);
 
-    // Điểm đến dừng cách tâm cung đích 82px (đón tại cửa ngõ cung, cách chữ >= 25px)
+    // Điểm khởi đầu vươn từ sát khối chính tinh (cách 8px)
+    startX = cx1 + ux * rStart + inX * sideOffset;
+    startY = cy1 + uy * rStart + inY * sideOffset;
+
+    // Điểm đến vươn sâu vào cung đích, dừng cách chính tinh chỉ 10px
     if (lInfo.hasDestSlot) {
       if (lInfo.slotSector === 'V') {
-        endX = cx2 - ux * 82;
+        endX = cx2 - ux * rEnd;
         endY = cy2 + shiftY;
       } else {
         endX = cx2 + shiftX;
-        endY = cy2 - uy * 82;
+        endY = cy2 - uy * rEnd;
       }
     } else {
-      endX = cx2 - ux * 82 + inX * sideOffset;
-      endY = cy2 - uy * 82 + inY * sideOffset;
+      endX = cx2 - ux * rEnd + inX * sideOffset;
+      endY = cy2 - uy * rEnd + inY * sideOffset;
     }
-    let y2 = layoutTo.row * 210;
-    endY = Math.max(y2 + 42, Math.min(y2 + 168, endY));
 
     let mx = (startX + endX) / 2;
     let my = (startY + endY) / 2;
 
-    let baseCurve = Math.max(38, minCurve(dist * 0.10));
+    let baseCurve = Math.max(28, minCurve(dist * 0.08));
     let actualCurve = sign * (baseCurve + laneShift);
     cpX = mx + inX * actualCurve + shiftX * 0.5;
     cpY = my + inY * actualCurve + shiftY * 0.5;
@@ -148,7 +155,7 @@ function renderSvgFlightArrow(path, layoutInfo) {
 
   let tanX = endX - cpX, tanY = endY - cpY;
   let angle = Math.atan2(tanY, tanX);
-  let len = 10, alpha = 0.38;
+  let len = 9.5, alpha = 0.38;
   let lx = (endX - len * Math.cos(angle - alpha)).toFixed(1);
   let ly = (endY - len * Math.sin(angle - alpha)).toFixed(1);
   let nxBase = (endX - (len - 2.5) * Math.cos(angle)).toFixed(1);

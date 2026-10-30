@@ -169,6 +169,55 @@ function renderSvgFlightArrow(path, layoutInfo) {
 function minCurve(v) { return Math.min(55, v); }
 
 function computeKyFlightPaths(palaces, startIndices) {
+  let menhIdx = palaces.findIndex(p => p.palaceName === "Mệnh");
+  let menhKyIdx = (menhIdx >= 0 && typeof palaces[menhIdx]?.phiHoa?.Ky?.toIndex === "number") ? palaces[menhIdx].phiHoa.Ky.toIndex : -1;
+  function hasMenhOrNienKy(idx) {
+    if (idx < 0 || idx >= 12) return false;
+    if (idx === menhKyIdx) return true;
+    return !!palaces[idx]?.stars?.some(s => s.sinhNien === "Kỵ");
+  }
+  function continueIfMenhOrNienKy(currTarget, prevIdx, startIdx, visited) {
+    if (!hasMenhOrNienKy(currTarget) || visited.has(currTarget)) return currTarget;
+    visited.add(currTarget);
+    for (let i = 0; i < 12; i++) {
+      if (i === startIdx || i === prevIdx || i === currTarget) continue;
+      if (palaces[i].phiHoa?.Ky?.toIndex === currTarget) {
+        addKyPath(i, currTarget, "ky");
+      }
+    }
+    let currOpp = (currTarget + 6) % 12;
+    let hasCurrOppTruy = false;
+    for (let i = 0; i < 12; i++) {
+      if (i === startIdx || i === prevIdx || i === currTarget || i === currOpp) continue;
+      if (palaces[i].phiHoa?.Ky?.toIndex === currOpp) {
+        addKyPath(i, currOpp, "ky");
+        hasCurrOppTruy = true;
+      }
+    }
+    if (hasCurrOppTruy && !visited.has(currOpp)) {
+      let lastStopOpp = currOpp;
+      let kyCurrOpp = palaces[currOpp].phiHoa?.Ky;
+      if (kyCurrOpp && typeof kyCurrOpp.toIndex === "number" && kyCurrOpp.toIndex >= 0 && kyCurrOpp.toIndex < 12 && kyCurrOpp.toIndex !== currOpp) {
+        let nextHopOpp = kyCurrOpp.toIndex;
+        addKyPath(currOpp, nextHopOpp, "chuyen_ky");
+        visited.add(currOpp);
+        lastStopOpp = continueIfMenhOrNienKy(nextHopOpp, currOpp, startIdx, visited);
+      }
+      let oppStop = (lastStopOpp + 6) % 12;
+      if (palaces[lastStopOpp].phiHoa?.Ky?.toIndex === oppStop) {
+        addKyPath(lastStopOpp, oppStop, "xung_ky");
+        lastStopOpp = oppStop;
+      }
+      finalBranches.push(palaces[lastStopOpp].branch);
+    }
+    let kyCurr = palaces[currTarget].phiHoa?.Ky;
+    if (kyCurr && typeof kyCurr.toIndex === "number" && kyCurr.toIndex >= 0 && kyCurr.toIndex < 12 && kyCurr.toIndex !== currTarget) {
+      let nextHop = kyCurr.toIndex;
+      addKyPath(currTarget, nextHop, "chuyen_ky");
+      return continueIfMenhOrNienKy(nextHop, currTarget, startIdx, visited);
+    }
+    return currTarget;
+  }
   let pathMap = new Map();
   let startBranches = [];
   let finalBranches = [];
@@ -182,7 +231,7 @@ function computeKyFlightPaths(palaces, startIndices) {
 
     if (pathMap.has(key)) {
       let existing = pathMap.get(key);
-      if (existing.type === "ky") return;
+      if (existing.type === "ky" || existing.type === "chuyen_ky") return;
       if (isKy) {
         pathMap.set(key, { fromBranch, toBranch, type: "ky", color: "black", dashed: false });
       }
@@ -227,7 +276,7 @@ function computeKyFlightPaths(palaces, startIndices) {
     if (kyTarget1 && typeof kyTarget1.toIndex === "number" && kyTarget1.toIndex >= 0 && kyTarget1.toIndex < 12 && kyTarget1.toIndex !== target1) {
       let nextTarget1 = kyTarget1.toIndex;
       addKyPath(target1, nextTarget1, "chuyen_ky");
-      lastStop1 = nextTarget1;
+      lastStop1 = continueIfMenhOrNienKy(nextTarget1, target1, startIdx, new Set([startIdx, target1]));
     }
     let oppStop1 = (lastStop1 + 6) % 12;
     if (palaces[lastStop1].phiHoa?.Ky?.toIndex === oppStop1) {
@@ -256,7 +305,7 @@ function computeKyFlightPaths(palaces, startIndices) {
       if (kyTargetOpp && typeof kyTargetOpp.toIndex === "number" && kyTargetOpp.toIndex >= 0 && kyTargetOpp.toIndex < 12 && kyTargetOpp.toIndex !== target1Opp) {
         let nextTargetOpp = kyTargetOpp.toIndex;
         addKyPath(target1Opp, nextTargetOpp, "chuyen_ky");
-        lastStop2 = nextTargetOpp;
+        lastStop2 = continueIfMenhOrNienKy(nextTargetOpp, target1Opp, startIdx, new Set([startIdx, target1, target1Opp]));
       }
       let oppStop2 = (lastStop2 + 6) % 12;
       if (palaces[lastStop2].phiHoa?.Ky?.toIndex === oppStop2) {

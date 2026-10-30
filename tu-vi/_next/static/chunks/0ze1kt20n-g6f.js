@@ -563,10 +563,10 @@ return`
       <rect x="2.5" y="2.5" width="1125" height="845" fill="none" stroke="#111111" stroke-width="1.5" rx="4" ry="4" opacity="0.4" />
       <g transform="translate(5, 5)">
         <rect width="1120" height="840" fill="#ffffff" />
-        ${palaceBgs}
-        <rect x="280" y="210" width="560" height="420" fill="#ffffff" stroke="#111111" stroke-width="2" />
-        ${renderedHighlights}
-        ${renderedArrows}
+        ${renderedHighlights.replaceAll(/stroke="[^"]+"/g, 'stroke="none"')}${renderedArrows}
+
+        ${palaceBgs.replaceAll('fill="#ffffff"', 'fill="none"').replaceAll('stroke="#111111" stroke-width="2"', 'stroke="#ffffff" stroke-width="6.5"')}<rect x="280" y="210" width="560" height="420" fill="none" stroke="#ffffff" stroke-width="6.5" />${renderedHighlights.replaceAll(/fill="[^"]+"/g, 'fill="none"').replaceAll(/stroke="[^"]+"/g, 'stroke="#ffffff"').replaceAll(/stroke-width="[^"]+"/g, 'stroke-width="6"').replaceAll('stroke-dasharray="6,4"', '')}${palaceBgs.replaceAll('fill="#ffffff"', 'fill="none"')}<rect x="280" y="210" width="560" height="420" fill="none" stroke="#111111" stroke-width="2" />${renderedHighlights.replaceAll(/fill="[^"]+"/g, 'fill="none"')}
+
         ${palaceTexts}
         ${h=560,`
     <g>
@@ -590,7 +590,7 @@ return`
       <text x="686" y="${504}" font-size="18.5" font-weight="400" fill="#111111">${f(n.hourCanChi.label)}</text>
 
       <line x1="${h-96}" y1="546" x2="${h+96}" y2="546" stroke="#ffffff" stroke-width="6.5" stroke-linecap="round" />
-      <line x1="${h-96}" y1="546" x2="${h+96}" y2="546" stroke="#111111" stroke-width="1.5" shape-rendering="crispEdges" />
+      <line x1="${h-96}" y1="546" x2="${h+96}" y2="546" stroke="#111111" stroke-width="1.8" />
       <text x="${h}" y="${572}" font-size="18.5" font-weight="700" text-anchor="middle" fill="#d00000">luchao.io.vn/tu-vi</text>
     </g>
   `}

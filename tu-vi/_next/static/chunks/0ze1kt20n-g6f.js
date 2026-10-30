@@ -171,45 +171,41 @@ function minCurve(v) { return Math.min(55, v); }
 function computeKyFlightPaths(palaces, startIndices) {
   let menhIdx = palaces.findIndex(p => p.palaceName === "Mệnh");
   let menhKyIdx = (menhIdx >= 0 && typeof palaces[menhIdx]?.phiHoa?.Ky?.toIndex === "number") ? palaces[menhIdx].phiHoa.Ky.toIndex : -1;
-  function hasMenhOrNienKy(idx) {
+  function hasSingleMenhOrNienKy(idx) {
     if (idx < 0 || idx >= 12) return false;
     if (idx === menhKyIdx) return true;
     return !!palaces[idx]?.stars?.some(s => s.sinhNien === "Kỵ");
   }
-  function continueIfMenhOrNienKy(currTarget, prevIdx, startIdx, visited) {
-    if (!hasMenhOrNienKy(currTarget) || visited.has(currTarget)) return currTarget;
-    visited.add(currTarget);
+  function hasMenhOrNienKy(idx) {
+    if (idx < 0 || idx >= 12) return false;
+    let oppIdx = (idx + 6) % 12;
+    return hasSingleMenhOrNienKy(idx) || hasSingleMenhOrNienKy(oppIdx);
+  }
+  function isTuHoaKyXuat(idx) {
+    if (idx < 0 || idx >= 12) return false;
+    let toIdx = palaces[idx]?.phiHoa?.Ky?.toIndex;
+    let oppIdx = (idx + 6) % 12;
+    return toIdx === idx || toIdx === oppIdx;
+  }
+  function scanTruyKy(currIdx, prevIdx, startIdx) {
+    let currOpp = (currIdx + 6) % 12;
     for (let i = 0; i < 12; i++) {
-      if (i === startIdx || i === prevIdx || i === currTarget) continue;
-      if (palaces[i].phiHoa?.Ky?.toIndex === currTarget) {
-        addKyPath(i, currTarget, "ky");
+      if (i === startIdx || i === prevIdx || i === currIdx) continue;
+      if (palaces[i].phiHoa?.Ky?.toIndex === currIdx) {
+        addKyPath(i, currIdx, "ky");
       }
     }
-    let currOpp = (currTarget + 6) % 12;
-    let hasCurrOppTruy = false;
     for (let i = 0; i < 12; i++) {
-      if (i === startIdx || i === prevIdx || i === currTarget || i === currOpp) continue;
+      if (i === startIdx || i === prevIdx || i === currIdx || i === currOpp) continue;
       if (palaces[i].phiHoa?.Ky?.toIndex === currOpp) {
         addKyPath(i, currOpp, "ky");
-        hasCurrOppTruy = true;
       }
     }
-    if (hasCurrOppTruy && !visited.has(currOpp)) {
-      let lastStopOpp = currOpp;
-      let kyCurrOpp = palaces[currOpp].phiHoa?.Ky;
-      if (kyCurrOpp && typeof kyCurrOpp.toIndex === "number" && kyCurrOpp.toIndex >= 0 && kyCurrOpp.toIndex < 12 && kyCurrOpp.toIndex !== currOpp) {
-        let nextHopOpp = kyCurrOpp.toIndex;
-        addKyPath(currOpp, nextHopOpp, "chuyen_ky");
-        visited.add(currOpp);
-        lastStopOpp = continueIfMenhOrNienKy(nextHopOpp, currOpp, startIdx, visited);
-      }
-      let oppStop = (lastStopOpp + 6) % 12;
-      if (palaces[lastStopOpp].phiHoa?.Ky?.toIndex === oppStop) {
-        addKyPath(lastStopOpp, oppStop, "xung_ky");
-        lastStopOpp = oppStop;
-      }
-      finalBranches.push(palaces[lastStopOpp].branch);
-    }
+  }
+  function continueIfMenhOrNienKy(currTarget, prevIdx, startIdx, visited) {
+    if ((!hasMenhOrNienKy(currTarget) && !isTuHoaKyXuat(currTarget)) || visited.has(currTarget)) return currTarget;
+    visited.add(currTarget);
+    scanTruyKy(currTarget, prevIdx, startIdx);
     let kyCurr = palaces[currTarget].phiHoa?.Ky;
     if (kyCurr && typeof kyCurr.toIndex === "number" && kyCurr.toIndex >= 0 && kyCurr.toIndex < 12 && kyCurr.toIndex !== currTarget) {
       let nextHop = kyCurr.toIndex;
@@ -253,6 +249,7 @@ function computeKyFlightPaths(palaces, startIndices) {
     let pStart = palaces[startIdx];
     let ky1 = pStart.phiHoa?.Ky;
     if (!ky1 || typeof ky1.toIndex !== "number" || ky1.toIndex < 0 || ky1.toIndex >= 12 || ky1.toIndex === startIdx) {
+      if (ky1 && ky1.toIndex === startIdx) scanTruyKy(startIdx, -1, startIdx);
       finalBranches.push(palaces[startIdx].branch);
       return;
     }
@@ -260,9 +257,10 @@ function computeKyFlightPaths(palaces, startIndices) {
     let target1 = ky1.toIndex;
     addKyPath(startIdx, target1, "ky");
 
-    // 1. Truy Kỵ tại cung nhận Kỵ (target1)
+    // 1. Truy Kỵ tại cung nhận Kỵ (target1) và đối cung trước khi chuyển Kỵ
+    scanTruyKy(target1, startIdx, startIdx);
     for (let i = 0; i < 12; i++) {
-      if (i === startIdx) continue;
+      if (true) continue;
       let pOther = palaces[i];
       if (pOther.phiHoa?.Ky?.toIndex === target1) {
         addKyPath(i, target1, "ky");
@@ -289,7 +287,7 @@ function computeKyFlightPaths(palaces, startIndices) {
     let target1Opp = (target1 + 6) % 12;
     let hasOppTruy = false;
     for (let i = 0; i < 12; i++) {
-      if (i === startIdx) continue;
+      if (true) continue;
       let pOther = palaces[i];
       if (pOther.phiHoa?.Ky?.toIndex === target1Opp) {
         addKyPath(i, target1Opp, "ky");
@@ -298,7 +296,7 @@ function computeKyFlightPaths(palaces, startIndices) {
     }
 
     // Nếu đối cung có cung phi Kỵ vào: chuyển Kỵ từ đối cung
-    if (hasOppTruy) {
+    if (false && hasOppTruy) {
       let lastStop2 = target1Opp;
       let pTargetOpp = palaces[target1Opp];
       let kyTargetOpp = pTargetOpp.phiHoa?.Ky;

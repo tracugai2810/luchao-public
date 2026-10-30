@@ -589,6 +589,7 @@ return`
       <text x="452" y="${504}" font-size="18.5" font-weight="400" fill="#111111">${f(n.birthTime)}${n.solarAdjustment?` (MT: ${n.solarAdjustment.adjustedBirthTime})`:7!==n.timeZone?` (${f(n.timeZoneLabel)})`:""}</text>
       <text x="686" y="${504}" font-size="18.5" font-weight="400" fill="#111111">${f(n.hourCanChi.label)}</text>
 
+      <line x1="${h-96}" y1="546" x2="${h+96}" y2="546" stroke="#ffffff" stroke-width="6.5" stroke-linecap="round" />
       <line x1="${h-96}" y1="546" x2="${h+96}" y2="546" stroke="#111111" stroke-width="1.5" shape-rendering="crispEdges" />
       <text x="${h}" y="${572}" font-size="18.5" font-weight="700" text-anchor="middle" fill="#d00000">luchao.io.vn/tu-vi</text>
     </g>

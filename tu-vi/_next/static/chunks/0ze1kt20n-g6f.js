@@ -350,6 +350,7 @@ function computeLocFlightPaths(palaces, startIdx) {
   let currentTargetIdx = loc1.toIndex;
   let currentStar = loc1.star;
   let currentOriginIdx = startIdx;
+  let usedLocOrigins = new Set([startIdx]);
 
   let stage = 0;
   let currentColor = STAGE_COLORS[stage];
@@ -364,6 +365,7 @@ function computeLocFlightPaths(palaces, startIdx) {
       let p = palaces[i];
       if (p.phiHoa?.Loc?.toIndex === currentTargetIdx && p.phiHoa?.Loc?.star === currentStar) {
         addPath(i, currentTargetIdx, "truy_loc", currentColor, false);
+        usedLocOrigins.add(i);
       }
       if (p.phiHoa?.Quyen?.toIndex === currentTargetIdx && p.phiHoa?.Quyen?.star === currentStar) {
         addPath(i, currentTargetIdx, "truy_quyen", "yellow", false);
@@ -395,7 +397,7 @@ function computeLocFlightPaths(palaces, startIdx) {
       for (let i = 0; i < 12; i++) {
         if (i === stepIdx) continue;
         let p = palaces[i];
-        if (p.phiHoa?.Loc?.toIndex === stepIdx && p.phiHoa?.Loc?.star === nextStar) truyLoc.push(i);
+        if (!usedLocOrigins.has(i) && p.phiHoa?.Loc?.toIndex === stepIdx && p.phiHoa?.Loc?.star === nextStar) { truyLoc.push(i); usedLocOrigins.add(i); }
         if (p.phiHoa?.Quyen?.toIndex === stepIdx && p.phiHoa?.Quyen?.star === nextStar) truyQuyen.push(i);
         if (p.phiHoa?.Khoa?.toIndex === stepIdx && p.phiHoa?.Khoa?.star === nextStar) truyKhoa.push(i);
       }
@@ -430,7 +432,7 @@ function computeLocFlightPaths(palaces, startIdx) {
     for (let i = 0; i < 12; i++) {
       if (i === stepIdx) continue;
       let p = palaces[i];
-      if (p.phiHoa?.Loc?.toIndex === nextTarget && p.phiHoa?.Loc?.star === nextStar) truyLoc.push(i);
+      if (!usedLocOrigins.has(i) && p.phiHoa?.Loc?.toIndex === nextTarget && p.phiHoa?.Loc?.star === nextStar) { truyLoc.push(i); usedLocOrigins.add(i); }
       if (p.phiHoa?.Quyen?.toIndex === nextTarget && p.phiHoa?.Quyen?.star === nextStar) truyQuyen.push(i);
       if (p.phiHoa?.Khoa?.toIndex === nextTarget && p.phiHoa?.Khoa?.star === nextStar) truyKhoa.push(i);
     }

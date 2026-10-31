@@ -1,4 +1,7 @@
-const MODEL = "gemini-3.1-flash-lite";
+const MODELS = [
+  "gemini-flash-lite-latest",
+  "gemini-flash-latest",
+];
 
 function normalizeTimeStr(raw) {
   if (typeof raw !== "string") return null;
@@ -106,7 +109,7 @@ Nhiệm vụ của bạn là đọc kỹ văn bản và/hoặc hình ảnh đư�
 - calcMonth: số tháng xem hạn (số nguyên từ 1 đến 12) nếu có ghi tháng xem hạn (ví dụ "Năm xem: 10/2026" -> 10). Nếu không có thì để null.
 - calcDay: số ngày xem hạn (số nguyên từ 1 đến 31) nếu có ghi ngày xem hạn cụ thể. Nếu không có thì để null.
 
-Trả về duy nhất định dạng JSON theo đúng cấu trúc trên.`;
+Trả về duy nhất 1 JSON object (không bọc trong mảng) theo đúng cấu trúc trên.`;
 
     const userParts = [];
     if (imageBase64) {
@@ -125,52 +128,83 @@ Trả về duy nhất định dạng JSON theo đúng cấu trúc trên.`;
       });
     }
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    const requestBody = JSON.stringify({
+      system_instruction: {
+        parts: [{ text: systemPrompt }],
+      },
+      contents: [
+        {
+          parts: userParts,
         },
-        body: JSON.stringify({
-          system_instruction: {
-            parts: [{ text: systemPrompt }],
-          },
-          contents: [
-            {
-              parts: userParts,
+      ],
+      generationConfig: {
+        response_mime_type: "application/json",
+        temperature: 0.1,
+      },
+    });
+
+    let parsed = null;
+    let lastErrorText = "";
+
+    for (const modelName of MODELS) {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 9000);
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
             },
-          ],
-          generationConfig: {
-            response_mime_type: "application/json",
-            temperature: 0.1,
-          },
-        }),
+            body: requestBody,
+            signal: controller.signal,
+          }
+        );
+        clearTimeout(timer);
+
+        if (!response.ok) {
+          lastErrorText = await response.text();
+          console.warn(`Gemini model ${modelName} failed (${response.status}):`, lastErrorText);
+          continue;
+        }
+
+        const data = await response.json();
+        const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!candidateText) {
+          console.warn(`Gemini model ${modelName} returned empty text.`);
+          continue;
+        }
+
+        const cleanedText = candidateText.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+        let obj = JSON.parse(cleanedText);
+        if (Array.isArray(obj)) {
+          obj = obj[0] || null;
+        }
+        if (obj && typeof obj === "object") {
+          parsed = obj;
+          break;
+        }
+      } catch (err) {
+        lastErrorText = err instanceof Error ? err.message : String(err);
+        console.warn(`Gemini model ${modelName} exception:`, lastErrorText);
       }
-    );
+    }
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("Gemini API Error:", errText);
+    if (!parsed) {
+      console.error("All Gemini fallback models failed:", lastErrorText);
       return res.status(502).json({
-        error: "Lỗi kết nối tới Gemini API để bóc tách dữ liệu.",
+        error: "Lỗi kết nối tới Gemini API để bóc tách dữ liệu. Vui lòng thử lại.",
       });
     }
 
-    const data = await response.json();
-    const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!candidateText) {
-      return res.status(422).json({
-        error: "AI không trích xuất được thông tin hợp lệ.",
-      });
-    }
-
-    const parsed = JSON.parse(candidateText);
-    if (parsed && parsed.birthTime) {
-      const normTime = normalizeTimeStr(parsed.birthTime);
+    if (parsed.birthTime) {
+      const normTime = normalizeTimeStr(String(parsed.birthTime));
       if (normTime) parsed.birthTime = normTime;
     }
+    if (parsed.birthDay !== undefined && parsed.birthDay !== null) parsed.birthDay = Number(parsed.birthDay);
+    if (parsed.birthMonth !== undefined && parsed.birthMonth !== null) parsed.birthMonth = Number(parsed.birthMonth);
+    if (parsed.birthYear !== undefined && parsed.birthYear !== null) parsed.birthYear = Number(parsed.birthYear);
 
     return res.status(200).json({ success: true, data: parsed });
   } catch (error) {

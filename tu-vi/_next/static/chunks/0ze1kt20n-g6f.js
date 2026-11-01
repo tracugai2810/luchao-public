@@ -414,7 +414,7 @@ function computeLocFlightPaths(palaces, startIdx) {
       break;
     }
 
-    if (visited.includes(nextTarget)) break;
+
 
     // Chuyển Kỵ mang Lộc: thuộc thức hiện tại
     addPath(stepIdx, nextTarget, "loc_chuyen_ky", currentColor, true);
@@ -448,7 +448,7 @@ function computeLocFlightPaths(palaces, startIdx) {
     }
 
     stepIdx = nextTarget;
-    if (!hasLocTiepUng) break;
+    if (!hasLocTiepUng || visited.includes(nextTarget)) break;
     visited.push(nextTarget);
   }
 

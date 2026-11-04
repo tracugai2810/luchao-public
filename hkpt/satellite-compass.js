@@ -352,7 +352,7 @@
       const deg = currentFacingDegree;
       const degStr = deg.toFixed(1);
       
-      const mountain = window.FlyingStar.getMountain ? window.FlyingStar.getMountain(deg) : null;
+      const mountain = window.FlyingStar.getMountain ? window.FlyingStar.getMountain(deg) : (window.FlyingStar.findMountain ? window.FlyingStar.findMountain(deg).mountain : null);
       let mName = '';
       let mSub = '';
 
@@ -365,12 +365,12 @@
         const center = mountain.center;
         const diff = Math.abs(deg - center);
         const normDiff = Math.min(diff, 360 - diff);
-        if (normDiff <= 1.5) {
+        if (normDiff < 4.0) {
           mSub = `✓ Chính Hướng thuần khiết (lệch tâm ${normDiff.toFixed(1)}°)`;
-        } else if (normDiff <= 4.5) {
+        } else if (normDiff < 7.0) {
           mSub = `⚡ Kiêm Hướng (lệch tâm ${normDiff.toFixed(1)}° - Dùng Tinh Bàn Thế Quái)`;
         } else {
-          mSub = `⚠️ Cận tuyến Không Vong (lệch tâm ${normDiff.toFixed(1)}°)`;
+          mSub = `⚠️ Phạm tuyến Không Vong (lệch tâm ${normDiff.toFixed(1)}°)`;
         }
       }
 

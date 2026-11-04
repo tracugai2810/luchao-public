@@ -163,10 +163,11 @@ const TIEU_KHONG_VONG_BOUNDARIES = [
  * Classify the chart type based on deviation from mountain center and facing degree
  */
 function classifyChart(deviation, facingDegree) {
-  if (deviation <= 3.0) {
+  const dev = Math.round(deviation * 1e6) / 1e6;
+  if (dev < 4.0) {
     return { type: 'HA_QUAI', label: 'Chính Hướng (Hạ Quái)', isKhongVong: false };
   }
-  if (deviation <= 5.5) {
+  if (dev < 7.0) {
     return { type: 'THE_QUAI', label: 'Kiêm Hướng (Thế Quái)', isKhongVong: false };
   }
 

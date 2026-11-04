@@ -826,7 +826,9 @@
     if (r.chartType === 'HA_QUAI') huongType = 'Chính Hướng';
     else if (r.chartType === 'THE_QUAI') {
       huongType = r.kiemInfo ? r.kiemInfo.label : 'Kiêm Hướng';
-    } else if (r.chartType === 'KHONG_VONG') huongType = 'Không Vong';
+    } else if (r.chartType === 'DAI_KHONG_VONG') huongType = 'Đại Không Vong';
+    else if (r.chartType === 'TIEU_KHONG_VONG') huongType = 'Tiểu Không Vong';
+    else if (r.chartType === 'KHONG_VONG' || r.isKhongVong) huongType = 'Không Vong';
     
     text += `• Tọa/Hướng: Tọa ${r.sittingMountain.name} / Hướng ${r.facingMountain.name} (${huongType})\n\n`;
     

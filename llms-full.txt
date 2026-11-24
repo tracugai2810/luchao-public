@@ -96,7 +96,7 @@ Hoa Sơn Bát Tự là hệ thống mệnh lý Tứ Trụ chân truyền của �
 ### 4.1. Giới thiệu Thẩm Thị Huyền Không Học & Vận 9 (Thẩm Trúc Nhưng)
 Huyền Không Phi Tinh là trường phái phong thủy lý khí đỉnh cao, kế thừa tác phẩm kinh điển *Thẩm Thị Huyền Không Học* của Đại sư Thẩm Trúc Nhưng, kết hợp chặt chẽ giữa Thời gian (Tam Nguyên Cửu Vận), Không gian (24 Sơn Hướng) và Địa hình môi trường thực tế (Loan Đầu).
 - Giai đoạn hiện tại là **Hạ Nguyên Vận 9 (2024 - 2043)**, do sao **Cửu Tử Hỏa Tinh** quản vận.
-- Vận Tinh cai quản: Số 9 nhập trung cung trong Vận 9. Chuẩn hóa phân định Chính Hướng (Hạ Quái) và Kiêm Hướng (Thế Quái) khi lệch trên 3 độ.
+- Vận Tinh cai quản: Số 9 nhập trung cung trong Vận 9. Chuẩn hóa phân định Chính Hướng (Hạ Quái) và Kiêm Hướng (Thế Quái) khi lệch trên 4 độ.
 
 ### 4.2. Cấu Trúc Tinh Bàn 24 Sơn Hướng
 - **Cung Vị (Địa Bàn)**: 8 hướng chia làm 24 sơn (mỗi sơn 15 độ). Mỗi hướng quái quản 3 sơn:

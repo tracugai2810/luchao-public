@@ -164,7 +164,7 @@ const TIEU_KHONG_VONG_BOUNDARIES = [
  */
 function classifyChart(deviation, facingDegree) {
   const dev = Math.round(deviation * 1e6) / 1e6;
-  if (dev < 4.0) {
+  if (dev <= 4.0) {
     return { type: 'HA_QUAI', label: 'Chính Hướng (Hạ Quái)', isKhongVong: false };
   }
   if (dev < 7.0) {

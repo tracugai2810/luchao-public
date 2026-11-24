@@ -364,8 +364,8 @@
         // Check Kiem / Chinh
         const center = mountain.center;
         const diff = Math.abs(deg - center);
-        const normDiff = Math.min(diff, 360 - diff);
-        if (normDiff < 4.0) {
+        const normDiff = Math.round(Math.min(diff, 360 - diff) * 1e6) / 1e6;
+        if (normDiff <= 4.0) {
           mSub = `✓ Chính Hướng thuần khiết (lệch tâm ${normDiff.toFixed(1)}°)`;
         } else if (normDiff < 7.0) {
           mSub = `⚡ Kiêm Hướng (lệch tâm ${normDiff.toFixed(1)}° - Dùng Tinh Bàn Thế Quái)`;

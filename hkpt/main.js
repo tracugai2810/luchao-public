@@ -638,6 +638,16 @@
   let cachedChartBlob = null;
   let snapshotTimer = null;
 
+  function waitForFontsReady(timeoutMs = 1500) {
+    if (typeof document === 'undefined' || !document.fonts || !document.fonts.ready) {
+      return Promise.resolve();
+    }
+    return Promise.race([
+      document.fonts.ready,
+      new Promise(resolve => setTimeout(resolve, timeoutMs))
+    ]);
+  }
+
   function updateImageSnapshot() {
     clearTimeout(snapshotTimer);
     snapshotTimer = setTimeout(() => {
@@ -647,12 +657,12 @@
 
       if (imgOverlay) imgOverlay.style.display = 'none';
 
-      html2canvas(exportAreaEl, {
+      waitForFontsReady().then(() => html2canvas(exportAreaEl, {
         scale: 2.5,
         useCORS: true,
         logging: false,
         backgroundColor: '#ffffff'
-      }).then(canvas => {
+      })).then(canvas => {
         const dataUrl = canvas.toDataURL('image/png');
         if (imgOverlay) {
           imgOverlay.src = dataUrl;
@@ -793,12 +803,12 @@
 
     // Direct snapshot with high quality
     setTimeout(() => {
-      html2canvas(exportArea, {
+      waitForFontsReady().then(() => html2canvas(exportArea, {
         scale: 3,
         useCORS: true,
         logging: false,
         backgroundColor: '#ffffff',
-      }).then(canvas => {
+      })).then(canvas => {
         btnDownload.innerHTML = origHTML;
         btnDownload.disabled = false;
         const filename = `tinhban_${document.getElementById('inputVan').value}_${document.getElementById('inputDegree').value}.png`;

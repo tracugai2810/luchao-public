@@ -806,10 +806,28 @@ select.input-field {
 /* ---- Export Signature / Watermark ---- */
 .export-signature {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  padding: 4px 2px 2px;
-  margin-top: -4px;
+  gap: 8px;
+  padding: 6px 2px 2px;
+  margin-top: -2px;
+}
+
+.sig-author {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 6px 0 4px;
+}
+
+.sig-author-name {
+  font-family: 'Dancing Script', 'Segoe Script', 'Brush Script MT', cursive;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #0f172a;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 
 .sig-badge {
@@ -1182,6 +1200,28 @@ select.input-field {
     border-radius: 6px;
   }
 
+  /* Export Signature */
+  .export-signature {
+    gap: 6px;
+    padding: 4px 2px 2px;
+  }
+
+  .sig-author {
+    padding: 0 4px 0 2px;
+  }
+
+  .sig-author-name {
+    font-size: 1.12rem;
+  }
+
+  .sig-badge {
+    padding: 3px 9px;
+  }
+
+  .sig-badge .sig-name {
+    font-size: 0.7rem;
+  }
+
   /* Action Buttons */
   .action-container {
     gap: 8px;
@@ -1239,6 +1279,18 @@ select.input-field {
     width: 15px;
     height: 15px;
     font-size: 0.65rem;
+  }
+
+  .sig-author-name {
+    font-size: 1rem;
+  }
+
+  .sig-badge {
+    padding: 3px 7px;
+  }
+
+  .sig-badge .sig-name {
+    font-size: 0.64rem;
   }
 }
 

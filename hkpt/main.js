@@ -584,52 +584,6 @@
       infoHour.textContent = timeStr ? `${hourmap[currentHour] || '-'} (${timeStr})` : (hourmap[currentHour] || '-');
     }
 
-    // Render Loan Dau (Exterior landscape) recommendation
-    try {
-      const loanDauSection = document.getElementById('loanDauSection');
-      if (loanDauSection && window.LoanDauRules) {
-        const loanDauAnalysis = window.LoanDauRules.analyze(result);
-        if (loanDauAnalysis) {
-          loanDauSection.innerHTML = window.LoanDauRules.renderHTML(loanDauAnalysis);
-          loanDauSection.classList.remove('hidden');
-          window.LoanDauRules.initTabs();
-        }
-      }
-    } catch (e) {
-      console.error('LoanDauRules error:', e);
-    }
-
-    // Render Thanh Mon (Castle Gate) recommendation
-    try {
-      const thanhMonSection = document.getElementById('thanhMonSection');
-      if (thanhMonSection && window.ThanhMonRules) {
-        const tmAnalysis = window.ThanhMonRules.analyze(result);
-        if (tmAnalysis) {
-          thanhMonSection.innerHTML = window.ThanhMonRules.renderHTML(tmAnalysis);
-          thanhMonSection.classList.remove('hidden');
-        } else {
-          thanhMonSection.classList.add('hidden');
-        }
-      }
-    } catch (e) {
-      console.error('ThanhMonRules error:', e);
-    }
-
-    // Render Feng Shui interpretation if module available
-    try {
-      const interpretationSection = document.getElementById('interpretationSection');
-      if (interpretationSection && window.FengShuiRules) {
-        const analysis = window.FengShuiRules.analyze(result);
-        if (analysis) {
-          interpretationSection.innerHTML = window.FengShuiRules.renderHTML(analysis);
-          interpretationSection.classList.remove('hidden');
-          window.FengShuiRules.initTabs();
-        }
-      }
-    } catch (e) {
-      console.error('FengShuiRules error:', e);
-    }
-
     // Automatically update image snapshot for right-click copy & instant share sheet
     updateImageSnapshot();
   }

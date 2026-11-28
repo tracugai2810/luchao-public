@@ -163,10 +163,10 @@ function executeEvalCurrentSim() {
     if (currentSimArea) {
         currentSimArea.style.display = 'block';
         currentSimArea.innerHTML = `
-            <div class="sim-card" style="border: 2px solid var(--gold-dark); background: #1a2438; margin-top: 14px;">
+            <div class="sim-card sim-card-evaluated">
                 <div class="sim-info">
-                    <div style="font-size: 0.95rem; color: var(--gold-primary); font-weight: bold; margin-bottom: 4px;">
-                        📲 KẾT QUẢ ĐÁNH GIÁ SIM ĐANG DÙNG:
+                    <div class="sim-eval-label">
+                        KẾT QUẢ ĐÁNH GIÁ SIM ĐANG DÙNG:
                     </div>
                     <div class="sim-number-display" style="font-size: 1.8rem;">
                         <span class="highlight">${formattedSim}</span>
@@ -180,7 +180,7 @@ function executeEvalCurrentSim() {
 
                 <div class="sim-actions">
                     <button class="btn-action btn-view-hex" onclick="handleCurrentSimDetail()">
-                        🔍 Xem Chi Tiết
+                        Xem Chi Tiết
                     </button>
                 </div>
             </div>
@@ -203,9 +203,8 @@ function executeSearchSims() {
     const resultsContainer = document.getElementById('resultsContainer');
     if (resultsContainer) {
         resultsContainer.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: var(--gold-primary);">
-                <div class="spinner" style="font-size: 2rem; margin-bottom: 10px;">🔮</div>
-                <p style="font-size: 1.1rem; font-weight: 600;">Đang lập quẻ Lục Hào & Tính toán Top ${limitVal} SIM Cát Tường...</p>
+            <div class="sim-loading-state">
+                <p style="font-size: 1.05rem; font-weight: 600;">Đang lập quẻ Lục Hào & Tính toán Top ${limitVal} SIM Cát Tường...</p>
             </div>
         `;
     }
@@ -229,9 +228,9 @@ function renderResults(results) {
     if (!results || results.length === 0) {
         if (resultsHeader) resultsHeader.style.display = 'none';
         resultsContainer.innerHTML = `
-            <div style="text-align: center; padding: 40px; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-gold);">
-                <p style="font-size: 1.2rem; color: #f87171; font-weight: 600;">Không tìm thấy dãy số phù hợp đạt điều kiện Lục Hào Cát Tường.</p>
-                <p style="color: var(--text-muted); margin-top: 8px;">Gợi ý: Hãy thử bỏ bớt các chữ số cố định (để ô trống) để hệ thống có nhiều lựa chọn phối số hơn.</p>
+            <div class="sim-empty-state">
+                <p class="sim-empty-title">Không tìm thấy dãy số phù hợp đạt điều kiện Lục Hào Cát Tường.</p>
+                <p class="sim-empty-hint">Gợi ý: Hãy thử bỏ bớt các chữ số cố định (để ô trống) để hệ thống có nhiều lựa chọn phối số hơn.</p>
             </div>
         `;
         return;

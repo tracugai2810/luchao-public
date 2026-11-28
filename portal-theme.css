@@ -1,0 +1,2552 @@
+/* ==========================================================================
+   LỤC HÀO PORTAL — DESIGN SYSTEM: "SƠN MÀI HẮC KIM" (OBSIDIAN LACQUER)
+   Warm Charcoal Lacquer · Sumi Ivory · Antique Brass · Deep Cinnabar Seal
+   Unified Editorial Theme & Responsive Architecture across 5 Modules
+   ========================================================================== */
+
+:root {
+  /* Lacquer Surface Tokens (Warm Charcoal — never cold blue-navy) */
+  --lacquer-bg: #11100E;
+  --lacquer-surface: #191715;
+  --lacquer-inset: #13110F;
+  --lacquer-elevated: #23201C;
+  --border-hairline: #2E2924;
+  --border-strong: #443D35;
+
+  /* Ink & Artisanal Accents */
+  --ink-primary: #F2EDE4;
+  --ink-secondary: #C5BDB0;
+  --ink-muted: #938A7D;
+  --brass: #CFA355;
+  --brass-bright: #E2BE79;
+  --brass-soft: rgba(207, 163, 85, 0.11);
+  --seal-red: #A62C2B;
+  --seal-red-hover: #BD3534;
+  --seal-red-soft: rgba(166, 44, 43, 0.18);
+
+  /* Semantic Status (WCAG AA on Dark Lacquer) */
+  --status-success: #6EE7B7;
+  --status-success-bg: rgba(16, 185, 129, 0.12);
+  --status-success-border: rgba(110, 231, 183, 0.28);
+  --status-warn: #FCD34D;
+  --status-warn-bg: rgba(245, 158, 11, 0.12);
+  --status-warn-border: rgba(252, 211, 77, 0.28);
+  --status-danger: #FCA5A5;
+  --status-danger-bg: rgba(239, 68, 68, 0.14);
+  --status-danger-border: rgba(252, 165, 165, 0.30);
+
+  /* Typography */
+  --font-serif: 'Noto Serif', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Elevation & Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-card: inset 0 1px 0 rgba(255, 245, 225, 0.045), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-elevated: inset 0 1px 0 rgba(255, 245, 225, 0.06), 0 16px 40px rgba(0, 0, 0, 0.55);
+  --shadow-frame: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --ease-ui: 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Safe-area tokens */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+/* --- Global Base & Accessibility --- */
+html {
+  font-size: 16px;
+  color-scheme: dark;
+  background-color: var(--lacquer-bg) !important;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip !important;
+}
+
+body {
+  font-family: var(--font-sans) !important;
+  background-color: var(--lacquer-bg) !important;
+  background-image:
+    radial-gradient(ellipse 85% 42% at 50% 0%, rgba(207, 163, 85, 0.055) 0%, transparent 70%),
+    radial-gradient(circle at 85% 90%, rgba(166, 44, 43, 0.04) 0%, transparent 45%) !important;
+  color: var(--ink-primary) !important;
+  line-height: 1.55;
+  overflow-x: clip !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input, select, textarea {
+  color-scheme: dark;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--brass) !important;
+  outline-offset: 2px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Tabular Figures for Dates, Degrees, Numbers, SIMs */
+input[type="number"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="tel"],
+.digit-box,
+.sim-number-display,
+.sat-res-degree,
+.info-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   1. UNIFIED EDITORIAL TOP NAVIGATION & MOBILE DRAWER
+   ========================================================================== */
+.portal-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10000 !important;
+  background: rgba(17, 16, 14, 0.90) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 245, 225, 0.04) !important;
+  padding: 0 16px !important;
+  padding-left: max(16px, var(--sal)) !important;
+  padding-right: max(16px, var(--sar)) !important;
+}
+
+.portal-desktop-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.portal-tabs-track {
+  display: inline-flex !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  background: transparent !important;
+  padding: 6px 0 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.portal-tab-btn {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 10px 16px 12px !important;
+  font-family: var(--font-sans) !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: var(--ink-secondary) !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: color var(--ease-ui), background-color var(--ease-ui) !important;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.portal-tab-btn:hover {
+  color: var(--ink-primary) !important;
+  background: var(--lacquer-elevated) !important;
+  border-color: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.portal-tab-btn.active {
+  color: var(--brass-bright) !important;
+  background: var(--brass-soft) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+}
+
+.portal-tab-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2.5px;
+  background: var(--seal-red);
+  border-radius: 2px 2px 0 0;
+}
+
+.portal-tab-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: currentColor;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.portal-tab-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.portal-tab-text {
+  letter-spacing: 0.01em;
+}
+
+/* Mobile Top Bar */
+.portal-mobile-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 54px;
+  padding: 5px 0;
+}
+
+.portal-mobile-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  text-decoration: none !important;
+  color: var(--ink-primary) !important;
+  min-height: 44px;
+}
+
+.mobile-brand-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--seal-red-soft);
+  border: 1px solid rgba(207, 163, 85, 0.35);
+  color: var(--brass-bright);
+  flex-shrink: 0;
+}
+
+.mobile-brand-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.mobile-brand-title {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: var(--ink-primary) !important;
+  color: var(--ink-primary) !important;
+  font-family: var(--font-serif) !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+.portal-hamburger-btn {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 5px !important;
+  width: 44px !important;
+  height: 44px !important;
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-sm) !important;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--ease-ui), border-color var(--ease-ui) !important;
+}
+
+.portal-hamburger-btn:hover {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--brass) !important;
+}
+
+.hamburger-bar {
+  display: block;
+  width: 18px !important;
+  height: 2px !important;
+  background: var(--ink-primary) !important;
+  border-radius: 2px;
+}
+
+/* Mobile Slide-in Drawer */
+.portal-drawer-backdrop {
+  background: rgba(8, 7, 6, 0.72) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+}
+
+.portal-drawer {
+  width: min(330px, 88vw) !important;
+  background: #161412 !important;
+  border-left: 1px solid var(--border-hairline) !important;
+  box-shadow: -12px 0 36px rgba(0, 0, 0, 0.65) !important;
+  color: var(--ink-primary) !important;
+}
+
+.portal-drawer-header {
+  padding: 14px 18px !important;
+  background: var(--lacquer-bg) !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+}
+
+.drawer-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px !important;
+  color: var(--brass-bright) !important;
+  font-family: var(--font-serif) !important;
+  font-weight: 700 !important;
+  font-size: 0.96rem !important;
+  letter-spacing: 0.02em !important;
+}
+
+.drawer-header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--seal-red);
+  color: #F2EDE4;
+  font-size: 0.9rem !important;
+  line-height: 1;
+}
+
+.drawer-close-btn {
+  width: 38px !important;
+  height: 38px !important;
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-secondary) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: 1rem !important;
+}
+
+.drawer-close-btn:hover,
+.drawer-close-btn:active {
+  color: var(--ink-primary) !important;
+  background: var(--seal-red-soft) !important;
+  border-color: var(--seal-red) !important;
+}
+
+.portal-drawer-body {
+  padding: 14px !important;
+}
+
+.drawer-list {
+  gap: 8px !important;
+}
+
+.drawer-item {
+  padding: 12px 14px !important;
+  min-height: 60px;
+  background: #1D1A17 !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: none !important;
+}
+
+.drawer-item:hover {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-strong) !important;
+  transform: none !important;
+}
+
+.drawer-item.active {
+  background: rgba(166, 44, 43, 0.14) !important;
+  border: 1px solid rgba(207, 163, 85, 0.35) !important;
+  border-left: 3.5px solid var(--seal-red) !important;
+  box-shadow: none !important;
+}
+
+.drawer-item-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--lacquer-inset);
+  border: 1px solid var(--border-hairline);
+  color: var(--ink-secondary);
+  flex-shrink: 0;
+}
+
+.drawer-item.active .drawer-item-icon {
+  background: var(--seal-red);
+  border-color: var(--seal-red);
+  color: #F2EDE4;
+}
+
+.drawer-item-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.drawer-item-title {
+  color: var(--ink-primary) !important;
+  font-size: 0.94rem !important;
+  font-weight: 700 !important;
+}
+
+.drawer-item.active .drawer-item-title {
+  color: var(--brass-bright) !important;
+}
+
+.drawer-item-desc {
+  color: var(--ink-muted) !important;
+  font-size: 0.78rem !important;
+}
+
+.drawer-item-badge {
+  color: #F2EDE4 !important;
+  background: var(--seal-red) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 4px !important;
+  font-size: 0.7rem !important;
+  padding: 2px 7px !important;
+}
+
+.drawer-item-arrow {
+  color: var(--ink-muted) !important;
+}
+
+.portal-drawer-footer {
+  padding: 14px !important;
+  background: var(--lacquer-bg) !important;
+  border-top: 1px solid var(--border-hairline) !important;
+}
+
+.drawer-contact-card {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 10px 12px !important;
+  color: var(--ink-secondary) !important;
+  text-align: center;
+}
+
+.drawer-contact-card a {
+  color: var(--brass-bright) !important;
+  font-weight: 700 !important;
+}
+
+@media (max-width: 768px) {
+  .portal-nav {
+    padding: 0 12px !important;
+    padding-left: max(12px, var(--sal)) !important;
+    padding-right: max(12px, var(--sar)) !important;
+  }
+  .portal-desktop-nav {
+    display: none !important;
+  }
+  .portal-mobile-bar {
+    display: flex !important;
+  }
+}
+
+/* ==========================================================================
+   2. SHARED PAGE HEADER, EDITORIAL SEAL & FOOTERS
+   ========================================================================== */
+.portal-page-header {
+  text-align: center;
+  padding: 20px 12px 18px;
+  max-width: 780px;
+  margin: 0 auto 16px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.portal-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid rgba(207, 163, 85, 0.34);
+  background: var(--brass-soft);
+  color: var(--brass);
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.portal-page-header h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.45rem, 3.2vw, 2rem);
+  font-weight: 700;
+  color: var(--ink-primary);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+
+.portal-page-subtitle {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Unified Footer across all 5 modules */
+.main-site-footer,
+.bazi-footer,
+.hkpt-footer,
+.seo-footer-bottom {
+  margin-top: 36px !important;
+  padding: 24px 16px max(24px, var(--sab)) !important;
+  text-align: center !important;
+  border-top: 1px solid var(--border-hairline) !important;
+  color: var(--ink-muted) !important;
+  font-size: 0.85rem !important;
+  font-family: var(--font-sans) !important;
+  line-height: 1.65 !important;
+  background: transparent !important;
+}
+
+.main-site-footer p,
+.bazi-footer p,
+.hkpt-footer p,
+.seo-footer-bottom p,
+.seo-footer-bottom .footer-subtext {
+  color: var(--ink-muted) !important;
+  font-size: 0.85rem !important;
+  margin: 4px 0 !important;
+}
+
+.main-site-footer strong,
+.bazi-footer strong,
+.hkpt-footer strong,
+.seo-footer-bottom strong {
+  color: var(--ink-primary) !important;
+  font-weight: 700 !important;
+}
+
+.main-site-footer a,
+.bazi-footer a,
+.hkpt-footer a,
+.seo-footer-bottom a,
+.seo-footer-bottom .footer-subtext a {
+  color: var(--brass) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+}
+
+.main-site-footer a:hover,
+.bazi-footer a:hover,
+.hkpt-footer a:hover,
+.seo-footer-bottom a:hover {
+  color: var(--brass-bright) !important;
+  text-decoration: underline !important;
+}
+
+/* ==========================================================================
+   3. LỤC HÀO (/) — SƠN MÀI HẮC KIM OVERRIDES
+   Note: #captureArea and #captureTarget (#fefee5) are strictly untouched!
+   ========================================================================== */
+#portal-tab-luchao .app-container {
+  max-width: 1200px;
+  padding: 16px 16px 32px;
+}
+
+#portal-tab-luchao .card {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+  color: var(--ink-primary) !important;
+}
+
+#portal-tab-luchao .card:hover {
+  border-color: var(--border-strong) !important;
+}
+
+#portal-tab-luchao .section-title {
+  font-family: var(--font-serif) !important;
+  font-size: 1.12rem !important;
+  font-weight: 700 !important;
+  color: var(--ink-primary) !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 16px !important;
+}
+
+#portal-tab-luchao .form-group label {
+  color: var(--ink-secondary) !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+}
+
+#portal-tab-luchao .form-input,
+#portal-tab-luchao .line-select {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--ink-primary) !important;
+  font-size: 16px !important;
+  min-height: 44px;
+  padding: 9px 12px !important;
+  min-width: 0;
+}
+
+#portal-tab-luchao .form-input:focus,
+#portal-tab-luchao .line-select:focus {
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+}
+
+#portal-tab-luchao .form-input::placeholder {
+  color: var(--ink-muted) !important;
+  opacity: 0.85;
+}
+
+#portal-tab-luchao .form-hint {
+  color: var(--ink-muted) !important;
+}
+
+/* Lục Hào Date/Timezone Flex Row (Mobile Safe) */
+.luchao-datetime-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.luchao-datetime-row #inputDate {
+  flex: 1 1 auto;
+  min-width: 0 !important;
+}
+
+.luchao-datetime-row #inputTimezone {
+  flex: 0 0 auto;
+  width: auto !important;
+  min-width: 112px;
+}
+
+@media (max-width: 420px) {
+  .luchao-datetime-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .luchao-datetime-row #inputTimezone {
+    width: 100% !important;
+  }
+}
+
+/* Method Tabs */
+#portal-tab-luchao .tabs {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md) !important;
+  padding: 4px !important;
+  gap: 4px !important;
+}
+
+#portal-tab-luchao .tab-btn {
+  color: var(--ink-secondary) !important;
+  background: transparent !important;
+  border-radius: var(--radius-sm) !important;
+  min-height: 44px;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+}
+
+#portal-tab-luchao .tab-btn:hover {
+  color: var(--ink-primary) !important;
+  background: var(--lacquer-elevated) !important;
+}
+
+#portal-tab-luchao .tab-btn.active {
+  background: var(--lacquer-elevated) !important;
+  color: var(--brass-bright) !important;
+  border: 1px solid rgba(207, 163, 85, 0.45) !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+}
+
+/* Coin Line Rows */
+#portal-tab-luchao .line-row {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 7px 10px !important;
+}
+
+#portal-tab-luchao .line-row:hover {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-strong) !important;
+}
+
+#portal-tab-luchao .line-label {
+  color: var(--brass-bright) !important;
+  font-weight: 700 !important;
+}
+
+#portal-tab-luchao .line-select {
+  min-height: 38px !important;
+  padding: 6px 10px !important;
+  font-size: 0.92rem !important;
+  background: var(--lacquer-surface) !important;
+}
+
+#portal-tab-luchao .line-moving-label:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+#portal-tab-luchao .line-moving-checkbox {
+  accent-color: var(--brass) !important;
+}
+
+#portal-tab-luchao .moving-text {
+  color: var(--ink-muted) !important;
+}
+
+#portal-tab-luchao .line-moving-checkbox:checked + .moving-text {
+  color: var(--brass-bright) !important;
+}
+
+/* Buttons on Lục Hào */
+#portal-tab-luchao .btn {
+  border-radius: var(--radius-md) !important;
+  min-height: 46px;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+}
+
+#portal-tab-luchao .btn-primary {
+  background: var(--seal-red) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--ink-primary) !important;
+}
+
+#portal-tab-luchao .btn-primary:hover {
+  background: var(--seal-red-hover) !important;
+  transform: none !important;
+  box-shadow: 0 6px 18px rgba(166, 44, 43, 0.35) !important;
+}
+
+#portal-tab-luchao .btn-secondary {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+}
+
+#portal-tab-luchao .btn-secondary:hover {
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+  transform: none !important;
+}
+
+#portal-tab-luchao .btn-download {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--brass) !important;
+  color: var(--brass-bright) !important;
+}
+
+#portal-tab-luchao .btn-download:hover {
+  background: var(--brass-soft) !important;
+  transform: none !important;
+}
+
+#portal-tab-luchao .image-display {
+  border: 1px solid rgba(207, 163, 85, 0.45);
+  border-radius: var(--radius-md) !important;
+  background: #fefee5;
+  box-shadow: var(--shadow-frame);
+}
+
+#portal-tab-luchao .save-hint {
+  color: var(--ink-muted) !important;
+}
+
+/* Lục Hào Coin Toss Modal & Loading Overlay */
+#loading-overlay {
+  background: rgba(17, 16, 14, 0.90) !important;
+}
+
+#loading-overlay .loader-content {
+  color: var(--ink-primary) !important;
+}
+
+#loading-overlay .spinner {
+  border-color: var(--border-hairline) !important;
+  border-top-color: var(--brass) !important;
+}
+
+#coin-toss-modal {
+  background: rgba(8, 7, 6, 0.80) !important;
+}
+
+#coin-toss-modal .modal-content {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: var(--shadow-elevated) !important;
+}
+
+#coin-toss-modal .modal-header {
+  border-bottom: 1px solid var(--border-hairline) !important;
+}
+
+#coin-toss-modal .modal-header h3 {
+  font-family: var(--font-serif) !important;
+  color: var(--brass-bright) !important;
+}
+
+#coin-toss-modal .close-btn {
+  color: var(--ink-secondary) !important;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+#coin-toss-modal .close-btn:hover {
+  color: var(--ink-primary) !important;
+  background: var(--seal-red-soft);
+}
+
+#coin-toss-modal .toss-info {
+  color: var(--ink-secondary) !important;
+}
+
+#coin-toss-modal .toss-results-container {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+}
+
+#coin-toss-modal .result-row {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+}
+
+#coin-toss-modal .result-label {
+  color: var(--brass-bright) !important;
+}
+
+#coin-toss-modal .result-text,
+#coin-toss-modal .result-symbol {
+  color: var(--ink-primary) !important;
+}
+
+#coin-toss-modal .result-row.moving .result-text {
+  color: var(--status-danger) !important;
+  font-weight: 700;
+}
+
+#coin-toss-modal .btn-primary {
+  background: var(--seal-red) !important;
+  color: var(--ink-primary) !important;
+}
+
+/* Lục Hào SEO Section */
+#portal-tab-luchao .seo-knowledge-section {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+#portal-tab-luchao .seo-title {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+}
+
+#portal-tab-luchao .seo-lead {
+  color: var(--ink-secondary) !important;
+}
+
+#portal-tab-luchao .seo-card,
+#portal-tab-luchao .faq-item,
+#portal-tab-luchao .authority-card {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+  box-shadow: none !important;
+}
+
+#portal-tab-luchao .seo-card:hover,
+#portal-tab-luchao .authority-card:hover {
+  border-color: var(--border-strong) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+#portal-tab-luchao .seo-card h3,
+#portal-tab-luchao .authority-card h4,
+#portal-tab-luchao .faq-item summary {
+  color: var(--brass-bright) !important;
+}
+
+#portal-tab-luchao .authority-card strong {
+  color: var(--ink-primary) !important;
+}
+
+#portal-tab-luchao .seo-faq h3,
+#portal-tab-luchao .seo-authority h3 {
+  font-family: var(--font-serif) !important;
+  color: var(--brass) !important;
+}
+
+#portal-tab-luchao .seo-card p,
+#portal-tab-luchao .faq-item p,
+#portal-tab-luchao .authority-card p {
+  color: var(--ink-secondary) !important;
+}
+
+@media (min-width: 992px) {
+  #portal-tab-luchao .result-section {
+    top: 68px !important;
+  }
+}
+
+/* ==========================================================================
+   4. TỬ VI BẮC PHÁI (/tu-vi) — SƠN MÀI HẮC KIM OVERRIDES
+   ========================================================================== */
+.page-shell {
+  padding: 16px 14px 32px !important;
+  background: transparent !important;
+}
+
+.page-shell::before,
+.page-shell::after {
+  display: none !important;
+}
+
+.simple-layout {
+  max-width: 1240px !important;
+}
+
+.panel-simple,
+.preview-simple {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+  color: var(--ink-primary) !important;
+}
+
+.panel-simple h1,
+.panel-simple h2,
+.preview-toolbar h2 {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+  font-weight: 700 !important;
+}
+
+.field-label,
+.check-row {
+  color: var(--ink-secondary) !important;
+}
+
+.field-row input,
+.field-row select,
+.province-search-input {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--ink-primary) !important;
+  min-height: 44px !important;
+  font-size: 16px !important;
+}
+
+.field-row input:focus,
+.field-row select:focus,
+.province-search-input:focus {
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+}
+
+.check-row input[type="checkbox"] {
+  accent-color: var(--brass) !important;
+}
+
+.province-clear-btn {
+  color: var(--ink-muted) !important;
+}
+
+.province-clear-btn:hover {
+  color: var(--ink-primary) !important;
+}
+
+.province-inline-clear {
+  background: var(--border-hairline) !important;
+  color: var(--ink-primary) !important;
+}
+
+.province-inline-clear:hover {
+  background: var(--border-strong) !important;
+}
+
+.province-toggle-btn::after {
+  border-top-color: var(--ink-secondary) !important;
+}
+
+.province-toggle-btn:hover::after {
+  border-top-color: var(--ink-primary) !important;
+}
+
+.province-dropdown-menu {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  box-shadow: var(--shadow-elevated) !important;
+}
+
+.province-dropdown-item {
+  border-bottom-color: var(--border-hairline) !important;
+}
+
+.province-dropdown-item:hover,
+.province-dropdown-item:active {
+  background: rgba(207, 163, 85, 0.10) !important;
+}
+
+.province-dropdown-item.active {
+  background: var(--brass-soft) !important;
+}
+
+.province-dropdown-item .prov-name {
+  color: var(--ink-primary) !important;
+}
+
+.province-dropdown-item .prov-capital,
+.province-dropdown-item .item-coord,
+.province-dropdown-item .item-sub,
+.province-dropdown-empty {
+  color: var(--ink-muted) !important;
+}
+
+.solar-preview-card {
+  background: var(--status-success-bg) !important;
+  border-color: var(--status-success-border) !important;
+  color: var(--status-success) !important;
+}
+
+.error-box {
+  background: var(--status-danger-bg) !important;
+  border-color: var(--status-danger-border) !important;
+  color: var(--status-danger) !important;
+}
+
+.submit-row button {
+  background: var(--seal-red) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--ink-primary) !important;
+  border-radius: var(--radius-md) !important;
+  min-height: 46px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+}
+
+.submit-row button:hover {
+  background: var(--seal-red-hover) !important;
+}
+
+/* AI Parse Box on Tử Vi */
+.ai-parse-box {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-left: 3px solid var(--brass) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 12px 14px !important;
+}
+
+.ai-parse-box.drag-over {
+  background: var(--brass-soft) !important;
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.18) !important;
+}
+
+.ai-badge {
+  color: var(--brass-bright) !important;
+  font-weight: 700 !important;
+}
+
+.ai-model-tag {
+  background: var(--lacquer-elevated) !important;
+  color: var(--ink-secondary) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: 4px !important;
+}
+
+.ai-textarea {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  font-size: 16px !important;
+}
+
+.ai-textarea:focus {
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+}
+
+.ai-textarea::placeholder {
+  color: var(--ink-muted) !important;
+}
+
+.ai-img-preview {
+  background: var(--lacquer-surface) !important;
+  border-color: var(--brass) !important;
+}
+
+.ai-thumb-name {
+  color: var(--ink-primary) !important;
+}
+
+.ai-thumb-sub {
+  color: var(--status-success) !important;
+}
+
+.ai-upload-btn {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  min-height: 42px !important;
+}
+
+.ai-upload-btn:hover:not(:disabled) {
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+}
+
+.ai-parse-btn {
+  background: var(--brass) !important;
+  color: #11100E !important;
+  min-height: 42px !important;
+}
+
+.ai-parse-btn:hover:not(:disabled) {
+  background: var(--brass-bright) !important;
+}
+
+.ai-parse-error {
+  background: var(--status-danger-bg) !important;
+  border-color: var(--status-danger-border) !important;
+  color: var(--status-danger) !important;
+}
+
+.form-divider {
+  color: var(--ink-muted) !important;
+}
+
+.form-divider::before,
+.form-divider::after {
+  border-bottom-color: var(--border-hairline) !important;
+}
+
+/* Tử Vi Chart Preview & Phi Hóa Interactive Panel */
+.phi-control-panel {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-strong) !important;
+  box-shadow: none !important;
+}
+
+.user-badge {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-hairline) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.action-btn.download-link,
+.zoom-btn-action.dl {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--brass) !important;
+  color: var(--brass-bright) !important;
+  min-height: 42px;
+}
+
+.action-btn.download-link:hover,
+.zoom-btn-action.dl:hover {
+  background: var(--brass-soft) !important;
+}
+
+.preview-frame {
+  border: 1px solid rgba(207, 163, 85, 0.48) !important;
+  border-radius: var(--radius-md) !important;
+  background: #FFFFFF !important;
+  box-shadow: var(--shadow-frame);
+}
+
+.image-hint {
+  color: var(--ink-muted) !important;
+}
+
+.phi-panel-header {
+  border-bottom-color: var(--border-hairline) !important;
+}
+
+.phi-panel-icon {
+  color: var(--brass) !important;
+}
+
+.phi-panel-title h4 {
+  color: var(--ink-primary) !important;
+}
+
+.phi-panel-subtitle {
+  color: var(--ink-muted) !important;
+}
+
+.phi-clear-btn {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.phi-clear-btn:hover {
+  background: var(--seal-red-soft) !important;
+  border-color: var(--seal-red) !important;
+  color: var(--status-danger) !important;
+}
+
+.phi-mode-tab {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.phi-mode-tab .tab-title {
+  color: inherit !important;
+}
+
+.phi-mode-tab:hover {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-strong) !important;
+}
+
+.phi-mode-tab.tab-loc.active {
+  background: #2E1918 !important;
+  border-color: #DC4A48 !important;
+  color: #FECACA !important;
+  box-shadow: none !important;
+}
+
+.phi-mode-tab.tab-ky.active {
+  background: #2C2418 !important;
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+  box-shadow: none !important;
+}
+
+.tab-dot.loc {
+  background: #E05856 !important;
+}
+
+.tab-dot.ky {
+  background: var(--brass) !important;
+}
+
+.phi-mode-tab.tab-ky.active .tab-dot.ky {
+  background: var(--brass-bright) !important;
+}
+
+.tab-color-tag.loc {
+  background: rgba(220, 74, 72, 0.22) !important;
+  color: #FECACA !important;
+}
+
+.phi-mode-tab.tab-loc.active .tab-color-tag.loc {
+  background: var(--seal-red) !important;
+  color: #FFFFFF !important;
+}
+
+.tab-color-tag.ky {
+  background: var(--lacquer-elevated) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.phi-mode-tab.tab-ky.active .tab-color-tag.ky {
+  background: var(--brass) !important;
+  color: #11100E !important;
+}
+
+.phi-mode-desc {
+  background: var(--lacquer-inset) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.phi-mode-desc strong {
+  color: var(--ink-primary) !important;
+}
+
+.phi-toggle-row span {
+  color: var(--ink-secondary) !important;
+}
+
+.phi-toggle-row button {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.phi-palace-btn {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--border-hairline) !important;
+}
+
+.phi-palace-btn:hover {
+  background: #2C2722 !important;
+  border-color: var(--border-strong) !important;
+}
+
+.phi-palace-btn .p-name {
+  color: var(--ink-primary) !important;
+}
+
+.phi-palace-btn .p-canchi {
+  color: var(--ink-muted) !important;
+}
+
+.phi-palace-btn.loc.selected {
+  background: rgba(166, 44, 43, 0.28) !important;
+  border-color: #DC4A48 !important;
+  box-shadow: 0 0 0 1px #DC4A48 !important;
+}
+
+.phi-palace-btn.loc.selected .p-name,
+.phi-palace-btn.loc.selected .p-canchi {
+  color: #FECACA !important;
+}
+
+.phi-palace-btn.ky.selected {
+  background: var(--brass) !important;
+  border-color: var(--brass-bright) !important;
+  box-shadow: 0 0 0 1px var(--brass-bright) !important;
+}
+
+.phi-palace-btn.ky.selected .p-name,
+.phi-palace-btn.ky.selected .p-canchi {
+  color: #11100E !important;
+}
+
+.chart-zoom-dialog {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+}
+
+.zoom-dialog-header {
+  background: var(--lacquer-bg) !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+}
+
+.zoom-title-info h4 {
+  color: var(--brass-bright) !important;
+}
+
+.zoom-scroll-area {
+  background: var(--lacquer-inset) !important;
+}
+
+/* Tử Vi SEO Section */
+.seo-guide-section {
+  max-width: 1240px !important;
+  margin-top: 24px !important;
+  gap: 14px !important;
+}
+
+.seo-highlights-grid .highlight-item,
+.highlight-item,
+.seo-article-card {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.seo-highlights-grid .highlight-item:hover,
+.highlight-item:hover,
+.seo-article-card:hover {
+  border-color: var(--border-strong) !important;
+  box-shadow: var(--shadow-card) !important;
+  transform: none !important;
+}
+
+.highlight-item h5,
+.seo-article-card h2 {
+  font-family: var(--font-serif) !important;
+  color: var(--brass-bright) !important;
+  border-bottom-color: var(--border-hairline) !important;
+}
+
+.seo-article-card h3,
+.faq-question-text,
+.guide-steps-list li strong {
+  color: var(--ink-primary) !important;
+}
+
+.highlight-item p,
+.seo-article-card p,
+.faq-answer-content p,
+.guide-steps-list li p {
+  color: var(--ink-secondary) !important;
+}
+
+.tu-hoa-box.loc {
+  background: var(--status-success-bg) !important;
+  border-color: var(--status-success-border) !important;
+  color: var(--status-success) !important;
+}
+
+.tu-hoa-box.quyen {
+  background: var(--brass-soft) !important;
+  border-color: rgba(207, 163, 85, 0.34) !important;
+  color: var(--brass-bright) !important;
+}
+
+.tu-hoa-box.khoa {
+  background: rgba(59, 130, 246, 0.12) !important;
+  border-color: rgba(147, 197, 253, 0.30) !important;
+  color: #93C5FD !important;
+}
+
+.tu-hoa-box.ky {
+  background: var(--seal-red-soft) !important;
+  border-color: rgba(248, 113, 113, 0.35) !important;
+  color: #FCA5A5 !important;
+}
+
+.tu-hoa-box p {
+  color: var(--ink-secondary) !important;
+}
+
+.tu-hoa-box:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.guide-steps-list li {
+  background: var(--lacquer-inset) !important;
+  border-left: 3px solid var(--brass) !important;
+}
+
+.faq-item {
+  border-color: var(--border-hairline) !important;
+}
+
+.faq-question-btn {
+  background: var(--lacquer-inset) !important;
+}
+
+.faq-question-btn:hover {
+  background: var(--lacquer-elevated) !important;
+}
+
+.faq-answer-content {
+  background: var(--lacquer-surface) !important;
+  border-top-color: var(--border-hairline) !important;
+}
+
+.faq-toggle-icon {
+  color: var(--brass) !important;
+}
+
+/* ==========================================================================
+   5. HOA SƠN BÁT TỰ (/bat-tu) — SƠN MÀI HẮC KIM OVERRIDES
+   Note: #bazi-capture-container & .bazi-chart-card (#FEF6E8) stay untouched!
+   ========================================================================== */
+.bazi-page-wrapper {
+  max-width: 1200px !important;
+  padding: 18px 16px 36px !important;
+}
+
+.bazi-header-banner {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+  border-left: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 6px 4px 16px !important;
+  margin-bottom: 20px !important;
+}
+
+.bazi-header-title h1 {
+  font-family: var(--font-serif) !important;
+  font-size: clamp(1.35rem, 2.8vw, 1.8rem) !important;
+  font-weight: 700 !important;
+  color: var(--ink-primary) !important;
+  letter-spacing: -0.015em !important;
+}
+
+.bazi-badge {
+  background: var(--brass-soft) !important;
+  border: 1px solid rgba(207, 163, 85, 0.34) !important;
+  color: var(--brass) !important;
+  border-radius: 4px !important;
+  padding: 5px 12px !important;
+  font-size: 0.78rem !important;
+}
+
+.bazi-form-card {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.bazi-ai-parse-box {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-left: 3px solid var(--brass) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.bazi-ai-parse-box.drag-over {
+  background: var(--brass-soft) !important;
+  border-color: var(--brass) !important;
+}
+
+.bazi-ai-badge {
+  color: var(--brass-bright) !important;
+}
+
+.bazi-ai-model-tag {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-hairline) !important;
+  color: var(--ink-secondary) !important;
+  border-radius: 4px !important;
+}
+
+.bazi-ai-textarea,
+.bazi-form-card .form-input,
+.bazi-form-card .form-select,
+input[type="time"].form-input,
+.bazi-time-input {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  min-height: 44px;
+  font-size: 16px !important;
+}
+
+.bazi-ai-textarea::placeholder,
+.bazi-form-card .form-input::placeholder {
+  color: var(--ink-muted) !important;
+}
+
+.bazi-ai-textarea:focus,
+.bazi-form-card .form-input:focus,
+.bazi-form-card .form-select:focus {
+  background: var(--lacquer-surface) !important;
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+}
+
+.bazi-form-card .form-group label {
+  color: var(--ink-secondary) !important;
+}
+
+.bazi-ai-img-preview {
+  background: var(--lacquer-surface) !important;
+  border-color: var(--brass) !important;
+}
+
+.bazi-ai-thumb-name {
+  color: var(--ink-primary) !important;
+}
+
+.bazi-ai-thumb-sub {
+  color: var(--status-success) !important;
+}
+
+.bazi-ai-upload-btn {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  min-height: 44px !important;
+}
+
+.bazi-ai-upload-btn:hover {
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+}
+
+.bazi-ai-parse-btn {
+  background: var(--brass) !important;
+  color: #11100E !important;
+  box-shadow: none !important;
+  min-height: 44px !important;
+}
+
+.bazi-ai-parse-btn:hover:not(:disabled) {
+  background: var(--brass-bright) !important;
+  transform: none !important;
+}
+
+.bazi-form-divider::before,
+.bazi-form-divider::after {
+  border-bottom-color: var(--border-hairline) !important;
+}
+
+.bazi-form-divider span {
+  color: var(--ink-muted) !important;
+}
+
+.province-dropdown {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-strong) !important;
+  box-shadow: var(--shadow-elevated) !important;
+}
+
+.province-item {
+  color: var(--ink-primary) !important;
+  border-bottom-color: var(--border-hairline) !important;
+}
+
+.province-item .sub {
+  color: var(--ink-muted) !important;
+}
+
+.province-item:hover,
+.province-item.active {
+  background: var(--brass-soft) !important;
+  color: var(--brass-bright) !important;
+}
+
+.btn-submit-bazi {
+  background: var(--seal-red) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: none !important;
+  min-height: 48px !important;
+}
+
+.btn-submit-bazi:hover {
+  background: var(--seal-red-hover) !important;
+  transform: none !important;
+  box-shadow: 0 6px 18px rgba(166, 44, 43, 0.35) !important;
+}
+
+.bazi-daivan-switcher-box {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.bazi-daivan-switcher-box .switcher-title,
+.switcher-quick-year {
+  color: var(--ink-primary) !important;
+}
+
+.form-select-sm {
+  background: var(--lacquer-inset) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+}
+
+.bazi-dv-pill {
+  background: var(--lacquer-inset) !important;
+  border-color: var(--border-hairline) !important;
+  color: var(--ink-primary) !important;
+}
+
+.bazi-dv-pill:hover,
+.bazi-dv-pill.active {
+  background: var(--brass-soft) !important;
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+  box-shadow: none !important;
+}
+
+.bazi-image-display-frame {
+  border: 1px solid rgba(207, 163, 85, 0.48) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-frame) !important;
+}
+
+.bazi-img-loading {
+  background: rgba(17, 16, 14, 0.88) !important;
+  color: var(--brass-bright) !important;
+}
+
+.bazi-spinner {
+  border-color: var(--border-hairline) !important;
+  border-top-color: var(--brass) !important;
+}
+
+.bazi-save-hints {
+  background: var(--lacquer-surface) !important;
+  border: 1px dashed var(--border-strong) !important;
+  color: var(--ink-muted) !important;
+}
+
+.bazi-save-hints strong {
+  color: var(--brass-bright) !important;
+}
+
+.btn-bazi-download {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--brass) !important;
+  color: var(--brass-bright) !important;
+  min-height: 46px;
+}
+
+.btn-bazi-download:hover {
+  background: var(--brass-soft) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.bazi-seo-guide-section {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.bazi-seo-guide-section h2 {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+}
+
+.bazi-seo-guide-section h3 {
+  font-family: var(--font-serif) !important;
+  color: var(--brass-bright) !important;
+}
+
+.bazi-seo-guide-section p {
+  color: var(--ink-secondary) !important;
+}
+
+.bazi-seo-card {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-left: 3px solid var(--brass) !important;
+}
+
+.bazi-seo-card:hover {
+  transform: none !important;
+  border-color: var(--border-strong) !important;
+  box-shadow: none !important;
+}
+
+.bazi-seo-card h4 {
+  color: var(--ink-primary) !important;
+}
+
+.bazi-seo-card p {
+  color: var(--ink-secondary) !important;
+}
+
+/* ==========================================================================
+   6. PHONG THỦY HKPT (/hkpt) — SƠN MÀI HẮC KIM OVERRIDES
+   Note: #exportArea (white chart grid & star colors) remains 100% pure!
+   ========================================================================== */
+.app-container {
+  max-width: 980px !important;
+}
+
+.app-header {
+  padding: 18px 12px 16px !important;
+  border-bottom: 1px solid var(--border-hairline);
+  margin-bottom: 16px !important;
+  max-width: 780px !important;
+}
+
+.header-title {
+  font-family: var(--font-serif) !important;
+  font-size: clamp(1.45rem, 3.2vw, 2rem) !important;
+  font-weight: 700 !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: var(--ink-primary) !important;
+  color: var(--ink-primary) !important;
+  letter-spacing: -0.015em !important;
+}
+
+.header-subtitle {
+  color: var(--brass) !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.1em !important;
+  margin-top: 4px !important;
+}
+
+.input-section {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+  max-width: 680px !important;
+  padding: 20px !important;
+}
+
+.form-block {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.form-block-title {
+  color: var(--brass-bright) !important;
+}
+
+.block-num {
+  background: var(--seal-red) !important;
+  color: var(--ink-primary) !important;
+}
+
+.input-group label {
+  color: var(--ink-secondary) !important;
+}
+
+.input-field {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  font-size: 16px !important;
+  min-height: 44px !important;
+}
+
+.input-datetime-local {
+  background: var(--lacquer-surface) !important;
+  color: var(--ink-primary) !important;
+}
+
+select.input-field {
+  background-image: none !important;
+  -webkit-appearance: auto !important;
+  appearance: auto !important;
+  padding-right: 10px !important;
+}
+
+.input-field:focus {
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+}
+
+.input-readonly {
+  background: var(--lacquer-bg) !important;
+  color: var(--brass-bright) !important;
+  border-color: var(--border-hairline) !important;
+}
+
+.input-hint {
+  color: var(--ink-muted) !important;
+}
+
+.badge-canh {
+  background: var(--lacquer-elevated) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.badge-tiet {
+  background: var(--status-success-bg) !important;
+  border-color: var(--status-success-border) !important;
+  color: var(--status-success) !important;
+}
+
+.btn-sat-standalone {
+  background: var(--lacquer-elevated) !important;
+  color: var(--ink-primary) !important;
+  border: 1px solid var(--border-strong) !important;
+  box-shadow: none !important;
+  min-height: 44px !important;
+}
+
+.btn-sat-standalone:hover {
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+  transform: none !important;
+}
+
+.btn-calculate {
+  background: var(--seal-red) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: none !important;
+  min-height: 48px !important;
+}
+
+.btn-calculate:hover {
+  background: var(--seal-red-hover) !important;
+  transform: none !important;
+  box-shadow: 0 6px 18px rgba(166, 44, 43, 0.35) !important;
+}
+
+.export-area {
+  max-width: 680px !important;
+  border: 1px solid rgba(207, 163, 85, 0.48) !important;
+  box-shadow: var(--shadow-frame) !important;
+}
+
+.action-container {
+  max-width: 680px !important;
+}
+
+.btn-action-download {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--brass) !important;
+  color: var(--brass-bright) !important;
+  min-height: 46px !important;
+}
+
+.btn-action-download:hover {
+  background: var(--brass-soft) !important;
+  box-shadow: none !important;
+}
+
+.btn-action-plan {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  min-height: 46px !important;
+}
+
+.btn-action-plan:hover {
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+  background: var(--lacquer-elevated) !important;
+  box-shadow: none !important;
+}
+
+/* HKPT Floorplan & Satellite Modal */
+.floorplan-section {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  box-shadow: var(--shadow-card) !important;
+  color: var(--ink-primary) !important;
+}
+
+.floorplan-title {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+}
+
+.fp-header-btn,
+.fp-btn,
+.fp-mini-btn {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+}
+
+.fp-header-btn:hover,
+.fp-btn:hover,
+.fp-mini-btn:hover {
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+}
+
+.floorplan-container {
+  background: var(--lacquer-inset) !important;
+  border-color: var(--border-strong) !important;
+}
+
+.center-tools-panel {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-strong) !important;
+}
+
+.center-tools-title {
+  color: var(--brass-bright) !important;
+}
+
+.center-mode-btn {
+  background: var(--lacquer-surface) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--ink-secondary) !important;
+  min-height: 38px;
+}
+
+.center-mode-btn.active {
+  background: var(--seal-red) !important;
+  border-color: var(--seal-red-hover) !important;
+  color: var(--ink-primary) !important;
+}
+
+.center-tool-desc {
+  color: var(--ink-secondary) !important;
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline);
+}
+
+.fp-toggles-row {
+  background: var(--lacquer-inset) !important;
+  border-color: var(--border-hairline) !important;
+}
+
+.fp-toggle-label,
+.fp-control-group label,
+.fp-rotation-display {
+  color: var(--ink-secondary) !important;
+}
+
+.fp-rotation-display strong {
+  color: var(--brass-bright) !important;
+}
+
+.fp-btn-primary,
+.fp-btn.active {
+  background: var(--seal-red) !important;
+  border-color: var(--seal-red-hover) !important;
+  color: var(--ink-primary) !important;
+}
+
+.fp-slider {
+  background: var(--border-strong) !important;
+}
+
+.fp-slider::-webkit-slider-thumb {
+  background: var(--brass) !important;
+}
+
+.fp-toggle-label input[type="checkbox"] {
+  accent-color: var(--brass) !important;
+}
+
+.sat-modal-backdrop {
+  background: rgba(8, 7, 6, 0.80) !important;
+}
+
+.sat-modal-container {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+}
+
+.sat-modal-header,
+.sat-search-bar,
+.sat-result-bar {
+  background: var(--lacquer-bg) !important;
+  border-color: var(--border-hairline) !important;
+}
+
+.sat-header-title h3,
+.sat-res-name {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+}
+
+.sat-header-title p,
+.sat-res-label {
+  color: var(--ink-muted) !important;
+}
+
+.sat-close-btn,
+.sat-tool-btn,
+.sat-mini-btn {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+}
+
+.sat-search-input {
+  background: var(--lacquer-inset) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+}
+
+.sat-search-btn {
+  background: var(--brass) !important;
+  color: #11100E !important;
+}
+
+.sat-layer-toggle {
+  border-color: var(--border-strong) !important;
+}
+
+.sat-layer-btn {
+  background: var(--lacquer-surface) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.sat-layer-btn.active {
+  background: var(--seal-red) !important;
+  color: var(--ink-primary) !important;
+}
+
+.sat-instruction {
+  background: var(--brass-soft) !important;
+  color: var(--brass-bright) !important;
+  border-bottom-color: var(--border-hairline) !important;
+}
+
+.sat-res-degree {
+  color: var(--brass-bright) !important;
+}
+
+.sat-result-sub {
+  color: var(--ink-secondary) !important;
+}
+
+.sat-btn-apply:not(:disabled) {
+  background: var(--seal-red) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: none !important;
+}
+
+.sat-btn-apply:not(:disabled):hover {
+  background: var(--seal-red-hover) !important;
+}
+
+/* HKPT SEO Section */
+.hkpt-seo-guide-section {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.hkpt-seo-guide-section h2 {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+  border-bottom: 1px solid var(--border-hairline);
+  padding-bottom: 12px;
+}
+
+.hkpt-seo-guide-section h3 {
+  font-family: var(--font-serif) !important;
+  color: var(--brass-bright) !important;
+  border-left-color: var(--brass) !important;
+}
+
+.hkpt-seo-guide-section p,
+.hkpt-seo-guide-section li {
+  color: var(--ink-secondary) !important;
+}
+
+.hkpt-seo-card {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+}
+
+.hkpt-seo-card:hover {
+  border-color: var(--border-strong) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.hkpt-seo-card h4 {
+  color: var(--brass-bright) !important;
+}
+
+.hkpt-seo-card p {
+  color: var(--ink-secondary) !important;
+}
+
+@media (max-width: 480px) {
+  .input-section {
+    padding: 14px 12px !important;
+  }
+  .datetime-picker-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  .datetime-picker-row .select-timezone {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   7. SIM PHONG THỦY (/simphongthuy) — SƠN MÀI HẮC KIM OVERRIDES
+   Note: #hiddenRenderArea and .hex-card-view (#fefee5) remain untouched!
+   ========================================================================== */
+.container {
+  max-width: 980px !important;
+  padding: 16px 14px 32px !important;
+}
+
+.sim-page-header {
+  text-align: center;
+  padding: 12px 8px 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.sim-page-header h1 {
+  font-family: var(--font-serif) !important;
+  font-size: clamp(1.45rem, 3.2vw, 1.95rem) !important;
+  font-weight: 700 !important;
+  color: var(--ink-primary) !important;
+  margin: 0 0 6px !important;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.sim-page-header p {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.form-card {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.form-card .section-title {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+}
+
+.form-card .form-group label {
+  color: var(--ink-secondary) !important;
+}
+
+.form-control,
+.gender-radio-group {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  min-height: 44px;
+}
+
+.form-control:focus {
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+}
+
+.gender-radio-label {
+  color: var(--ink-primary) !important;
+}
+
+.gender-radio-label input[type="radio"] {
+  accent-color: var(--brass) !important;
+}
+
+.current-sim-group {
+  background: var(--lacquer-inset) !important;
+  border: 1px dashed var(--border-strong) !important;
+}
+
+.current-sim-group label {
+  color: var(--brass-bright) !important;
+}
+
+.btn-eval-current {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--brass) !important;
+  color: var(--brass-bright) !important;
+  box-shadow: none !important;
+  min-height: 44px;
+}
+
+.btn-eval-current:hover {
+  background: var(--brass-soft) !important;
+}
+
+/* Digit Selector Section */
+.digit-section {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-top: 3px solid var(--seal-red) !important;
+  box-shadow: none !important;
+}
+
+.digit-section-title {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+  font-weight: 700 !important;
+}
+
+.prefix-selector-group label {
+  color: var(--ink-secondary) !important;
+}
+
+.prefix-select {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  min-height: 40px;
+}
+
+.digit-boxes-container {
+  gap: 4px !important;
+}
+
+.digit-box {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  font-family: var(--font-sans) !important;
+  font-size: 16px !important;
+}
+
+.digit-box:focus {
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.18) !important;
+}
+
+.digit-box.fixed-zero {
+  background: var(--lacquer-elevated) !important;
+  color: var(--brass-bright) !important;
+  border-color: rgba(207, 163, 85, 0.45) !important;
+}
+
+.digit-help-text {
+  color: var(--ink-muted) !important;
+}
+
+@media (max-width: 400px) {
+  .digit-boxes-container {
+    gap: 2px !important;
+  }
+  .digit-box {
+    height: 40px !important;
+    border-radius: 5px !important;
+  }
+}
+
+.btn-submit {
+  background: var(--seal-red) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: none !important;
+  min-height: 48px;
+}
+
+.btn-submit:hover {
+  background: var(--seal-red-hover) !important;
+}
+
+/* Sim Results & Cards */
+.results-header h3 {
+  font-family: var(--font-serif);
+  color: var(--ink-primary);
+}
+
+.result-count-badge {
+  background: var(--brass-soft);
+  color: var(--brass-bright);
+  border: 1px solid rgba(207, 163, 85, 0.35);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.sim-card {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.sim-card-evaluated {
+  border: 1px solid rgba(207, 163, 85, 0.5) !important;
+  background: var(--lacquer-inset) !important;
+  margin-top: 14px;
+}
+
+.sim-eval-label {
+  font-size: 0.86rem;
+  color: var(--brass);
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sim-card:hover {
+  border-color: var(--border-strong) !important;
+  transform: none !important;
+}
+
+.sim-number-display {
+  color: var(--ink-muted) !important;
+}
+
+.sim-number-display .highlight {
+  color: var(--brass-bright) !important;
+}
+
+.badge-score {
+  background: var(--status-success-bg) !important;
+  color: var(--status-success) !important;
+  border-color: var(--status-success-border) !important;
+}
+
+.badge-hex {
+  background: var(--brass-soft) !important;
+  color: var(--brass-bright) !important;
+  border-color: rgba(207, 163, 85, 0.32) !important;
+}
+
+.btn-view-hex {
+  background: var(--seal-red) !important;
+  color: var(--ink-primary) !important;
+  min-height: 40px;
+}
+
+.btn-view-hex:hover {
+  background: var(--seal-red-hover) !important;
+}
+
+.btn-copy-info {
+  background: var(--lacquer-elevated) !important;
+  color: var(--ink-primary) !important;
+  border: 1px solid var(--border-strong) !important;
+  min-height: 40px;
+}
+
+.btn-copy-info:hover {
+  border-color: var(--brass) !important;
+  color: var(--brass-bright) !important;
+}
+
+.sim-loading-state {
+  text-align: center;
+  padding: 36px 16px;
+  color: var(--brass-bright);
+}
+
+.sim-empty-state {
+  text-align: center;
+  padding: 32px 18px;
+  background: var(--lacquer-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-hairline);
+}
+
+.sim-empty-title {
+  font-size: 1.05rem;
+  color: var(--status-danger);
+  font-weight: 700;
+}
+
+.sim-empty-hint {
+  color: var(--ink-muted);
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+/* Sim Hex Modal */
+#hexModal.modal-overlay {
+  background: rgba(8, 7, 6, 0.82) !important;
+}
+
+#hexModal .modal-content {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: var(--shadow-elevated) !important;
+}
+
+#hexModal .modal-close {
+  background: var(--lacquer-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: none !important;
+}
+
+#hexModal .modal-close:hover {
+  background: var(--seal-red) !important;
+  border-color: var(--seal-red) !important;
+  color: var(--ink-primary) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.desktop-img-hint {
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Sim SEO Section */
+.container .seo-knowledge-section {
+  background: var(--lacquer-surface) !important;
+  border: 1px solid var(--border-hairline) !important;
+  box-shadow: var(--shadow-card) !important;
+  color: var(--ink-secondary) !important;
+}
+
+.container .seo-knowledge-section h2 {
+  font-family: var(--font-serif) !important;
+  color: var(--ink-primary) !important;
+  border-bottom: 1px solid var(--border-hairline);
+  padding-bottom: 12px;
+}
+
+.container .seo-knowledge-section h3 {
+  font-family: var(--font-serif) !important;
+  color: var(--brass-bright) !important;
+  border-left-color: var(--brass) !important;
+}
+
+.container .seo-knowledge-section p,
+.container .seo-knowledge-section li {
+  color: var(--ink-secondary) !important;
+}
+
+.container .seo-knowledge-section a {
+  color: var(--brass-bright);
+  font-weight: 600;
+}
+
+.container .seo-faq-card {
+  background: var(--lacquer-inset) !important;
+  border: 1px solid var(--border-hairline) !important;
+}
+
+.container .seo-faq-card:hover {
+  border-color: var(--border-strong) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.container .seo-faq-card h4 {
+  color: var(--brass-bright) !important;
+}
+
+/* ==========================================================================
+   8. GLOBAL POLISH: TOASTS
+   ========================================================================== */
+.toast,
+.bazi-toast,
+.toast-notification {
+  background: var(--lacquer-elevated) !important;
+  color: var(--ink-primary) !important;
+  border: 1px solid var(--brass) !important;
+  box-shadow: var(--shadow-elevated) !important;
+}

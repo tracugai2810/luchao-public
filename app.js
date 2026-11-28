@@ -684,7 +684,7 @@ function processDivination() {
         imageDisplay.innerHTML = `
             <div style="text-align:center; padding: 36px 20px;">
                 <div class="spinner" style="width:38px; height:38px; border-width:3px; margin: 0 auto 12px;"></div>
-                <div style="color: var(--gold-glow); font-size: 15px; font-weight: 600;">Đang tạo hình ảnh lá quẻ...</div>
+                <div style="color: var(--ink-secondary, #4A453F); font-size: 15px; font-weight: 600;">Đang tạo hình ảnh lá quẻ...</div>
             </div>
         `;
     }
@@ -941,7 +941,7 @@ function captureAndDisplayImage() {
 
         const imageDisplay = document.getElementById('imageDisplay');
         if (imageDisplay) {
-            imageDisplay.innerHTML = `<p style="color:#ef4444; text-align:center; padding:20px;">Có lỗi khi tạo ảnh. Vui lòng bấm Lập Quẻ lại!</p>`;
+            imageDisplay.innerHTML = `<p style="color: var(--seal-red, #9B2226); text-align:center; padding:20px;">Có lỗi khi tạo ảnh. Vui lòng bấm Lập Quẻ lại!</p>`;
         }
     });
 }

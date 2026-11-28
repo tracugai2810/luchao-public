@@ -157,19 +157,87 @@
     };
   }
 
+  var VI_FONT_SAMPLE = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789ÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬĐÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴáàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵ';
+
   function waitForFonts(fontSpecs, timeoutMs) {
     if (typeof document === 'undefined' || !document.fonts) {
       return Promise.resolve();
     }
-    var ms = typeof timeoutMs === 'number' ? timeoutMs : 1800;
+    var ms = typeof timeoutMs === 'number' ? timeoutMs : 3000;
     var specs = Array.isArray(fontSpecs) ? fontSpecs : [];
     var loaders = specs.map(function (spec) {
-      return document.fonts.load(spec).catch(function () { return []; });
+      return document.fonts.load(spec, VI_FONT_SAMPLE).catch(function () { return []; });
     });
     return Promise.race([
       Promise.all(loaders).then(function () { return document.fonts.ready; }),
       new Promise(function (resolve) { setTimeout(resolve, ms); })
     ]).catch(function () {});
+  }
+
+  var TUVI_UNICODE_VI = 'U+102-103,U+110-111,U+128-129,U+168-169,U+1A0-1A1,U+1AF-1B0,U+300-301,U+303-304,U+308-309,U+323,U+329,U+1EA0-1EF9,U+20AB';
+  var TUVI_UNICODE_LATIN = 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
+  var TUVI_FONT_SOURCES = [
+    { weight: 400, range: TUVI_UNICODE_VI, url: '/tu-vi/_next/static/media/53e45098eac42afb-s.p.0l2qk94b1u89y.woff2' },
+    { weight: 400, range: TUVI_UNICODE_LATIN, url: '/tu-vi/_next/static/media/3c285486269019b7-s.p.0sn2213rkw2e_.woff2' },
+    { weight: 700, range: TUVI_UNICODE_VI, url: '/tu-vi/_next/static/media/8ffc259da9d23054-s.p.0b_.2~bprftx..woff2' },
+    { weight: 700, range: TUVI_UNICODE_LATIN, url: '/tu-vi/_next/static/media/6f42e0a3b0519c4d-s.p.0czffigx~77c..woff2' },
+    { weight: 800, range: TUVI_UNICODE_VI, url: '/tu-vi/_next/static/media/fcf129058e6e31f2-s.p.0k.rt6-fab6y0.woff2' },
+    { weight: 800, range: TUVI_UNICODE_LATIN, url: '/tu-vi/_next/static/media/3eca85881bcfa204-s.p.09gf3ff1ir7gl.woff2' }
+  ];
+  var tuviFontCssPromise = null;
+
+  function arrayBufferToBase64(buffer) {
+    var bytes = new Uint8Array(buffer);
+    var chunks = [];
+    var chunkSize = 0x8000;
+    for (var i = 0; i < bytes.length; i += chunkSize) {
+      chunks.push(String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize)));
+    }
+    return btoa(chunks.join(''));
+  }
+
+  function getTuViEmbeddedFontCss() {
+    if (typeof fetch === 'undefined' || typeof btoa === 'undefined') {
+      return Promise.resolve('');
+    }
+    if (tuviFontCssPromise) return tuviFontCssPromise;
+
+    tuviFontCssPromise = Promise.all(
+      TUVI_FONT_SOURCES.map(function (entry) {
+        return fetch(entry.url, { credentials: 'same-origin' })
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.arrayBuffer();
+          })
+          .then(function (buf) {
+            var b64 = arrayBufferToBase64(buf);
+            return "@font-face{font-family:'Be Vietnam Pro';font-style:normal;font-weight:" +
+              entry.weight + ";src:url(data:font/woff2;base64," + b64 + ") format('woff2');unicode-range:" +
+              entry.range + ';}';
+          })
+          .catch(function (err) {
+            console.warn('Skip Tu Vi font embed:', entry.url, err);
+            return '';
+          });
+      })
+    ).then(function (rules) {
+      return rules.join('');
+    }).catch(function () {
+      return '';
+    });
+
+    return tuviFontCssPromise;
+  }
+
+  function injectTuViFontsIntoSvg(svgStr) {
+    if (!svgStr || typeof svgStr !== 'string') return Promise.resolve(svgStr);
+    return getTuViEmbeddedFontCss().then(function (css) {
+      if (!css) return svgStr;
+      var styleIdx = svgStr.indexOf('<style>');
+      if (styleIdx === -1) return svgStr;
+      var insertPos = styleIdx + 7;
+      return svgStr.slice(0, insertPos) + css + svgStr.slice(insertPos);
+    });
   }
 
   global.PortalImageDownload = {
@@ -179,6 +247,8 @@
     directDownload: directDownload,
     saveOrShare: saveOrShare,
     enableInkText: enableInkText,
-    waitForFonts: waitForFonts
+    waitForFonts: waitForFonts,
+    getTuViEmbeddedFontCss: getTuViEmbeddedFontCss,
+    injectTuViFontsIntoSvg: injectTuViFontsIntoSvg
   };
 })(typeof window !== 'undefined' ? window : this);

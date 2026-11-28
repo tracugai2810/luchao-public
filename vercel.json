@@ -42,7 +42,16 @@
       ]
     },
     {
-      "source": "/(banner.png|banner.jpg|favicon.png|duong.png|am.png)",
+      "source": "/(banner.png|banner.jpg|favicon.png|duong.png|am.png|icon-192.png|icon-512.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/tu-vi/og-image.jpg",
       "headers": [
         {
           "key": "Cache-Control",
@@ -60,6 +69,42 @@
         {
           "key": "Service-Worker-Allowed",
           "value": "/"
+        }
+      ]
+    },
+    {
+      "source": "/bat-tu/:file(style.css|bazi-engine.js|bazi-canvas-renderer.js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/hkpt/:file(style.css|flyingstar.js|thanh-mon-rules.js|compass.js|floorplan.js|satellite-compass.js|hkpt-canvas-renderer.js|main.js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/simphongthuy/css/styles.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/simphongthuy/js/:file(luchao-core.js|sim-engine.js|app.js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     }

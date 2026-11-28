@@ -6,8 +6,6 @@
    - MOBILE FIRST RESPONSIVE
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
-
 :root {
     --bg-dark: #0c1222;
     --bg-card: #151d30;

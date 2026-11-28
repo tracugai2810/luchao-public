@@ -4,8 +4,8 @@
   "description": "Cổng tra cứu & ứng dụng Huyền Học Á Đông: Kinh Dịch Lục Hào (Chu Thần Bân), Tử Vi Bắc Phái (Lương Nhược Du), Huyền Không Phi Tinh (Thẩm Thị Huyền Không) & SIM Phong Thủy.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#7f1d1d",
+  "background_color": "#f4f6fa",
+  "theme_color": "#8b2525",
   "orientation": "portrait-primary",
   "lang": "vi",
   "icons": [

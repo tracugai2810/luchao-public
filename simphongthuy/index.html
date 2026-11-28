@@ -15,6 +15,7 @@
     <meta name="language" content="Vietnamese">
     <meta name="geo.region" content="VN">
     <meta name="geo.placename" content="Hà Nội, Việt Nam">
+    <meta name="theme-color" content="#f4f6fa">
     <link rel="canonical" href="https://luchao.io.vn/simphongthuy">
     <link rel="manifest" href="/manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
@@ -136,17 +137,14 @@
     <!-- Google Fonts Preconnect & Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Inter:wght@400;600;700;800;900&family=Noto+Serif:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/styles.css?v=20260814_v18">
-    <link rel="stylesheet" href="/portal-theme.css?v=4.1">
+    <link rel="stylesheet" href="css/styles.css?v=20261128_v22">
+    <link rel="stylesheet" href="/portal-theme.css?v=4.2">
 
-    <!-- Lunar JavaScript Library (Đài thiên văn Tử Kim Sơn - Tiết khí chuẩn từng phút) -->
-    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
-
-    <!-- html2canvas cho xuất & tải ảnh quẻ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Lunar JavaScript Library (Deferred) -->
+    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js" defer></script>
 </head>
 <body>
     <!-- Top Portal Multi-Tab Navigation (4 Môn Huyền Học) -->
@@ -344,11 +342,11 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast-notification"></div>
 
-    <!-- Scripts -->
-    <script src="js/luchao-core.js?v=20260814_v18"></script>
-    <script src="js/sim-engine.js?v=20260814_v18"></script>
-    <script src="/portal-download.js?v=1.0"></script>
-    <script src="js/app.js?v=20261128_v21"></script>
+    <!-- Scripts (Deferred in strict order) -->
+    <script src="js/luchao-core.js?v=20260814_v18" defer></script>
+    <script src="js/sim-engine.js?v=20260814_v18" defer></script>
+    <script src="/portal-download.js?v=1.0" defer></script>
+    <script src="js/app.js?v=20261128_v21" defer></script>
     <script src="/portal-nav.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,6 @@
+# Protect personal/internal reference documents & backups from public deployment
+*.pdf
+*.md
+*.bak
+*.tmp
+*.old

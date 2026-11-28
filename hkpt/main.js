@@ -5,6 +5,20 @@
 (function() {
   'use strict';
 
+  function loadHtml2Canvas() {
+    if (typeof html2canvas !== 'undefined') return Promise.resolve();
+    if (window.__h2cLoadingPromise) return window.__h2cLoadingPromise;
+    window.__h2cLoadingPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      s.async = true;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('Failed to load html2canvas'));
+      document.head.appendChild(s);
+    });
+    return window.__h2cLoadingPromise;
+  }
+
   // Grid layout: visual row/col to Lo Shu palace mapping
   // Traditional Feng Shui chart: South on top, North at bottom
   // Grid positions (row, col) → Palace number
@@ -643,10 +657,10 @@
         console.warn('HKPTCanvasRenderer fallback to html2canvas:', nativeErr);
       }
 
-      if (!exportAreaEl || typeof html2canvas === 'undefined') return;
+      if (!exportAreaEl) return;
       if (imgOverlay) imgOverlay.style.display = 'none';
 
-      waitForFontsReady().then(() => html2canvas(exportAreaEl, {
+      Promise.all([waitForFontsReady(), loadHtml2Canvas()]).then(() => html2canvas(exportAreaEl, {
         scale: 2.5,
         useCORS: true,
         logging: false,
@@ -790,6 +804,7 @@
         return;
       }
       await waitForFontsReady();
+      await loadHtml2Canvas();
       const canvas = await html2canvas(exportArea, {
         scale: 3,
         useCORS: true,

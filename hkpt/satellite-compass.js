@@ -22,6 +22,35 @@
   let currentFacingDegree = null;
   let normalOffset = 90; // +90 or -90 (flip)
   let fineTuneDegree = 0; // +/- adjustment
+  let leafletLoadPromise = null;
+
+  /**
+   * Lazy-load Leaflet CSS & JS only when the user opens Satellite Compass
+   */
+  function ensureLeafletLoaded() {
+    if (typeof window.L !== 'undefined') return Promise.resolve();
+    if (leafletLoadPromise) return leafletLoadPromise;
+
+    leafletLoadPromise = new Promise((resolve, reject) => {
+      if (!document.querySelector('link[href*="leaflet.css"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        document.head.appendChild(link);
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => {
+        leafletLoadPromise = null;
+        reject(new Error('Không thể tải thư viện bản đồ Leaflet'));
+      };
+      document.head.appendChild(script);
+    });
+    return leafletLoadPromise;
+  }
 
   // Default initial location: Hanoi, Vietnam
   const DEFAULT_LAT = 21.028511;
@@ -541,12 +570,18 @@
     if (!modal) return;
     modal.classList.remove('hidden');
 
-    setTimeout(() => {
-      initMap();
-      if (map) {
-        map.invalidateSize();
-      }
-    }, 150);
+    ensureLeafletLoaded()
+      .then(() => {
+        setTimeout(() => {
+          initMap();
+          if (map) {
+            map.invalidateSize();
+          }
+        }, 120);
+      })
+      .catch(err => {
+        console.warn('SatelliteCompass load error:', err);
+      });
   }
 
   function closeModal() {

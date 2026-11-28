@@ -494,6 +494,7 @@
 
       // Analyze Thanh Mon (Castle Gate)
       const tmAnalysis = (window.ThanhMonRules && window.ThanhMonRules.analyze) ? window.ThanhMonRules.analyze(result) : null;
+      lastRenderPayload = { result, currentYear, currentMonth, currentDay, currentHour, menhQuai, exactHour, exactMinute, tmAnalysis };
       
       for (let i = 0; i < 9; i++) {
         const palace = displayGrid[i];
@@ -590,9 +591,14 @@
 
   let cachedChartFile = null;
   let cachedChartBlob = null;
+  let cachedObjectUrl = null;
+  let lastRenderPayload = null;
   let snapshotTimer = null;
 
   function waitForFontsReady(timeoutMs = 1500) {
+    if (window.PortalImageDownload && window.PortalImageDownload.waitForFonts) {
+      return window.PortalImageDownload.waitForFonts([], timeoutMs);
+    }
     if (typeof document === 'undefined' || !document.fonts || !document.fonts.ready) {
       return Promise.resolve();
     }
@@ -604,11 +610,40 @@
 
   function updateImageSnapshot() {
     clearTimeout(snapshotTimer);
-    snapshotTimer = setTimeout(() => {
+    snapshotTimer = setTimeout(async () => {
       const exportAreaEl = document.getElementById('exportArea');
       const imgOverlay = document.getElementById('exportAreaImgOverlay');
-      if (!exportAreaEl || typeof html2canvas === 'undefined') return;
+      const van = (document.getElementById('inputVan') && document.getElementById('inputVan').value) || '8';
+      const deg = (document.getElementById('inputDegree') && document.getElementById('inputDegree').value) || '180';
+      const filename = `tinhban_van${van}_${deg}deg.png`;
 
+      try {
+        if (lastRenderPayload && window.HKPTCanvasRenderer && window.HKPTCanvasRenderer.renderHKPTToCanvas) {
+          const canvas = await window.HKPTCanvasRenderer.renderHKPTToCanvas(lastRenderPayload);
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+          const resolvedBlob = blob || (window.PortalImageDownload ? window.PortalImageDownload.dataURItoBlob(canvas.toDataURL('image/png')) : null);
+          if (resolvedBlob) {
+            cachedChartBlob = resolvedBlob;
+            cachedChartFile = window.PortalImageDownload
+              ? window.PortalImageDownload.prepareFile(resolvedBlob, filename)
+              : new File([resolvedBlob], filename, { type: 'image/png', lastModified: Date.now() });
+          }
+          if (imgOverlay) {
+            if (cachedObjectUrl) {
+              URL.revokeObjectURL(cachedObjectUrl);
+              cachedObjectUrl = null;
+            }
+            const displaySrc = resolvedBlob ? (cachedObjectUrl = URL.createObjectURL(resolvedBlob)) : canvas.toDataURL('image/png');
+            imgOverlay.src = displaySrc;
+            imgOverlay.style.display = 'block';
+          }
+          return;
+        }
+      } catch (nativeErr) {
+        console.warn('HKPTCanvasRenderer fallback to html2canvas:', nativeErr);
+      }
+
+      if (!exportAreaEl || typeof html2canvas === 'undefined') return;
       if (imgOverlay) imgOverlay.style.display = 'none';
 
       waitForFontsReady().then(() => html2canvas(exportAreaEl, {
@@ -625,11 +660,10 @@
         canvas.toBlob(blob => {
           if (blob) {
             cachedChartBlob = blob;
-            const van = (document.getElementById('inputVan') && document.getElementById('inputVan').value) || '8';
-            const deg = (document.getElementById('inputDegree') && document.getElementById('inputDegree').value) || '180';
-            const filename = `tinhban_van${van}_${deg}deg.png`;
             try {
-              cachedChartFile = new File([blob], filename, { type: 'image/png', lastModified: Date.now() });
+              cachedChartFile = window.PortalImageDownload
+                ? window.PortalImageDownload.prepareFile(blob, filename)
+                : new File([blob], filename, { type: 'image/png', lastModified: Date.now() });
             } catch(e) {
               console.warn('File constructor fallback:', e);
             }
@@ -638,7 +672,7 @@
       }).catch(err => {
         console.warn('Image snapshot generation error:', err);
       });
-    }, 80);
+    }, 60);
   }
 
   async function handleDownloadButtonClick(e) {
@@ -737,31 +771,40 @@
 
   window.saveOrShareImage = saveOrShareImage;
 
-  function downloadChart() {
+  async function downloadChart() {
     if (!exportArea) return;
     const origHTML = btnDownload.innerHTML;
     btnDownload.innerText = 'Đang tạo ảnh...';
     btnDownload.disabled = true;
 
-    // Direct snapshot with high quality
-    setTimeout(() => {
-      waitForFontsReady().then(() => html2canvas(exportArea, {
+    const van = (document.getElementById('inputVan') && document.getElementById('inputVan').value) || '8';
+    const deg = (document.getElementById('inputDegree') && document.getElementById('inputDegree').value) || '180';
+    const filename = `tinhban_van${van}_${deg}deg.png`;
+
+    try {
+      if (lastRenderPayload && window.HKPTCanvasRenderer && window.HKPTCanvasRenderer.renderHKPTToCanvas) {
+        const canvas = await window.HKPTCanvasRenderer.renderHKPTToCanvas(lastRenderPayload);
+        btnDownload.innerHTML = origHTML;
+        btnDownload.disabled = false;
+        await saveOrShareImage(canvas, filename, 'Tinh Bàn Huyền Không');
+        return;
+      }
+      await waitForFontsReady();
+      const canvas = await html2canvas(exportArea, {
         scale: 3,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff',
-      })).then(canvas => {
-        btnDownload.innerHTML = origHTML;
-        btnDownload.disabled = false;
-        const filename = `tinhban_${document.getElementById('inputVan').value}_${document.getElementById('inputDegree').value}.png`;
-        saveOrShareImage(canvas, filename, 'Tinh Bàn Huyền Không');
-      }).catch(err => {
-        btnDownload.innerHTML = origHTML;
-        btnDownload.disabled = false;
-        console.error('Download error:', err);
-        alert('Có lỗi khi tạo ảnh tải về, vui lòng thử lại.');
+        backgroundColor: '#ffffff'
       });
-    }, 40);
+      btnDownload.innerHTML = origHTML;
+      btnDownload.disabled = false;
+      await saveOrShareImage(canvas, filename, 'Tinh Bàn Huyền Không');
+    } catch (err) {
+      btnDownload.innerHTML = origHTML;
+      btnDownload.disabled = false;
+      console.error('Download error:', err);
+      alert('Có lỗi khi tạo ảnh tải về, vui lòng thử lại.');
+    }
   }
 
   function copyChartToText() {

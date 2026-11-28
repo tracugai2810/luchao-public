@@ -1094,7 +1094,7 @@ async function renderHexagramToCanvas(data) {
         for (let i = 5; i >= 0; i--) {
             const lineIdx = 5 - i;
             const lineY = yBarsStart + lineIdx * 24;
-            const isMoving = data.lines[i] === 0 || data.lines[i] === 3;
+            const isMoving = linesArr[i] === 0 || linesArr[i] === 3;
             const barColor = isMoving ? '#e60000' : '#1a1a1a';
             const isYang = bits[i] === '1';
             ctx.fillStyle = barColor;
@@ -1251,7 +1251,7 @@ async function renderHexagramToCanvas(data) {
             line.lucThu,
             ctk,
             line.tsNgay,
-            line.vsThang
+            line.tsThang
         ];
 
         vals.forEach((v, idx) => {

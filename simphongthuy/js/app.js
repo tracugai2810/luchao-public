@@ -630,7 +630,7 @@ async function renderSimHexagramToCanvas(item) {
         for (let i = 5; i >= 0; i--) {
             const lineIdx = 5 - i;
             const lineY = yBarsStart + lineIdx * 24;
-            const isMoving = hexData.lines[i] === 0 || hexData.lines[i] === 3;
+            const isMoving = linesArr[i] === 0 || linesArr[i] === 3;
             const barColor = isMoving ? '#e60000' : '#1a1a1a';
             const isYang = bits[i] === '1';
             ctx.fillStyle = barColor;

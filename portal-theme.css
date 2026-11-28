@@ -501,7 +501,7 @@ input[type="tel"],
   border-left: 1px solid rgba(122, 30, 30, 0.25) !important;
   border-radius: 12px !important;
   box-shadow: 0 4px 14px rgba(139, 37, 37, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
-  padding: 12px 20px !important;
+  padding: 13px 20px !important;
   margin: 0 auto 16px !important;
   max-width: 100% !important;
   text-align: center !important;
@@ -533,12 +533,7 @@ input[type="tel"],
 .portal-page-subtitle,
 .app-header .header-subtitle,
 .sim-page-header p {
-  font-size: 0.85rem !important;
-  color: rgba(241, 245, 249, 0.88) !important;
-  margin: 4px 0 0 !important;
-  line-height: 1.4 !important;
-  letter-spacing: 0.01em !important;
-  text-transform: none !important;
+  display: none !important;
 }
 
 /* Unified Footer across all 5 modules */
@@ -2530,8 +2525,8 @@ select.input-field {
 .toast,
 .bazi-toast,
 .toast-notification {
-  background: var(--lacquer-elevated) !important;
-  color: var(--ink-primary) !important;
+  background: #0f172a !important;
+  color: #ffffff !important;
   border: 1px solid var(--brass) !important;
   box-shadow: var(--shadow-elevated) !important;
 }

@@ -68,7 +68,7 @@
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
   <link rel="stylesheet" href="/bat-tu/style.css?v=7.5">
-  <link rel="stylesheet" href="/portal-theme.css?v=4.0">
+  <link rel="stylesheet" href="/portal-theme.css?v=4.1">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
@@ -77,8 +77,9 @@
   <!-- Unified Image Download & Share Helper -->
   <script src="/portal-download.js?v=1.0"></script>
 
-  <!-- Bazi Core Engine -->
+  <!-- Bazi Core Engine & Native Canvas 2D HD Renderer -->
   <script src="/bat-tu/bazi-engine.js?v=7.4"></script>
+  <script src="/bat-tu/bazi-canvas-renderer.js?v=1.0"></script>
 
   <script>
     // Tự động kiểm tra và cập nhật Service Worker, xóa cache cũ ngay tức thì
@@ -1629,18 +1630,53 @@
         }, 3000);
       }
 
-      // 13. Tự động kết xuất ảnh lá số bằng html2canvas
+      // 13. Tự động kết xuất ảnh lá số sắc nét bằng Native Canvas 2D (+ fallback html2canvas)
       let snapshotTimer = null;
       let cachedChartBlob = null;
       let cachedChartFile = null;
       let currentImageDataUrl = "";
+      let currentBaziObjectUrl = null;
 
       function updateImageSnapshot() {
         clearTimeout(snapshotTimer);
         const loadingEl = document.getElementById("bazi-img-loading");
         if (loadingEl) loadingEl.style.display = "flex";
 
-        snapshotTimer = setTimeout(() => {
+        snapshotTimer = setTimeout(async () => {
+          const tzOpt = (tzSelect && tzSelect.selectedIndex >= 0) ? tzSelect.options[tzSelect.selectedIndex].text : "VN (+7)";
+          const imgEl = document.getElementById("bazi-rendered-img");
+          const safeName = (currentBaziResult?.rawInput?.name || "duong-so").replace(/\s+/g, "_");
+          const filename = `la-so-hoa-son-bat-tu-${safeName}.png`;
+
+          try {
+            if (currentBaziResult && window.BaziCanvasRenderer && window.BaziCanvasRenderer.renderBaziToCanvas) {
+              const canvas = await window.BaziCanvasRenderer.renderBaziToCanvas(currentBaziResult, selectedDaiVanIndex, tzOpt);
+              const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+              const resolvedBlob = blob || (window.PortalImageDownload ? window.PortalImageDownload.dataURItoBlob(canvas.toDataURL("image/png")) : null);
+              cachedChartBlob = resolvedBlob;
+              cachedChartFile = (resolvedBlob && window.PortalImageDownload)
+                ? window.PortalImageDownload.prepareFile(resolvedBlob, filename)
+                : null;
+
+              if (currentBaziObjectUrl) {
+                URL.revokeObjectURL(currentBaziObjectUrl);
+                currentBaziObjectUrl = null;
+              }
+              const displayUrl = resolvedBlob ? (currentBaziObjectUrl = URL.createObjectURL(resolvedBlob)) : canvas.toDataURL("image/png");
+              currentImageDataUrl = displayUrl;
+
+              if (imgEl) {
+                imgEl.src = displayUrl;
+                imgEl.alt = `Lá số Hoa Sơn Bát Tự - ${currentBaziResult?.rawInput?.name || "Đương số"}`;
+              }
+              if (loadingEl) loadingEl.style.display = "none";
+              return;
+            }
+          } catch (nativeErr) {
+            console.warn("BaziCanvasRenderer fallback to html2canvas:", nativeErr);
+          }
+
+          // Fallback html2canvas nếu thiếu Native Canvas 2D
           const captureContainer = document.getElementById("bazi-capture-container");
           const printableCard = document.getElementById("bazi-printable-card");
           if (!printableCard || typeof html2canvas === "undefined") {
@@ -1648,7 +1684,6 @@
             return;
           }
 
-          // Đưa container lên màn hình tạm thời (opacity 0.01) để html2canvas tính đúng kích thước và font
           captureContainer.style.position = "fixed";
           captureContainer.style.left = "0";
           captureContainer.style.top = "0";
@@ -1677,34 +1712,24 @@
               }
             }
           }).then(canvas => {
-            // Đưa container trở lại ẩn ngoài màn hình
             captureContainer.style.position = "absolute";
             captureContainer.style.left = "-9999px";
             captureContainer.style.opacity = "1";
 
             const dataUrl = canvas.toDataURL("image/png");
             currentImageDataUrl = dataUrl;
-
-            // Gán vào thẻ <img> hiển thị
-            const imgEl = document.getElementById("bazi-rendered-img");
             if (imgEl) {
               imgEl.src = dataUrl;
               imgEl.alt = `Lá số Hoa Sơn Bát Tự - ${currentBaziResult?.rawInput?.name || "Đương số"}`;
             }
-
-            // Tạo file blob cho tải về và Web Share
             canvas.toBlob(blob => {
               if (blob) {
                 cachedChartBlob = blob;
-                const filename = `la-so-hoa-son-bat-tu-${(currentBaziResult?.rawInput?.name || "duong-so").replace(/\s+/g, "_")}.png`;
-                try {
-                  cachedChartFile = new File([blob], filename, { type: "image/png", lastModified: Date.now() });
-                } catch (e) {
-                  console.warn("File constructor fallback:", e);
-                }
+                cachedChartFile = window.PortalImageDownload
+                  ? window.PortalImageDownload.prepareFile(blob, filename)
+                  : null;
               }
             }, "image/png");
-
             if (loadingEl) loadingEl.style.display = "none";
           })).catch(err => {
             console.error("Lỗi khi kết xuất ảnh lá số:", err);

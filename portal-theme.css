@@ -1,51 +1,51 @@
 /* ==========================================================================
-   LỤC HÀO PORTAL — DESIGN SYSTEM: "SƠN MÀI HẮC KIM" (OBSIDIAN LACQUER)
-   Warm Charcoal Lacquer · Sumi Ivory · Antique Brass · Deep Cinnabar Seal
-   Unified Editorial Theme & Responsive Architecture across 5 Modules
+   LỤC HÀO PORTAL — DESIGN SYSTEM: "LỤC HÀO NAVY & CHU SA"
+   Deep Navy (#0C1222) · Slate Card (#151D30) · Deep Crimson (#8B2525) · Warm Amber (#D97706)
+   Clean, Simple, Unified across all 5 Modules
    ========================================================================== */
 
 :root {
-  /* Lacquer Surface Tokens (Warm Charcoal — never cold blue-navy) */
-  --lacquer-bg: #11100E;
-  --lacquer-surface: #191715;
-  --lacquer-inset: #13110F;
-  --lacquer-elevated: #23201C;
-  --border-hairline: #2E2924;
-  --border-strong: #443D35;
+  /* Navy & Slate Surface Tokens (from original Lục Hào theme) */
+  --lacquer-bg: #0c1222;
+  --lacquer-surface: #151d30;
+  --lacquer-inset: #0b1120;
+  --lacquer-elevated: #1e293b;
+  --border-hairline: #26334d;
+  --border-strong: #374869;
 
-  /* Ink & Artisanal Accents */
-  --ink-primary: #F2EDE4;
-  --ink-secondary: #C5BDB0;
-  --ink-muted: #938A7D;
-  --brass: #CFA355;
-  --brass-bright: #E2BE79;
-  --brass-soft: rgba(207, 163, 85, 0.11);
-  --seal-red: #A62C2B;
-  --seal-red-hover: #BD3534;
-  --seal-red-soft: rgba(166, 44, 43, 0.18);
+  /* Ink & Signature Accents */
+  --ink-primary: #f1f5f9;
+  --ink-secondary: #cbd5e1;
+  --ink-muted: #94a3b8;
+  --brass: #d97706;
+  --brass-bright: #f59e0b;
+  --brass-soft: rgba(217, 119, 6, 0.16);
+  --seal-red: #8b2525;
+  --seal-red-hover: #a32e2e;
+  --seal-red-soft: rgba(139, 37, 37, 0.22);
 
-  /* Semantic Status (WCAG AA on Dark Lacquer) */
+  /* Semantic Status (WCAG AA on Dark Navy) */
   --status-success: #6EE7B7;
-  --status-success-bg: rgba(16, 185, 129, 0.12);
-  --status-success-border: rgba(110, 231, 183, 0.28);
+  --status-success-bg: rgba(16, 185, 129, 0.14);
+  --status-success-border: rgba(110, 231, 183, 0.30);
   --status-warn: #FCD34D;
-  --status-warn-bg: rgba(245, 158, 11, 0.12);
-  --status-warn-border: rgba(252, 211, 77, 0.28);
+  --status-warn-bg: rgba(245, 158, 11, 0.14);
+  --status-warn-border: rgba(252, 211, 77, 0.30);
   --status-danger: #FCA5A5;
-  --status-danger-bg: rgba(239, 68, 68, 0.14);
-  --status-danger-border: rgba(252, 165, 165, 0.30);
+  --status-danger-bg: rgba(239, 68, 68, 0.16);
+  --status-danger-border: rgba(252, 165, 165, 0.32);
 
-  /* Typography */
-  --font-serif: 'Noto Serif', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Typography — Clean Modern Sans Across Entire Portal */
+  --font-sans: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: var(--font-sans);
 
   /* Elevation & Radii */
-  --radius-sm: 6px;
+  --radius-sm: 8px;
   --radius-md: 10px;
   --radius-lg: 14px;
-  --shadow-card: inset 0 1px 0 rgba(255, 245, 225, 0.045), 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-elevated: inset 0 1px 0 rgba(255, 245, 225, 0.06), 0 16px 40px rgba(0, 0, 0, 0.55);
-  --shadow-frame: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-frame: 0 10px 28px rgba(0, 0, 0, 0.48);
   --ease-ui: 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 
   /* Safe-area tokens */
@@ -55,7 +55,7 @@
   --sar: env(safe-area-inset-right, 0px);
 }
 
-/* --- Global Base & Accessibility --- */
+/* --- Global Base & Browser Surfaces --- */
 html {
   font-size: 16px;
   color-scheme: dark;
@@ -63,14 +63,14 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   overflow-x: clip !important;
+  scrollbar-color: #374869 #0b1120;
+  scrollbar-width: thin;
 }
 
 body {
   font-family: var(--font-sans) !important;
   background-color: var(--lacquer-bg) !important;
-  background-image:
-    radial-gradient(ellipse 85% 42% at 50% 0%, rgba(207, 163, 85, 0.055) 0%, transparent 70%),
-    radial-gradient(circle at 85% 90%, rgba(166, 44, 43, 0.04) 0%, transparent 45%) !important;
+  background-image: linear-gradient(180deg, #0c1222 0%, #0a0f1d 100%) !important;
   color: var(--ink-primary) !important;
   line-height: 1.55;
   overflow-x: clip !important;
@@ -78,12 +78,35 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+::selection {
+  background: rgba(217, 119, 6, 0.35);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b1120;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374869;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475d85;
+}
+
 input, select, textarea {
   color-scheme: dark;
 }
 
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--brass) !important;
+  outline: 2px solid var(--brass-bright) !important;
   outline-offset: 2px !important;
 }
 
@@ -109,18 +132,18 @@ input[type="tel"],
 }
 
 /* ==========================================================================
-   1. UNIFIED EDITORIAL TOP NAVIGATION & MOBILE DRAWER
+   1. UNIFIED TOP NAVIGATION & MOBILE DRAWER
    ========================================================================== */
 .portal-nav {
   position: sticky !important;
   top: 0 !important;
   z-index: 10000 !important;
-  background: rgba(17, 16, 14, 0.90) !important;
+  background: rgba(12, 18, 34, 0.94) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   border-bottom: 1px solid var(--border-hairline) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 245, 225, 0.04) !important;
-  padding: 0 16px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+  padding: 8px 16px !important;
   padding-left: max(16px, var(--sal)) !important;
   padding-right: max(16px, var(--sar)) !important;
 }
@@ -135,14 +158,14 @@ input[type="tel"],
 
 .portal-tabs-track {
   display: inline-flex !important;
-  align-items: stretch !important;
+  align-items: center !important;
   justify-content: center !important;
-  gap: 4px !important;
-  background: transparent !important;
-  padding: 6px 0 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  gap: 6px !important;
+  background: var(--lacquer-inset) !important;
+  padding: 5px 7px !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: 9999px !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35) !important;
 }
 
 .portal-tab-btn {
@@ -150,47 +173,41 @@ input[type="tel"],
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
-  padding: 10px 16px 12px !important;
+  padding: 8px 16px !important;
   font-family: var(--font-sans) !important;
   font-size: 0.9rem !important;
   font-weight: 600 !important;
   color: var(--ink-secondary) !important;
   background: transparent !important;
   border: 1px solid transparent !important;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+  border-radius: 9999px !important;
   text-decoration: none !important;
   box-shadow: none !important;
   transform: none !important;
-  transition: color var(--ease-ui), background-color var(--ease-ui) !important;
+  transition: color var(--ease-ui), background-color var(--ease-ui), border-color var(--ease-ui) !important;
   white-space: nowrap;
   cursor: pointer;
 }
 
 .portal-tab-btn:hover {
-  color: var(--ink-primary) !important;
+  color: #ffffff !important;
   background: var(--lacquer-elevated) !important;
-  border-color: transparent !important;
+  border-color: rgba(217, 119, 6, 0.5) !important;
   transform: none !important;
   box-shadow: none !important;
 }
 
 .portal-tab-btn.active {
-  color: var(--brass-bright) !important;
-  background: var(--brass-soft) !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #942929 0%, #7d1f1f 100%) !important;
+  border: 1px solid #b93333 !important;
+  box-shadow: 0 3px 12px rgba(139, 37, 37, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
   font-weight: 700 !important;
 }
 
 .portal-tab-btn.active::after {
-  content: "";
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: -1px;
-  height: 2.5px;
-  background: var(--seal-red);
-  border-radius: 2px 2px 0 0;
+  display: none !important;
+  content: none !important;
 }
 
 .portal-tab-icon {
@@ -242,7 +259,7 @@ input[type="tel"],
   height: 34px;
   border-radius: var(--radius-sm);
   background: var(--seal-red-soft);
-  border: 1px solid rgba(207, 163, 85, 0.35);
+  border: 1px solid rgba(217, 119, 6, 0.35);
   color: var(--brass-bright);
   flex-shrink: 0;
 }
@@ -296,14 +313,14 @@ input[type="tel"],
 
 /* Mobile Slide-in Drawer */
 .portal-drawer-backdrop {
-  background: rgba(8, 7, 6, 0.72) !important;
+  background: rgba(6, 10, 20, 0.72) !important;
   backdrop-filter: blur(5px) !important;
   -webkit-backdrop-filter: blur(5px) !important;
 }
 
 .portal-drawer {
   width: min(330px, 88vw) !important;
-  background: #161412 !important;
+  background: #0f172a !important;
   border-left: 1px solid var(--border-hairline) !important;
   box-shadow: -12px 0 36px rgba(0, 0, 0, 0.65) !important;
   color: var(--ink-primary) !important;
@@ -334,7 +351,7 @@ input[type="tel"],
   height: 28px;
   border-radius: var(--radius-sm);
   background: var(--seal-red);
-  color: #F2EDE4;
+  color: #ffffff;
   font-size: 0.9rem !important;
   line-height: 1;
 }
@@ -367,7 +384,7 @@ input[type="tel"],
 .drawer-item {
   padding: 12px 14px !important;
   min-height: 60px;
-  background: #1D1A17 !important;
+  background: #151d30 !important;
   border: 1px solid var(--border-hairline) !important;
   border-radius: var(--radius-md) !important;
   color: var(--ink-primary) !important;
@@ -381,9 +398,8 @@ input[type="tel"],
 }
 
 .drawer-item.active {
-  background: rgba(166, 44, 43, 0.14) !important;
-  border: 1px solid rgba(207, 163, 85, 0.35) !important;
-  border-left: 3.5px solid var(--seal-red) !important;
+  background: rgba(139, 37, 37, 0.24) !important;
+  border: 1.5px solid #b93333 !important;
   box-shadow: none !important;
 }
 
@@ -403,7 +419,7 @@ input[type="tel"],
 .drawer-item.active .drawer-item-icon {
   background: var(--seal-red);
   border-color: var(--seal-red);
-  color: #F2EDE4;
+  color: #ffffff;
 }
 
 .drawer-item-icon svg {
@@ -419,7 +435,7 @@ input[type="tel"],
 }
 
 .drawer-item.active .drawer-item-title {
-  color: var(--brass-bright) !important;
+  color: #ffffff !important;
 }
 
 .drawer-item-desc {
@@ -428,7 +444,7 @@ input[type="tel"],
 }
 
 .drawer-item-badge {
-  color: #F2EDE4 !important;
+  color: #ffffff !important;
   background: var(--seal-red) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
   border-radius: 4px !important;
@@ -475,48 +491,55 @@ input[type="tel"],
 }
 
 /* ==========================================================================
-   2. SHARED PAGE HEADER, EDITORIAL SEAL & FOOTERS
+   2. SHARED COMPACT CRIMSON HEADER BAR & FOOTERS
    ========================================================================== */
-.portal-page-header {
-  text-align: center;
-  padding: 20px 12px 18px;
-  max-width: 780px;
-  margin: 0 auto 16px;
-  border-bottom: 1px solid var(--border-hairline);
+.portal-page-header,
+.bazi-header-banner,
+.app-header,
+.sim-page-header {
+  background: linear-gradient(135deg, #6b1a1a 0%, #8b2525 50%, #6b1a1a 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  padding: 12px 20px !important;
+  margin: 0 auto 16px !important;
+  max-width: 100% !important;
+  text-align: center !important;
 }
 
 .portal-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 3px 10px;
-  border: 1px solid rgba(207, 163, 85, 0.34);
-  background: var(--brass-soft);
-  color: var(--brass);
-  border-radius: 4px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
+  display: none !important;
 }
 
-.portal-page-header h1 {
-  font-family: var(--font-serif);
-  font-size: clamp(1.45rem, 3.2vw, 2rem);
-  font-weight: 700;
-  color: var(--ink-primary);
-  line-height: 1.25;
-  letter-spacing: -0.015em;
-  margin: 0 0 6px;
-  text-wrap: balance;
+.portal-page-header h1,
+.bazi-header-title h1,
+.app-header .header-title,
+.sim-page-header h1 {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(1.1rem, 2.2vw, 1.42rem) !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #fef3c7 !important;
+  color: #fef3c7 !important;
+  line-height: 1.28 !important;
+  margin: 0 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35) !important;
 }
 
-.portal-page-subtitle {
-  font-size: 0.9rem;
-  color: var(--ink-muted);
-  margin: 0;
-  line-height: 1.5;
+.portal-page-subtitle,
+.app-header .header-subtitle,
+.sim-page-header p {
+  font-size: 0.85rem !important;
+  color: rgba(241, 245, 249, 0.88) !important;
+  margin: 4px 0 0 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
 }
 
 /* Unified Footer across all 5 modules */
@@ -572,11 +595,11 @@ input[type="tel"],
 }
 
 /* ==========================================================================
-   3. LỤC HÀO (/) — SƠN MÀI HẮC KIM OVERRIDES
+   3. LỤC HÀO (/) — LỤC HÀO NAVY OVERRIDES
    Note: #captureArea and #captureTarget (#fefee5) are strictly untouched!
    ========================================================================== */
 #portal-tab-luchao .app-container {
-  max-width: 1200px;
+  max-width: 1200px !important;
   padding: 16px 16px 32px;
 }
 
@@ -593,11 +616,11 @@ input[type="tel"],
 }
 
 #portal-tab-luchao .section-title {
-  font-family: var(--font-serif) !important;
-  font-size: 1.12rem !important;
+  font-family: var(--font-sans) !important;
+  font-size: 1.08rem !important;
   font-weight: 700 !important;
   color: var(--ink-primary) !important;
-  border-bottom: 1px solid var(--border-hairline) !important;
+  border-bottom: 1.5px solid rgba(217, 119, 6, 0.72) !important;
   padding-bottom: 10px !important;
   margin-bottom: 16px !important;
 }
@@ -623,7 +646,7 @@ input[type="tel"],
 #portal-tab-luchao .form-input:focus,
 #portal-tab-luchao .line-select:focus {
   border-color: var(--brass) !important;
-  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16) !important;
 }
 
 #portal-tab-luchao .form-input::placeholder {
@@ -688,10 +711,11 @@ input[type="tel"],
 }
 
 #portal-tab-luchao .tab-btn.active {
-  background: var(--lacquer-elevated) !important;
-  color: var(--brass-bright) !important;
-  border: 1px solid rgba(207, 163, 85, 0.45) !important;
-  box-shadow: none !important;
+  background: linear-gradient(180deg, #e08209 0%, #c86d06 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(245, 158, 11, 0.75) !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.30) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
   font-weight: 700 !important;
 }
 
@@ -747,15 +771,15 @@ input[type="tel"],
 }
 
 #portal-tab-luchao .btn-primary {
-  background: var(--seal-red) !important;
+  background: linear-gradient(180deg, #942929 0%, #7d1f1f 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  color: var(--ink-primary) !important;
+  color: #ffffff !important;
 }
 
 #portal-tab-luchao .btn-primary:hover {
   background: var(--seal-red-hover) !important;
   transform: none !important;
-  box-shadow: 0 6px 18px rgba(166, 44, 43, 0.35) !important;
+  box-shadow: 0 6px 18px rgba(139, 37, 37, 0.35) !important;
 }
 
 #portal-tab-luchao .btn-secondary {
@@ -782,7 +806,7 @@ input[type="tel"],
 }
 
 #portal-tab-luchao .image-display {
-  border: 1px solid rgba(207, 163, 85, 0.45);
+  border: 1px solid rgba(217, 119, 6, 0.45);
   border-radius: var(--radius-md) !important;
   background: #fefee5;
   box-shadow: var(--shadow-frame);
@@ -794,7 +818,7 @@ input[type="tel"],
 
 /* Lục Hào Coin Toss Modal & Loading Overlay */
 #loading-overlay {
-  background: rgba(17, 16, 14, 0.90) !important;
+  background: rgba(12, 18, 34, 0.90) !important;
 }
 
 #loading-overlay .loader-content {
@@ -807,7 +831,7 @@ input[type="tel"],
 }
 
 #coin-toss-modal {
-  background: rgba(8, 7, 6, 0.80) !important;
+  background: rgba(6, 10, 20, 0.80) !important;
 }
 
 #coin-toss-modal .modal-content {
@@ -935,7 +959,7 @@ input[type="tel"],
 }
 
 /* ==========================================================================
-   4. TỬ VI BẮC PHÁI (/tu-vi) — SƠN MÀI HẮC KIM OVERRIDES
+   4. TỬ VI BẮC PHÁI (/tu-vi) — LỤC HÀO NAVY OVERRIDES
    ========================================================================== */
 .page-shell {
   padding: 16px 14px 32px !important;
@@ -963,9 +987,15 @@ input[type="tel"],
 .panel-simple h1,
 .panel-simple h2,
 .preview-toolbar h2 {
-  font-family: var(--font-serif) !important;
+  font-family: var(--font-sans) !important;
   color: var(--ink-primary) !important;
   font-weight: 700 !important;
+}
+
+.panel-simple.left-panel > h2 {
+  border-bottom: 1.5px solid rgba(217, 119, 6, 0.72) !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 14px !important;
 }
 
 .field-label,
@@ -988,7 +1018,7 @@ input[type="tel"],
 .field-row select:focus,
 .province-search-input:focus {
   border-color: var(--brass) !important;
-  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16) !important;
 }
 
 .check-row input[type="checkbox"] {
@@ -1032,7 +1062,7 @@ input[type="tel"],
 
 .province-dropdown-item:hover,
 .province-dropdown-item:active {
-  background: rgba(207, 163, 85, 0.10) !important;
+  background: rgba(217, 119, 6, 0.10) !important;
 }
 
 .province-dropdown-item.active {
@@ -1063,9 +1093,9 @@ input[type="tel"],
 }
 
 .submit-row button {
-  background: var(--seal-red) !important;
+  background: linear-gradient(180deg, #942929 0%, #7d1f1f 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  color: var(--ink-primary) !important;
+  color: #ffffff !important;
   border-radius: var(--radius-md) !important;
   min-height: 46px !important;
   font-weight: 700 !important;
@@ -1079,8 +1109,7 @@ input[type="tel"],
 /* AI Parse Box on Tử Vi */
 .ai-parse-box {
   background: var(--lacquer-inset) !important;
-  border: 1px solid var(--border-hairline) !important;
-  border-left: 3px solid var(--brass) !important;
+  border: 1px dashed rgba(217, 119, 6, 0.55) !important;
   border-radius: var(--radius-md) !important;
   padding: 12px 14px !important;
 }
@@ -1088,7 +1117,7 @@ input[type="tel"],
 .ai-parse-box.drag-over {
   background: var(--brass-soft) !important;
   border-color: var(--brass) !important;
-  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.18) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18) !important;
 }
 
 .ai-badge {
@@ -1112,7 +1141,7 @@ input[type="tel"],
 
 .ai-textarea:focus {
   border-color: var(--brass) !important;
-  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16) !important;
 }
 
 .ai-textarea::placeholder {
@@ -1145,8 +1174,8 @@ input[type="tel"],
 }
 
 .ai-parse-btn {
-  background: var(--brass) !important;
-  color: #11100E !important;
+  background: linear-gradient(180deg, #e08209 0%, #c86d06 100%) !important;
+  color: #ffffff !important;
   min-height: 42px !important;
 }
 
@@ -1196,7 +1225,7 @@ input[type="tel"],
 }
 
 .preview-frame {
-  border: 1px solid rgba(207, 163, 85, 0.48) !important;
+  border: 1px solid rgba(217, 119, 6, 0.48) !important;
   border-radius: var(--radius-md) !important;
   background: #FFFFFF !important;
   box-shadow: var(--shadow-frame);
@@ -1250,14 +1279,14 @@ input[type="tel"],
 }
 
 .phi-mode-tab.tab-loc.active {
-  background: #2E1918 !important;
+  background: #2d161b !important;
   border-color: #DC4A48 !important;
   color: #FECACA !important;
   box-shadow: none !important;
 }
 
 .phi-mode-tab.tab-ky.active {
-  background: #2C2418 !important;
+  background: #271e12 !important;
   border-color: var(--brass) !important;
   color: var(--brass-bright) !important;
   box-shadow: none !important;
@@ -1292,7 +1321,7 @@ input[type="tel"],
 
 .phi-mode-tab.tab-ky.active .tab-color-tag.ky {
   background: var(--brass) !important;
-  color: #11100E !important;
+  color: #ffffff !important;
 }
 
 .phi-mode-desc {
@@ -1321,7 +1350,7 @@ input[type="tel"],
 }
 
 .phi-palace-btn:hover {
-  background: #2C2722 !important;
+  background: #1e293b !important;
   border-color: var(--border-strong) !important;
 }
 
@@ -1334,7 +1363,7 @@ input[type="tel"],
 }
 
 .phi-palace-btn.loc.selected {
-  background: rgba(166, 44, 43, 0.28) !important;
+  background: rgba(139, 37, 37, 0.28) !important;
   border-color: #DC4A48 !important;
   box-shadow: 0 0 0 1px #DC4A48 !important;
 }
@@ -1352,7 +1381,7 @@ input[type="tel"],
 
 .phi-palace-btn.ky.selected .p-name,
 .phi-palace-btn.ky.selected .p-canchi {
-  color: #11100E !important;
+  color: #ffffff !important;
 }
 
 .chart-zoom-dialog {
@@ -1425,7 +1454,7 @@ input[type="tel"],
 
 .tu-hoa-box.quyen {
   background: var(--brass-soft) !important;
-  border-color: rgba(207, 163, 85, 0.34) !important;
+  border-color: rgba(217, 119, 6, 0.34) !important;
   color: var(--brass-bright) !important;
 }
 
@@ -1452,7 +1481,8 @@ input[type="tel"],
 
 .guide-steps-list li {
   background: var(--lacquer-inset) !important;
-  border-left: 3px solid var(--brass) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: var(--radius-sm) !important;
 }
 
 .faq-item {
@@ -1477,7 +1507,7 @@ input[type="tel"],
 }
 
 /* ==========================================================================
-   5. HOA SƠN BÁT TỰ (/bat-tu) — SƠN MÀI HẮC KIM OVERRIDES
+   5. HOA SƠN BÁT TỰ (/bat-tu) — LỤC HÀO NAVY OVERRIDES
    Note: #bazi-capture-container & .bazi-chart-card (#FEF6E8) stay untouched!
    ========================================================================== */
 .bazi-page-wrapper {
@@ -1486,31 +1516,22 @@ input[type="tel"],
 }
 
 .bazi-header-banner {
-  background: transparent !important;
-  border: none !important;
-  border-bottom: 1px solid var(--border-hairline) !important;
-  border-left: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  padding: 6px 4px 16px !important;
-  margin-bottom: 20px !important;
-}
-
-.bazi-header-title h1 {
-  font-family: var(--font-serif) !important;
-  font-size: clamp(1.35rem, 2.8vw, 1.8rem) !important;
-  font-weight: 700 !important;
-  color: var(--ink-primary) !important;
-  letter-spacing: -0.015em !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 8px 16px !important;
+  text-align: left !important;
 }
 
 .bazi-badge {
-  background: var(--brass-soft) !important;
-  border: 1px solid rgba(207, 163, 85, 0.34) !important;
-  color: var(--brass) !important;
-  border-radius: 4px !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(254, 243, 199, 0.30) !important;
+  color: #fef3c7 !important;
+  border-radius: 6px !important;
   padding: 5px 12px !important;
   font-size: 0.78rem !important;
+  font-weight: 600 !important;
 }
 
 .bazi-form-card {
@@ -1522,8 +1543,7 @@ input[type="tel"],
 
 .bazi-ai-parse-box {
   background: var(--lacquer-inset) !important;
-  border: 1px solid var(--border-hairline) !important;
-  border-left: 3px solid var(--brass) !important;
+  border: 1px dashed rgba(217, 119, 6, 0.55) !important;
   border-radius: var(--radius-md) !important;
 }
 
@@ -1565,7 +1585,7 @@ input[type="time"].form-input,
 .bazi-form-card .form-select:focus {
   background: var(--lacquer-surface) !important;
   border-color: var(--brass) !important;
-  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16) !important;
 }
 
 .bazi-form-card .form-group label {
@@ -1598,8 +1618,8 @@ input[type="time"].form-input,
 }
 
 .bazi-ai-parse-btn {
-  background: var(--brass) !important;
-  color: #11100E !important;
+  background: linear-gradient(180deg, #e08209 0%, #c86d06 100%) !important;
+  color: #ffffff !important;
   box-shadow: none !important;
   min-height: 44px !important;
 }
@@ -1640,9 +1660,9 @@ input[type="time"].form-input,
 }
 
 .btn-submit-bazi {
-  background: var(--seal-red) !important;
+  background: linear-gradient(180deg, #942929 0%, #7d1f1f 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  color: var(--ink-primary) !important;
+  color: #ffffff !important;
   box-shadow: none !important;
   min-height: 48px !important;
 }
@@ -1650,7 +1670,7 @@ input[type="time"].form-input,
 .btn-submit-bazi:hover {
   background: var(--seal-red-hover) !important;
   transform: none !important;
-  box-shadow: 0 6px 18px rgba(166, 44, 43, 0.35) !important;
+  box-shadow: 0 6px 18px rgba(139, 37, 37, 0.35) !important;
 }
 
 .bazi-daivan-switcher-box {
@@ -1676,22 +1696,27 @@ input[type="time"].form-input,
   color: var(--ink-primary) !important;
 }
 
-.bazi-dv-pill:hover,
-.bazi-dv-pill.active {
-  background: var(--brass-soft) !important;
+.bazi-dv-pill:hover {
+  background: var(--lacquer-elevated) !important;
   border-color: var(--brass) !important;
   color: var(--brass-bright) !important;
-  box-shadow: none !important;
+}
+
+.bazi-dv-pill.active {
+  background: linear-gradient(180deg, #e08209 0%, #c86d06 100%) !important;
+  border-color: rgba(245, 158, 11, 0.75) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.28) !important;
 }
 
 .bazi-image-display-frame {
-  border: 1px solid rgba(207, 163, 85, 0.48) !important;
+  border: 1px solid rgba(217, 119, 6, 0.48) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: var(--shadow-frame) !important;
 }
 
 .bazi-img-loading {
-  background: rgba(17, 16, 14, 0.88) !important;
+  background: rgba(12, 18, 34, 0.88) !important;
   color: var(--brass-bright) !important;
 }
 
@@ -1748,7 +1773,6 @@ input[type="time"].form-input,
 .bazi-seo-card {
   background: var(--lacquer-inset) !important;
   border: 1px solid var(--border-hairline) !important;
-  border-left: 3px solid var(--brass) !important;
 }
 
 .bazi-seo-card:hover {
@@ -1766,7 +1790,7 @@ input[type="time"].form-input,
 }
 
 /* ==========================================================================
-   6. PHONG THỦY HKPT (/hkpt) — SƠN MÀI HẮC KIM OVERRIDES
+   6. PHONG THỦY HKPT (/hkpt) — LỤC HÀO NAVY OVERRIDES
    Note: #exportArea (white chart grid & star colors) remains 100% pure!
    ========================================================================== */
 .app-container {
@@ -1774,29 +1798,7 @@ input[type="time"].form-input,
 }
 
 .app-header {
-  padding: 18px 12px 16px !important;
-  border-bottom: 1px solid var(--border-hairline);
-  margin-bottom: 16px !important;
-  max-width: 780px !important;
-}
-
-.header-title {
-  font-family: var(--font-serif) !important;
-  font-size: clamp(1.45rem, 3.2vw, 2rem) !important;
-  font-weight: 700 !important;
-  background: none !important;
-  -webkit-background-clip: initial !important;
-  background-clip: initial !important;
-  -webkit-text-fill-color: var(--ink-primary) !important;
-  color: var(--ink-primary) !important;
-  letter-spacing: -0.015em !important;
-}
-
-.header-subtitle {
-  color: var(--brass) !important;
-  font-size: 0.82rem !important;
-  letter-spacing: 0.1em !important;
-  margin-top: 4px !important;
+  max-width: 680px !important;
 }
 
 .input-section {
@@ -1849,7 +1851,7 @@ select.input-field {
 
 .input-field:focus {
   border-color: var(--brass) !important;
-  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16) !important;
 }
 
 .input-readonly {
@@ -1889,9 +1891,9 @@ select.input-field {
 }
 
 .btn-calculate {
-  background: var(--seal-red) !important;
+  background: linear-gradient(180deg, #942929 0%, #7d1f1f 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  color: var(--ink-primary) !important;
+  color: #ffffff !important;
   box-shadow: none !important;
   min-height: 48px !important;
 }
@@ -1899,12 +1901,12 @@ select.input-field {
 .btn-calculate:hover {
   background: var(--seal-red-hover) !important;
   transform: none !important;
-  box-shadow: 0 6px 18px rgba(166, 44, 43, 0.35) !important;
+  box-shadow: 0 6px 18px rgba(139, 37, 37, 0.35) !important;
 }
 
 .export-area {
   max-width: 680px !important;
-  border: 1px solid rgba(207, 163, 85, 0.48) !important;
+  border: 1px solid rgba(217, 119, 6, 0.48) !important;
   box-shadow: var(--shadow-frame) !important;
 }
 
@@ -1988,9 +1990,9 @@ select.input-field {
 }
 
 .center-mode-btn.active {
-  background: var(--seal-red) !important;
-  border-color: var(--seal-red-hover) !important;
-  color: var(--ink-primary) !important;
+  background: linear-gradient(180deg, #e08209 0%, #c86d06 100%) !important;
+  border-color: rgba(245, 158, 11, 0.75) !important;
+  color: #ffffff !important;
 }
 
 .center-tool-desc {
@@ -2016,9 +2018,9 @@ select.input-field {
 
 .fp-btn-primary,
 .fp-btn.active {
-  background: var(--seal-red) !important;
-  border-color: var(--seal-red-hover) !important;
-  color: var(--ink-primary) !important;
+  background: linear-gradient(180deg, #e08209 0%, #c86d06 100%) !important;
+  border-color: rgba(245, 158, 11, 0.75) !important;
+  color: #ffffff !important;
 }
 
 .fp-slider {
@@ -2034,7 +2036,7 @@ select.input-field {
 }
 
 .sat-modal-backdrop {
-  background: rgba(8, 7, 6, 0.80) !important;
+  background: rgba(6, 10, 20, 0.80) !important;
 }
 
 .sat-modal-container {
@@ -2075,8 +2077,8 @@ select.input-field {
 }
 
 .sat-search-btn {
-  background: var(--brass) !important;
-  color: #11100E !important;
+  background: linear-gradient(180deg, #e08209 0%, #c86d06 100%) !important;
+  color: #ffffff !important;
 }
 
 .sat-layer-toggle {
@@ -2089,8 +2091,8 @@ select.input-field {
 }
 
 .sat-layer-btn.active {
-  background: var(--seal-red) !important;
-  color: var(--ink-primary) !important;
+  background: linear-gradient(180deg, #e08209 0%, #c86d06 100%) !important;
+  color: #ffffff !important;
 }
 
 .sat-instruction {
@@ -2136,7 +2138,6 @@ select.input-field {
 .hkpt-seo-guide-section h3 {
   font-family: var(--font-serif) !important;
   color: var(--brass-bright) !important;
-  border-left-color: var(--brass) !important;
 }
 
 .hkpt-seo-guide-section p,
@@ -2179,7 +2180,7 @@ select.input-field {
 }
 
 /* ==========================================================================
-   7. SIM PHONG THỦY (/simphongthuy) — SƠN MÀI HẮC KIM OVERRIDES
+   7. SIM PHONG THỦY (/simphongthuy) — LỤC HÀO NAVY OVERRIDES
    Note: #hiddenRenderArea and .hex-card-view (#fefee5) remain untouched!
    ========================================================================== */
 .container {
@@ -2188,26 +2189,7 @@ select.input-field {
 }
 
 .sim-page-header {
-  text-align: center;
-  padding: 12px 8px 18px;
-  margin-bottom: 18px;
-  border-bottom: 1px solid var(--border-hairline);
-}
-
-.sim-page-header h1 {
-  font-family: var(--font-serif) !important;
-  font-size: clamp(1.45rem, 3.2vw, 1.95rem) !important;
-  font-weight: 700 !important;
-  color: var(--ink-primary) !important;
-  margin: 0 0 6px !important;
-  letter-spacing: -0.015em;
-  line-height: 1.25;
-}
-
-.sim-page-header p {
-  color: var(--ink-muted);
-  font-size: 0.9rem;
-  margin: 0;
+  max-width: 100% !important;
 }
 
 .form-card {
@@ -2218,10 +2200,11 @@ select.input-field {
 }
 
 .form-card .section-title {
-  font-family: var(--font-serif) !important;
+  font-family: var(--font-sans) !important;
   color: var(--ink-primary) !important;
-  border-bottom: 1px solid var(--border-hairline) !important;
-  font-size: 1.15rem !important;
+  border-bottom: 1.5px solid rgba(217, 119, 6, 0.72) !important;
+  padding-bottom: 10px !important;
+  font-size: 1.1rem !important;
   font-weight: 700 !important;
 }
 
@@ -2239,7 +2222,7 @@ select.input-field {
 
 .form-control:focus {
   border-color: var(--brass) !important;
-  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.16) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16) !important;
 }
 
 .gender-radio-label {
@@ -2275,7 +2258,6 @@ select.input-field {
 .digit-section {
   background: var(--lacquer-inset) !important;
   border: 1px solid var(--border-strong) !important;
-  border-top: 3px solid var(--seal-red) !important;
   box-shadow: none !important;
 }
 
@@ -2314,13 +2296,13 @@ select.input-field {
 
 .digit-box:focus {
   border-color: var(--brass) !important;
-  box-shadow: 0 0 0 3px rgba(207, 163, 85, 0.18) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18) !important;
 }
 
 .digit-box.fixed-zero {
   background: var(--lacquer-elevated) !important;
   color: var(--brass-bright) !important;
-  border-color: rgba(207, 163, 85, 0.45) !important;
+  border-color: rgba(217, 119, 6, 0.45) !important;
 }
 
 .digit-help-text {
@@ -2338,9 +2320,9 @@ select.input-field {
 }
 
 .btn-submit {
-  background: var(--seal-red) !important;
+  background: linear-gradient(180deg, #942929 0%, #7d1f1f 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  color: var(--ink-primary) !important;
+  color: #ffffff !important;
   box-shadow: none !important;
   min-height: 48px;
 }
@@ -2358,7 +2340,7 @@ select.input-field {
 .result-count-badge {
   background: var(--brass-soft);
   color: var(--brass-bright);
-  border: 1px solid rgba(207, 163, 85, 0.35);
+  border: 1px solid rgba(217, 119, 6, 0.35);
   padding: 4px 10px;
   border-radius: 4px;
   font-size: 0.8rem;
@@ -2372,7 +2354,7 @@ select.input-field {
 }
 
 .sim-card-evaluated {
-  border: 1px solid rgba(207, 163, 85, 0.5) !important;
+  border: 1px solid rgba(217, 119, 6, 0.5) !important;
   background: var(--lacquer-inset) !important;
   margin-top: 14px;
 }
@@ -2408,7 +2390,7 @@ select.input-field {
 .badge-hex {
   background: var(--brass-soft) !important;
   color: var(--brass-bright) !important;
-  border-color: rgba(207, 163, 85, 0.32) !important;
+  border-color: rgba(217, 119, 6, 0.32) !important;
 }
 
 .btn-view-hex {
@@ -2461,7 +2443,7 @@ select.input-field {
 
 /* Sim Hex Modal */
 #hexModal.modal-overlay {
-  background: rgba(8, 7, 6, 0.82) !important;
+  background: rgba(6, 10, 20, 0.82) !important;
 }
 
 #hexModal .modal-content {
@@ -2511,7 +2493,6 @@ select.input-field {
 .container .seo-knowledge-section h3 {
   font-family: var(--font-serif) !important;
   color: var(--brass-bright) !important;
-  border-left-color: var(--brass) !important;
 }
 
 .container .seo-knowledge-section p,

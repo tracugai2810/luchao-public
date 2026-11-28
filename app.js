@@ -203,6 +203,8 @@ const LUC_THU = {
 
 // Store generated image data URL
 let currentImageDataUrl = null;
+let currentImageBlob = null;
+let currentImageFile = null;
 let currentHexData = null;
 let currentTuViData = null;
 let currentTabType = 'default';
@@ -684,7 +686,7 @@ function processDivination() {
         imageDisplay.innerHTML = `
             <div style="text-align:center; padding: 36px 20px;">
                 <div class="spinner" style="width:38px; height:38px; border-width:3px; margin: 0 auto 12px;"></div>
-                <div style="color: var(--ink-secondary, #cbd5e1); font-size: 15px; font-weight: 600;">Đang tạo hình ảnh lá quẻ...</div>
+                <div style="color: var(--ink-secondary, #334155); font-size: 15px; font-weight: 600;">Đang tạo hình ảnh lá quẻ...</div>
             </div>
         `;
     }
@@ -886,33 +888,506 @@ function renderCaptureHTML(data) {
 }
 
 
-function captureAndDisplayImage() {
-    const captureArea = document.getElementById('captureArea');
-    const target = document.getElementById('captureTarget');
+function drawCanvasRoundRect(ctx, x, y, w, h, r) {
+    if (typeof ctx.roundRect === 'function') {
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, r);
+        return;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+}
 
-    // Temporarily position capture area on screen for html2canvas
-    captureArea.style.position = 'fixed';
-    captureArea.style.left = '0';
-    captureArea.style.top = '0';
-    captureArea.style.zIndex = '-1';
-    captureArea.style.opacity = '0.01';
+function drawCanvasSpans(ctx, spans, startX, y) {
+    let curX = startX;
+    for (const span of spans) {
+        ctx.font = span.font || '18px Inter, sans-serif';
+        ctx.fillStyle = span.color || '#000000';
+        ctx.fillText(span.text, curX, y);
+        curX += ctx.measureText(span.text).width;
+    }
+    return curX;
+}
 
-    html2canvas(target, {
-        scale: 1.25,
-        useCORS: false,
-        logging: false,
-        imageTimeout: 0,
-        removeContainer: true
-    }).then(canvas => {
-        // Hide capture area again
-        captureArea.style.position = 'absolute';
-        captureArea.style.left = '-9999px';
-        captureArea.style.opacity = '1';
+function measureWrappedLabelLines(ctx, label, body, maxWidth, fontLabel, fontBody) {
+    const content = (body || '').trim();
+    if (!content) return [[{ text: label, font: fontLabel, color: '#000000' }]];
+    ctx.font = fontLabel;
+    const labelW = ctx.measureText(label).width;
+    ctx.font = fontBody;
+    const words = content.split(/\s+/);
+    const lines = [];
+    let currentLine = '';
+    let firstLineMax = Math.max(120, maxWidth - labelW);
 
-        // Convert to PNG
-        currentImageDataUrl = canvas.toDataURL('image/png');
+    for (let i = 0; i < words.length; i++) {
+        const w = words[i];
+        const test = currentLine ? currentLine + ' ' + w : w;
+        const limit = lines.length === 0 ? firstLineMax : maxWidth;
+        if (ctx.measureText(test).width <= limit || !currentLine) {
+            currentLine = test;
+        } else {
+            lines.push(currentLine);
+            currentLine = w;
+        }
+    }
+    if (currentLine) lines.push(currentLine);
 
-        // Display image
+    return lines.map((lineText, idx) => {
+        if (idx === 0) {
+            return [
+                { text: label, font: fontLabel, color: '#000000' },
+                { text: lineText, font: fontBody, color: '#000000' }
+            ];
+        }
+        return [{ text: lineText, font: fontBody, color: '#000000' }];
+    });
+}
+
+async function renderHexagramToCanvas(data) {
+    if (window.PortalImageDownload && window.PortalImageDownload.waitForFonts) {
+        await window.PortalImageDownload.waitForFonts([
+            '400 16px Inter',
+            '400 17px Inter',
+            '400 18px Inter',
+            '700 16px Inter',
+            '700 17px Inter',
+            '700 18px Inter',
+            '700 19px Inter',
+            '700 20px Inter'
+        ], 1800);
+    } else if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready.catch(() => {});
+    }
+
+    const W = 1160;
+    const SCALE = 1.5; // 1740px PNG lossless export (< 2000px so Zalo/social apps keep full sharpness)
+    const padX = 24;
+    const contentW = W - padX * 2; // 1112px
+
+    const mCanvas = document.createElement('canvas');
+    const mCtx = mCanvas.getContext('2d');
+    const questionLines = measureWrappedLabelLines(
+        mCtx,
+        'Việc cần xem: ',
+        data.userQuestion || '',
+        contentW,
+        'bold 18px Inter, sans-serif',
+        '18px Inter, sans-serif'
+    );
+
+    const shenshaList = Array.isArray(data.shensha) ? data.shensha : [];
+    const shenshaRows = Math.ceil(shenshaList.length / 4);
+    const ssItemH = 34;
+    const ssRowGap = 4;
+
+    let yCursor = 46;
+    yCursor += 30; // Line 1: Ngay gio + Phuong phap
+    yCursor += 30; // Line 2: Can chi + Tiet khi
+    yCursor += questionLines.length * 26 + 4; // Line 3+: Viec can xem
+    yCursor += 30; // Line 4: Hao tam + Tuan khong
+    yCursor += 22; // Line 5: Nhat than + Nguyet lenh bottom gap
+    const yDiv1 = yCursor;
+
+    const yHexTitle = yDiv1 + 36;
+    const yBarsStart = yHexTitle + 20;
+    const yFam = yBarsStart + 6 * 24 + 14;
+    const hasHoNgam = !!(data.hoData && data.ngamResult && data.ngamResult.length > 0);
+    const yDiv2 = yFam + (hasHoNgam ? 42 : 24);
+
+    const tableTop = yDiv2 + 14;
+    const tableHeadH = 38;
+    const rowH = 38;
+    const rowStartY = tableTop + tableHeadH;
+    const tableBottom = rowStartY + 6 * rowH;
+
+    const ssTop = tableBottom + 14;
+    const gridStartY = ssTop + 42;
+    const footerTop = gridStartY + shenshaRows * (ssItemH + ssRowGap) + 14;
+    const H = Math.ceil(footerTop + 52);
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = Math.round(W * SCALE);
+    canvas.height = Math.round(H * SCALE);
+    ctx.scale(SCALE, SCALE);
+
+    if (window.PortalImageDownload && window.PortalImageDownload.enableInkText) {
+        window.PortalImageDownload.enableInkText(ctx, 0.22);
+    }
+
+    // 1. Giữ nguyên nền giấy vàng kem #fefee5
+    ctx.fillStyle = '#fefee5';
+    ctx.fillRect(0, 0, W, H);
+
+    // Khung viền tinh tế hài hòa với giấy kem
+    ctx.save();
+    ctx.strokeStyle = '#d4ccb4';
+    ctx.lineWidth = 2;
+    drawCanvasRoundRect(ctx, 10, 10, W - 20, H - 20, 18);
+    ctx.stroke();
+    ctx.restore();
+
+    // 2. Khối Thông Tin Header (đầy đủ 5 dòng, giữ màu nhấn đỏ #e60000)
+    ctx.textAlign = 'left';
+    let hy = 46;
+    drawCanvasSpans(ctx, [
+        { text: 'Ngày giờ: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: (data.formattedDate || '') + '    ', font: '18px Inter, sans-serif', color: '#000000' },
+        { text: 'Phương pháp: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: data.methodText || '', font: 'bold 18px Inter, sans-serif', color: '#000000' }
+    ], padX, hy);
+    hy += 30;
+
+    const ccSpans = [
+        { text: 'Can chi: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: data.dateInfo.fullCanChi || '', font: '18px Inter, sans-serif', color: '#000000' }
+    ];
+    if (data.dateInfo.tietKhi) {
+        ccSpans.push({ text: '    Tiết khí: ', font: 'bold 18px Inter, sans-serif', color: '#000000' });
+        ccSpans.push({ text: data.dateInfo.tietKhi, font: '18px Inter, sans-serif', color: '#000000' });
+    }
+    drawCanvasSpans(ctx, ccSpans, padX, hy);
+    hy += 30;
+
+    questionLines.forEach(spans => {
+        drawCanvasSpans(ctx, spans, padX, hy);
+        hy += 26;
+    });
+    hy += 4;
+
+    drawCanvasSpans(ctx, [
+        { text: 'Hào tâm: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: (data.dateInfo.haoTam || '') + '    ', font: 'bold 18px Inter, sans-serif', color: '#e60000' },
+        { text: 'Tuần Không: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: data.dateInfo.tuanKhong || '', font: 'bold 18px Inter, sans-serif', color: '#e60000' }
+    ], padX, hy);
+    hy += 30;
+
+    drawCanvasSpans(ctx, [
+        { text: 'Nhật Thần: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: (data.dateInfo.nhatThan || '') + '    ', font: 'bold 18px Inter, sans-serif', color: '#e60000' },
+        { text: 'Nguyệt Lệnh: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: data.dateInfo.nguyetLenh || '', font: 'bold 18px Inter, sans-serif', color: '#e60000' }
+    ], padX, hy);
+
+    ctx.strokeStyle = '#888888';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(padX, yDiv1);
+    ctx.lineTo(W - padX, yDiv1);
+    ctx.stroke();
+
+    // 3. Khu Vực Hình Quẻ (Quẻ Chủ - Quẻ Hỗ nếu có - Quẻ Biến)
+    const drawSingleHex = (centerX, titleText, linesArr, useChanged, familyText) => {
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 20px Inter, sans-serif';
+        ctx.fillStyle = '#c41e3a';
+        ctx.fillText((titleText || '').toUpperCase(), centerX, yHexTitle);
+
+        const bits = linesArr.map(v => getBit(v, useChanged));
+        for (let i = 5; i >= 0; i--) {
+            const lineIdx = 5 - i;
+            const lineY = yBarsStart + lineIdx * 24;
+            const isMoving = data.lines[i] === 0 || data.lines[i] === 3;
+            const barColor = isMoving ? '#e60000' : '#1a1a1a';
+            const isYang = bits[i] === '1';
+            ctx.fillStyle = barColor;
+            if (isYang) {
+                ctx.fillRect(centerX - 55, lineY, 110, 16);
+            } else {
+                ctx.fillRect(centerX - 55, lineY, 46, 16);
+                ctx.fillRect(centerX - 55 + 46 + 18, lineY, 46, 16);
+            }
+        }
+
+        ctx.font = 'bold 17px Inter, sans-serif';
+        ctx.fillStyle = '#333333';
+        ctx.fillText(familyText.toUpperCase(), centerX, yFam);
+    };
+
+    if (data.hoData) {
+        const cXMain = 220, cXHo = 580, cXChanged = 940;
+        drawSingleHex(
+            cXMain,
+            data.mainName,
+            data.lines,
+            false,
+            `HỌ ${data.palaceName}${data.mainAttr ? ' - ' + data.mainAttr : ''}`
+        );
+        drawSingleHex(
+            cXHo,
+            data.hoData.name,
+            data.hoData.lines,
+            false,
+            `HỌ ${data.hoData.palaceName}${data.hoData.attr ? ' - ' + data.hoData.attr : ''}`
+        );
+        drawSingleHex(
+            cXChanged,
+            data.changedName,
+            data.lines,
+            true,
+            `HỌ ${data.changedPalaceName}${data.changedAttr ? ' - ' + data.changedAttr : ''}`
+        );
+        if (data.ngamResult && data.ngamResult.length > 0) {
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 15px Inter, sans-serif';
+            ctx.fillStyle = '#000000';
+            ctx.fillText(data.ngamResult.join(', ').toUpperCase(), cXHo, yFam + 24);
+        }
+    } else {
+        const cXMain = 320, cXChanged = 840;
+        drawSingleHex(
+            cXMain,
+            data.mainName,
+            data.lines,
+            false,
+            `HỌ ${data.palaceName}${data.mainAttr ? ' - ' + data.mainAttr : ''}`
+        );
+        drawSingleHex(
+            cXChanged,
+            data.changedName,
+            data.lines,
+            true,
+            `HỌ ${data.changedPalaceName}${data.changedAttr ? ' - ' + data.changedAttr : ''}`
+        );
+        if (data.ngamResult && data.ngamResult.length > 0) {
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 17px Inter, sans-serif';
+            ctx.fillStyle = '#000000';
+            const startNgamY = yBarsStart + 68 - ((data.ngamResult.length - 1) * 24) / 2;
+            data.ngamResult.forEach((txt, idx) => {
+                ctx.fillText(txt.toUpperCase(), W / 2, startNgamY + idx * 24);
+            });
+        }
+    }
+
+    ctx.strokeStyle = '#888888';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(padX, yDiv2);
+    ctx.lineTo(W - padX, yDiv2);
+    ctx.stroke();
+
+    // 4. Bảng Dữ Liệu 12 Cột (nền tiêu đề #e2e2cc, viền #d0c8b8)
+    const colWidths = [56, 67, 117, 117, 117, 50, 106, 112, 128, 45, 98, 99];
+    const colLefts = [];
+    let curColX = padX;
+    for (const w of colWidths) {
+        colLefts.push(curColX);
+        curColX += w;
+    }
+    const sepColX = colLefts[6];
+
+    ctx.fillStyle = '#e2e2cc';
+    ctx.fillRect(padX, tableTop, contentW, tableHeadH);
+
+    ctx.strokeStyle = '#bbbbbb';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(padX, tableTop);
+    ctx.lineTo(W - padX, tableTop);
+    ctx.moveTo(padX, tableTop + tableHeadH);
+    ctx.lineTo(W - padX, tableTop + tableHeadH);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.beginPath();
+    ctx.moveTo(sepColX, tableTop);
+    ctx.lineTo(sepColX, tableTop + tableHeadH);
+    ctx.stroke();
+
+    const headers = ['HÀO', 'T/Ư', 'LỤC THÂN', 'CAN CHI', 'P.THẦN', 'TK', 'LỤC THÂN', 'CAN CHI', 'LỤC THÚ', 'TK', 'TS NGÀY', 'TS THÁNG'];
+    ctx.font = 'bold 16px Inter, sans-serif';
+    ctx.fillStyle = '#1a1a1a';
+    ctx.textAlign = 'center';
+    headers.forEach((h, idx) => {
+        ctx.fillText(h, colLefts[idx] + colWidths[idx] / 2, tableTop + 25);
+    });
+
+    for (let r = 0; r < 6; r++) {
+        const i = 5 - r;
+        const line = data.linesData[i];
+        const rY = rowStartY + r * rowH;
+        const centerY = rY + 25;
+
+        ctx.strokeStyle = '#d0c8b8';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padX, rY + rowH);
+        ctx.lineTo(W - padX, rY + rowH);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+        ctx.beginPath();
+        ctx.moveTo(sepColX, rY);
+        ctx.lineTo(sepColX, rY + rowH);
+        ctx.stroke();
+
+        const isMoving = line.isMoving;
+        const textColor = isMoving ? '#e60000' : '#000000';
+        const rowFont = isMoving ? 'bold 17.5px Inter, sans-serif' : '17.5px Inter, sans-serif';
+
+        const sym = (line.val === 1) ? '—' : (line.val === 2) ? '--' : (line.val === 3) ? 'O' : 'X';
+        const tu = line.isShi ? 'Thế' : line.isYing ? 'Ứng' : '';
+        const phucThan = line.phucThan ? `${line.phucThan.rel} - ${line.phucThan.branch}` : '-';
+        const tk = line.isTK ? 'K' : '-';
+        const ctk = line.isCTK ? 'K' : '-';
+
+        const vals = [
+            sym,
+            tu,
+            line.relation,
+            `${line.chi}-${line.hanh}`,
+            phucThan,
+            tk,
+            line.changed.relation,
+            `${line.changed.branch}-${line.changed.hanh}`,
+            line.lucThu,
+            ctk,
+            line.tsNgay,
+            line.vsThang
+        ];
+
+        vals.forEach((v, idx) => {
+            const cX = colLefts[idx] + colWidths[idx] / 2;
+            ctx.textAlign = 'center';
+            if (idx === 1 && v) {
+                ctx.font = 'bold 17.5px Inter, sans-serif';
+                ctx.fillStyle = isMoving ? '#e60000' : '#1a1a1a';
+            } else if (idx === 4 && !isMoving) {
+                ctx.font = '17.5px Inter, sans-serif';
+                ctx.fillStyle = '#1a1a1a';
+            } else {
+                ctx.font = rowFont;
+                ctx.fillStyle = textColor;
+            }
+            ctx.fillText(v, cX, centerY);
+        });
+    }
+
+    // 5. Khu Vực Thần Sát (4 cột, tô đỏ #e60000 chi động)
+    ctx.strokeStyle = '#888888';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(padX, ssTop);
+    ctx.lineTo(W - padX, ssTop);
+    ctx.stroke();
+
+    ctx.font = 'bold 17px Inter, sans-serif';
+    ctx.fillStyle = '#1a1a1a';
+    ctx.textAlign = 'left';
+    ctx.fillText('THẦN SÁT', padX, ssTop + 28);
+
+    const movingChiSet = new Set();
+    data.linesData.forEach(line => {
+        if (line.isMoving) {
+            movingChiSet.add(line.chi);
+            movingChiSet.add(line.changed.branch);
+        }
+    });
+
+    const ssColGap = 12;
+    const itW = (contentW - 3 * ssColGap) / 4;
+    shenshaList.forEach((s, idx) => {
+        const c = idx % 4;
+        const r = Math.floor(idx / 4);
+        const itX = padX + c * (itW + ssColGap);
+        const itY = gridStartY + r * (ssItemH + ssRowGap);
+
+        ctx.strokeStyle = '#d0c8b8';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(itX, itY + ssItemH);
+        ctx.lineTo(itX + itW, itY + ssItemH);
+        ctx.stroke();
+
+        const m = s.match(/<strong>(.*?):<\/strong>\s*(.*)/);
+        if (m) {
+            const label = m[1] + ': ';
+            const val = m[2] || '-';
+            const valTokens = val.split(',');
+            const hasMoving = valTokens.some(tok => movingChiSet.has(tok.trim()));
+            const spans = [
+                {
+                    text: label,
+                    font: 'bold 17px Inter, sans-serif',
+                    color: hasMoving ? '#e60000' : '#1a1a1a'
+                }
+            ];
+            valTokens.forEach((tok, tIdx) => {
+                const trimmed = tok.trim();
+                const isTokMoving = movingChiSet.has(trimmed);
+                const prefix = tIdx === 0 ? '' : ', ';
+                spans.push({
+                    text: prefix + trimmed,
+                    font: isTokMoving ? 'bold 17px Inter, sans-serif' : '17px Inter, sans-serif',
+                    color: isTokMoving ? '#e60000' : '#1a1a1a'
+                });
+            });
+            ctx.textAlign = 'left';
+            drawCanvasSpans(ctx, spans, itX + 2, itY + 23);
+        } else {
+            const plain = s.replace(/<[^>]*>/g, '');
+            ctx.textAlign = 'left';
+            ctx.font = '17px Inter, sans-serif';
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillText(plain, itX + 2, itY + 23);
+        }
+    });
+
+    // 6. Chân trang bản quyền luchao.io.vn
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(padX, footerTop);
+    ctx.lineTo(W - padX, footerTop);
+    ctx.stroke();
+    ctx.restore();
+
+    const fPart1 = 'Quẻ được lập tại: ';
+    const fPart2 = 'luchao.io.vn';
+    ctx.font = 'italic 17px Inter, sans-serif';
+    const w1 = ctx.measureText(fPart1).width;
+    ctx.font = 'bold 17px Inter, sans-serif';
+    const w2 = ctx.measureText(fPart2).width;
+    const fStartX = (W - (w1 + w2)) / 2;
+    ctx.textAlign = 'left';
+    drawCanvasSpans(ctx, [
+        { text: fPart1, font: 'italic 17px Inter, sans-serif', color: '#475569' },
+        { text: fPart2, font: 'bold 17px Inter, sans-serif', color: '#b91c1c' }
+    ], fStartX, footerTop + 28);
+
+    return canvas;
+}
+
+async function captureAndDisplayImage() {
+    try {
+        if (!currentHexData) return;
+        const canvas = await renderHexagramToCanvas(currentHexData);
+
+        if (currentImageDataUrl && currentImageDataUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(currentImageDataUrl);
+        }
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        currentImageBlob = blob || (window.PortalImageDownload ? window.PortalImageDownload.dataURItoBlob(canvas.toDataURL('image/png')) : null);
+
+        const timestamp = new Date().toISOString().slice(0, 10);
+        const filename = `luchao_${timestamp}.png`;
+        currentImageFile = (currentImageBlob && window.PortalImageDownload)
+            ? window.PortalImageDownload.prepareFile(currentImageBlob, filename)
+            : null;
+
+        currentImageDataUrl = currentImageBlob ? URL.createObjectURL(currentImageBlob) : canvas.toDataURL('image/png');
+
         const imageDisplay = document.getElementById('imageDisplay');
         if (imageDisplay) {
             imageDisplay.innerHTML = '';
@@ -927,23 +1402,17 @@ function captureAndDisplayImage() {
 
         const resultSec = document.getElementById('resultSection');
         if (resultSec) resultSec.classList.add('visible');
-
-    }).catch(err => {
-        console.error('html2canvas error:', err);
-
-        // Hide capture area
-        captureArea.style.position = 'absolute';
-        captureArea.style.left = '-9999px';
-        captureArea.style.opacity = '1';
+    } catch (err) {
+        console.error('Native Canvas export error:', err);
 
         const loadingOverlay = document.getElementById('loading-overlay');
         if (loadingOverlay) loadingOverlay.classList.remove('visible');
 
         const imageDisplay = document.getElementById('imageDisplay');
         if (imageDisplay) {
-            imageDisplay.innerHTML = `<p style="color: var(--seal-red, #ef4444); text-align:center; padding:20px;">Có lỗi khi tạo ảnh. Vui lòng bấm Lập Quẻ lại!</p>`;
+            imageDisplay.innerHTML = `<p style="color: var(--seal-red, #b91c1c); text-align:center; padding:20px;">Có lỗi khi tạo ảnh. Vui lòng bấm Lập Quẻ lại!</p>`;
         }
-    });
+    }
 }
 
 
@@ -1393,7 +1862,7 @@ function showToast(message) {
 }
 
 function downloadImage() {
-    if (!currentImageDataUrl) {
+    if (!currentImageBlob && !currentImageDataUrl) {
         alert('Chưa có ảnh để tải!');
         return;
     }
@@ -1401,55 +1870,28 @@ function downloadImage() {
     const timestamp = new Date().toISOString().slice(0, 10);
     const filename = `luchao_${timestamp}.png`;
 
-    // Only iPhone / iPad uses Web Share API so user can save directly to Photos
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-    // Convert base64 to blob
-    fetch(currentImageDataUrl)
-        .then(res => res.blob())
-        .then(blob => {
-            if (isIOS && navigator.share && navigator.canShare) {
-                // iOS: Try Web Share API first
-                const file = new File([blob], filename, { type: 'image/png' });
-                const shareData = { files: [file] };
-
-                if (navigator.canShare(shareData)) {
-                    navigator.share(shareData)
-                        .then(() => showToast('Đã chia sẻ thành công!'))
-                        .catch((err) => {
-                            console.log('Share cancelled or failed, trying fallback');
-                            fallbackDownload(blob, filename);
-                        });
-                    return;
-                }
-            }
-
-            // Android, Desktop and fallback: Direct download
-            fallbackDownload(blob, filename);
-            showToast('Đã tải ảnh thành công!');
-        })
-        .catch(err => {
-            console.error('Download error:', err);
-            // Ultimate fallback - direct link download
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = currentImageDataUrl;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+    if (window.PortalImageDownload) {
+        window.PortalImageDownload.saveOrShare({
+            file: currentImageFile,
+            blob: currentImageBlob,
+            dataUrl: currentImageDataUrl,
+            filename: filename,
+            title: 'Quẻ Kinh Dịch Lục Hào',
+            onSuccess: showToast,
+            onError: (msg) => alert(msg)
         });
-}
+        return;
+    }
 
-function fallbackDownload(blob, filename) {
-    const url = URL.createObjectURL(blob);
+    const url = currentImageBlob ? URL.createObjectURL(currentImageBlob) : currentImageDataUrl;
     const link = document.createElement('a');
     link.download = filename;
     link.href = url;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    if (currentImageBlob) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('Đã tải ảnh HD về máy thành công!');
 }
 
 function calculateShenSha(dCan, dChi, mChi) {

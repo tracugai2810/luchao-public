@@ -292,13 +292,14 @@
     const thanhMon = options.thanhMon || null;
     const overlayRotation = options.overlayRotation || 0;
 
-    // 1. Set canvas resolution to 1000x1000
-    canvas.width = 1000;
-    canvas.height = 1000;
+    // 1. Set high-resolution canvas (default 1500x1500 for razor-sharp export & floorplan overlay)
+    const SIZE = Math.max(60, options.size || 1500);
+    canvas.width = SIZE;
+    canvas.height = SIZE;
     const ctx = canvas.getContext('2d');
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
-    const s = 1000 / 600; // Scale factor
+    const s = SIZE / 600; // Scale factor
 
     // 2. Clear canvas with transparency
     ctx.clearRect(0, 0, canvas.width, canvas.height);

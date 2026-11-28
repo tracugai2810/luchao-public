@@ -68,11 +68,14 @@
   
   <!-- CSS Stylesheet (Self-contained, includes Portal Navigation) -->
   <link rel="stylesheet" href="/bat-tu/style.css?v=7.5">
-  <link rel="stylesheet" href="/portal-theme.css?v=3.0">
+  <link rel="stylesheet" href="/portal-theme.css?v=4.0">
 
   <!-- Libraries: lunar-javascript & html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Unified Image Download & Share Helper -->
+  <script src="/portal-download.js?v=1.0"></script>
 
   <!-- Bazi Core Engine -->
   <script src="/bat-tu/bazi-engine.js?v=7.4"></script>
@@ -1653,7 +1656,11 @@
           captureContainer.style.zIndex = "-9999";
           captureContainer.style.opacity = "0.01";
 
-          html2canvas(printableCard, {
+          const waitFont = (window.PortalImageDownload && window.PortalImageDownload.waitForFonts)
+            ? window.PortalImageDownload.waitForFonts([], 1500)
+            : (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve());
+
+          waitFont.then(() => html2canvas(printableCard, {
             scale: 2.0,
             backgroundColor: "#FEF6E8",
             useCORS: false,
@@ -1699,7 +1706,7 @@
             }, "image/png");
 
             if (loadingEl) loadingEl.style.display = "none";
-          }).catch(err => {
+          })).catch(err => {
             console.error("Lỗi khi kết xuất ảnh lá số:", err);
             captureContainer.style.position = "absolute";
             captureContainer.style.left = "-9999px";
@@ -1724,47 +1731,31 @@
             cachedChartBlob = dataURItoBlob(currentImageDataUrl);
           }
 
-          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-          // 1. Cho iOS: Mở Native Share Sheet để lưu vào ứng dụng Ảnh (Photos)
-          if (isIOS && cachedChartBlob && typeof navigator !== 'undefined' && navigator.canShare && navigator.share) {
-            try {
-              const file = cachedChartFile || new File([cachedChartBlob], filename, { type: 'image/png', lastModified: Date.now() });
-              if (navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                  files: [file],
-                  title: 'Lá Số Hoa Sơn Bát Tự',
-                  text: 'Lá số Hoa Sơn Bát Tự lập tại luchao.io.vn'
-                });
-                showBaziToast('Đã lưu / chia sẻ ảnh thành công!');
-                btn.innerHTML = origText;
-                btn.disabled = false;
-                return;
-              }
-            } catch (err) {
-              if (err.name === 'AbortError') {
-                btn.innerHTML = origText;
-                btn.disabled = false;
-                return;
-              }
-              console.warn('iOS Native share error, fallback to direct download:', err);
-            }
+          if (window.PortalImageDownload) {
+            await window.PortalImageDownload.saveOrShare({
+              file: cachedChartFile,
+              blob: cachedChartBlob,
+              dataUrl: currentImageDataUrl,
+              filename: filename,
+              title: 'Lá Số Hoa Sơn Bát Tự',
+              text: 'Lá số Hoa Sơn Bát Tự lập tại luchao.io.vn',
+              onSuccess: showBaziToast,
+              onError: showBaziToast
+            });
+          } else {
+            const downloadUrl = cachedChartBlob ? URL.createObjectURL(cachedChartBlob) : currentImageDataUrl;
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = downloadUrl;
+            link.rel = 'noopener';
+            document.body.appendChild(link);
+            link.click();
+            showBaziToast('Đã tải ảnh lá số HD về máy thành công!');
+            setTimeout(() => {
+              if (document.body.contains(link)) document.body.removeChild(link);
+              if (cachedChartBlob) URL.revokeObjectURL(downloadUrl);
+            }, 500);
           }
-
-          // 2. Cho Android, PC, Mac: Tải file trực tiếp
-          const downloadUrl = cachedChartBlob ? URL.createObjectURL(cachedChartBlob) : currentImageDataUrl;
-          const link = document.createElement('a');
-          link.download = filename;
-          link.href = downloadUrl;
-          link.rel = 'noopener';
-          document.body.appendChild(link);
-          link.click();
-          showBaziToast('Đã tải ảnh lá số HD về máy thành công!');
-          setTimeout(() => {
-            if (document.body.contains(link)) document.body.removeChild(link);
-            if (cachedChartBlob) URL.revokeObjectURL(downloadUrl);
-          }, 500);
 
         } catch (err) {
           console.error('Lỗi khi tải ảnh:', err);

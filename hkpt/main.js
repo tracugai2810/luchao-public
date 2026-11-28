@@ -644,29 +644,27 @@
   async function handleDownloadButtonClick(e) {
     if (e) e.preventDefault();
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-    // 1. On iPhone / iPad: IMMEDIATELY trigger native iOS Share Sheet!
-    if (isIOS && cachedChartFile && typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files: [cachedChartFile] }) && navigator.share) {
-      try {
-        await navigator.share({
-          files: [cachedChartFile],
-          title: 'Tinh Bàn Phong Thủy'
-        });
-        showToast('Đã chia sẻ / lưu ảnh thành công!');
-        return;
-      } catch (err) {
-        if (err.name === 'AbortError') return; // User closed share sheet
-        console.warn('iOS Share sheet failed, downloading directly...', err);
-      }
+    if (cachedChartBlob && window.PortalImageDownload) {
+      const van = (document.getElementById('inputVan') && document.getElementById('inputVan').value) || '8';
+      const deg = (document.getElementById('inputDegree') && document.getElementById('inputDegree').value) || '180';
+      const filename = `tinhban_van${van}_${deg}deg.png`;
+      await window.PortalImageDownload.saveOrShare({
+        file: cachedChartFile,
+        blob: cachedChartBlob,
+        filename: filename,
+        title: 'Tinh Bàn Phong Thủy',
+        onSuccess: showToast,
+        onError: showToast
+      });
+      return;
     }
 
-    // 2. On PC, Android, Mac: Direct file download
+    // Fallback: Direct html2canvas snapshot if cache not ready yet
     downloadChart();
   }
 
   function dataURItoBlob(dataURI) {
+    if (window.PortalImageDownload) return window.PortalImageDownload.dataURItoBlob(dataURI);
     try {
       const parts = dataURI.split(',');
       const byteString = atob(parts[1]);
@@ -684,7 +682,7 @@
   }
 
   /**
-   * Universal Image Save / Share:
+   * Universal Image Save / Share (unified across all 5 modules via PortalImageDownload):
    * - On iOS: Native Share Sheet (Save to Photos).
    * - On Android, PC, Mac: Direct file download.
    */
@@ -711,28 +709,18 @@
       console.warn('Blob conversion error:', e);
     }
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-    // 1. For iOS (iPhone / iPad): Try Native Share Sheet
-    if (isIOS && blob && typeof navigator !== 'undefined' && navigator.canShare && navigator.share) {
-      try {
-        const file = new File([blob], filename || 'tinhban.png', { type: 'image/png', lastModified: Date.now() });
-        if (navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: title || 'Tinh Bàn Phong Thủy',
-          });
-          showToast('Đã chia sẻ / lưu ảnh thành công!');
-          return;
-        }
-      } catch (err) {
-        if (err.name === 'AbortError') return; // User closed share sheet normally
-        console.warn('iOS Native share failed, downloading file directly...', err);
-      }
+    if (window.PortalImageDownload) {
+      await window.PortalImageDownload.saveOrShare({
+        blob: blob,
+        dataUrl: dataUrl,
+        filename: filename || 'tinhban.png',
+        title: title || 'Tinh Bàn Phong Thủy',
+        onSuccess: showToast,
+        onError: showToast
+      });
+      return;
     }
 
-    // 2. Direct File Download for Android, PC, Mac
     const downloadUrl = blob ? URL.createObjectURL(blob) : dataUrl;
     const link = document.createElement('a');
     link.download = filename || 'tinhban.png';

@@ -51,7 +51,7 @@
       ]
     },
     {
-      "source": "/(styles.css|portal-theme.css|portal-nav.js|app.js|auth.js|sw.js)",
+      "source": "/(styles.css|portal-theme.css|portal-nav.js|portal-download.js|app.js|auth.js|sw.js)",
       "headers": [
         {
           "key": "Cache-Control",

@@ -475,79 +475,439 @@ function buildHexCardHTML(item) {
     `;
 }
 
-function openHexModalDesktopObject(item) {
+let currentSimModalObjectUrl = null;
+
+function drawSimCanvasRoundRect(ctx, x, y, w, h, r) {
+    if (typeof ctx.roundRect === 'function') {
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, r);
+        return;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+}
+
+function drawSimSpans(ctx, spans, startX, y) {
+    let curX = startX;
+    for (const span of spans) {
+        ctx.font = span.font || '18px Inter, sans-serif';
+        ctx.fillStyle = span.color || '#000000';
+        ctx.fillText(span.text, curX, y);
+        curX += ctx.measureText(span.text).width;
+    }
+    return curX;
+}
+
+async function renderSimHexagramToCanvas(item) {
+    if (window.PortalImageDownload && window.PortalImageDownload.waitForFonts) {
+        await window.PortalImageDownload.waitForFonts([
+            '400 16px Inter',
+            '400 18px Inter',
+            '700 16px Inter',
+            '700 18px Inter',
+            '700 20px Inter'
+        ], 1800);
+    } else if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready.catch(() => {});
+    }
+
+    const { hexData, sim } = item;
+    const { purpose, purposeText: pText, birthDateVal } = getFormInputs();
+    const purposeDisplay = item.purposeText || getPurposeText(item.purpose || purpose) || pText || '';
+    const rawBirthDate = item.birthDateVal || birthDateVal;
+    const formattedBirthDate = formatDateTimeVN(rawBirthDate);
+
+    const W = 1160;
+    const SCALE = 1.5; // 1740px lossless PNG (< 2000px for crisp Zalo/Facebook delivery)
+    const padX = 24;
+    const contentW = W - padX * 2; // 1112px
+
+    let hy = 46;
+    hy += 32; // SIM Chon
+    if (formattedBirthDate) hy += 30;
+    hy += 30; // Muc dich cau
+    hy += 30; // Tuan Khong
+    hy += 24; // Nhat Than / Nguyet Lenh / Tiet khi + gap
+    const yDiv1 = hy;
+
+    const yHexTitle = yDiv1 + 36;
+    const yBarsStart = yHexTitle + 20;
+    const yFam = yBarsStart + 6 * 24 + 14;
+    const hasHoNgam = !!(hexData.hoData && hexData.ngamResult && hexData.ngamResult.length > 0);
+    const yDiv2 = yFam + (hasHoNgam ? 42 : 24);
+
+    const tableTop = yDiv2 + 14;
+    const tableHeadH = 38;
+    const rowH = 38;
+    const rowStartY = tableTop + tableHeadH;
+    const tableBottom = rowStartY + 6 * rowH;
+
+    const footerTop = tableBottom + 20;
+    const H = Math.ceil(footerTop + 52);
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = Math.round(W * SCALE);
+    canvas.height = Math.round(H * SCALE);
+    ctx.scale(SCALE, SCALE);
+
+    if (window.PortalImageDownload && window.PortalImageDownload.enableInkText) {
+        window.PortalImageDownload.enableInkText(ctx, 0.22);
+    }
+
+    // 1. Giữ nguyên nền giấy vàng kem #fefee5
+    ctx.fillStyle = '#fefee5';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.save();
+    ctx.strokeStyle = '#d4ccb4';
+    ctx.lineWidth = 2;
+    drawSimCanvasRoundRect(ctx, 10, 10, W - 20, H - 20, 18);
+    ctx.stroke();
+    ctx.restore();
+
+    // 2. Header Thông Tin SIM
+    ctx.textAlign = 'left';
+    let curY = 46;
+    drawSimSpans(ctx, [
+        { text: 'SIM Chọn: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: formatSimNumber(sim), font: 'bold 21px Inter, sans-serif', color: '#e60000' }
+    ], padX, curY);
+    curY += 32;
+
+    if (formattedBirthDate) {
+        drawSimSpans(ctx, [
+            { text: 'Ngày giờ: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+            { text: formattedBirthDate, font: 'bold 18px Inter, sans-serif', color: '#e60000' }
+        ], padX, curY);
+        curY += 30;
+    }
+
+    drawSimSpans(ctx, [
+        { text: 'Mục đích cầu: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: purposeDisplay, font: 'bold 18px Inter, sans-serif', color: '#e60000' }
+    ], padX, curY);
+    curY += 30;
+
+    drawSimSpans(ctx, [
+        { text: 'Tuần Không: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: hexData.dateInfo.tuanKhong || '', font: 'bold 18px Inter, sans-serif', color: '#e60000' }
+    ], padX, curY);
+    curY += 30;
+
+    const infoLineSpans = [
+        { text: 'Nhật Thần: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: (hexData.dateInfo.nhatThan || '') + '    ', font: 'bold 18px Inter, sans-serif', color: '#e60000' },
+        { text: 'Nguyệt Lệnh: ', font: 'bold 18px Inter, sans-serif', color: '#000000' },
+        { text: hexData.dateInfo.nguyetLenh || '', font: 'bold 18px Inter, sans-serif', color: '#e60000' }
+    ];
+    if (hexData.dateInfo.tietKhi) {
+        infoLineSpans.push({ text: '    Tiết khí: ', font: 'bold 18px Inter, sans-serif', color: '#000000' });
+        infoLineSpans.push({ text: hexData.dateInfo.tietKhi, font: 'bold 18px Inter, sans-serif', color: '#e60000' });
+    }
+    drawSimSpans(ctx, infoLineSpans, padX, curY);
+
+    ctx.strokeStyle = '#888888';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(padX, yDiv1);
+    ctx.lineTo(W - padX, yDiv1);
+    ctx.stroke();
+
+    // 3. Khu vực 3 hình Quẻ Chủ - Quẻ Hỗ - Quẻ Biến
+    const drawSingleSimHex = (centerX, titleText, linesArr, useChanged, familyText) => {
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 20px Inter, sans-serif';
+        ctx.fillStyle = '#c41e3a';
+        ctx.fillText((titleText || '').toUpperCase(), centerX, yHexTitle);
+
+        const bits = linesArr.map(v => getBit(v, useChanged));
+        for (let i = 5; i >= 0; i--) {
+            const lineIdx = 5 - i;
+            const lineY = yBarsStart + lineIdx * 24;
+            const isMoving = hexData.lines[i] === 0 || hexData.lines[i] === 3;
+            const barColor = isMoving ? '#e60000' : '#1a1a1a';
+            const isYang = bits[i] === '1';
+            ctx.fillStyle = barColor;
+            if (isYang) {
+                ctx.fillRect(centerX - 55, lineY, 110, 16);
+            } else {
+                ctx.fillRect(centerX - 55, lineY, 46, 16);
+                ctx.fillRect(centerX - 55 + 46 + 18, lineY, 46, 16);
+            }
+        }
+
+        ctx.font = 'bold 17px Inter, sans-serif';
+        ctx.fillStyle = '#333333';
+        ctx.fillText(familyText.toUpperCase(), centerX, yFam);
+    };
+
+    if (hexData.hoData) {
+        const cXMain = 220, cXHo = 580, cXChanged = 940;
+        drawSingleSimHex(
+            cXMain,
+            hexData.mainName,
+            hexData.lines,
+            false,
+            `HỌ ${hexData.palaceName}${hexData.mainAttr ? ' - ' + hexData.mainAttr : ''}`
+        );
+        drawSingleSimHex(
+            cXHo,
+            hexData.hoData.name,
+            hexData.hoData.lines,
+            false,
+            `HỌ ${hexData.hoData.palaceName}${hexData.hoData.attr ? ' - ' + hexData.hoData.attr : ''}`
+        );
+        drawSingleSimHex(
+            cXChanged,
+            hexData.changedName,
+            hexData.lines,
+            true,
+            `HỌ ${hexData.changedPalaceName}${hexData.changedAttr ? ' - ' + hexData.changedAttr : ''}`
+        );
+        if (hexData.ngamResult && hexData.ngamResult.length > 0) {
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 15px Inter, sans-serif';
+            ctx.fillStyle = '#000000';
+            ctx.fillText(hexData.ngamResult.join(', ').toUpperCase(), cXHo, yFam + 24);
+        }
+    } else {
+        const cXMain = 320, cXChanged = 840;
+        drawSingleSimHex(
+            cXMain,
+            hexData.mainName,
+            hexData.lines,
+            false,
+            `HỌ ${hexData.palaceName}${hexData.mainAttr ? ' - ' + hexData.mainAttr : ''}`
+        );
+        drawSingleSimHex(
+            cXChanged,
+            hexData.changedName,
+            hexData.lines,
+            true,
+            `HỌ ${hexData.changedPalaceName}${hexData.changedAttr ? ' - ' + hexData.changedAttr : ''}`
+        );
+        if (hexData.ngamResult && hexData.ngamResult.length > 0) {
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 17px Inter, sans-serif';
+            ctx.fillStyle = '#000000';
+            const startNgamY = yBarsStart + 68 - ((hexData.ngamResult.length - 1) * 24) / 2;
+            hexData.ngamResult.forEach((txt, idx) => {
+                ctx.fillText(txt.toUpperCase(), W / 2, startNgamY + idx * 24);
+            });
+        }
+    }
+
+    ctx.strokeStyle = '#888888';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(padX, yDiv2);
+    ctx.lineTo(W - padX, yDiv2);
+    ctx.stroke();
+
+    // 4. Bảng Lục Hào 12 Cột
+    const colWidths = [56, 67, 117, 117, 117, 50, 106, 112, 128, 45, 98, 99];
+    const colLefts = [];
+    let curColX = padX;
+    for (const w of colWidths) {
+        colLefts.push(curColX);
+        curColX += w;
+    }
+    const sepColX = colLefts[6];
+
+    ctx.fillStyle = '#e2e2cc';
+    ctx.fillRect(padX, tableTop, contentW, tableHeadH);
+
+    ctx.strokeStyle = '#bbbbbb';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(padX, tableTop);
+    ctx.lineTo(W - padX, tableTop);
+    ctx.moveTo(padX, tableTop + tableHeadH);
+    ctx.lineTo(W - padX, tableTop + tableHeadH);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.beginPath();
+    ctx.moveTo(sepColX, tableTop);
+    ctx.lineTo(sepColX, tableTop + tableHeadH);
+    ctx.stroke();
+
+    const headers = ['HÀO', 'T/Ư', 'LỤC THÂN', 'CAN CHI', 'P.THẦN', 'TK', 'LỤC THÂN', 'CAN CHI', 'LỤC THÚ', 'TK', 'TS NGÀY', 'TS THÁNG'];
+    ctx.font = 'bold 16px Inter, sans-serif';
+    ctx.fillStyle = '#1a1a1a';
+    ctx.textAlign = 'center';
+    headers.forEach((h, idx) => {
+        ctx.fillText(h, colLefts[idx] + colWidths[idx] / 2, tableTop + 25);
+    });
+
+    for (let r = 0; r < 6; r++) {
+        const i = 5 - r;
+        const line = hexData.linesData[i];
+        const rY = rowStartY + r * rowH;
+        const centerY = rY + 25;
+
+        ctx.strokeStyle = '#d0c8b8';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padX, rY + rowH);
+        ctx.lineTo(W - padX, rY + rowH);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+        ctx.beginPath();
+        ctx.moveTo(sepColX, rY);
+        ctx.lineTo(sepColX, rY + rowH);
+        ctx.stroke();
+
+        const isMoving = line.isMoving;
+        const textColor = isMoving ? '#e60000' : '#000000';
+        const rowFont = isMoving ? 'bold 17.5px Inter, sans-serif' : '17.5px Inter, sans-serif';
+
+        const sym = (line.val === 1) ? '—' : (line.val === 2) ? '--' : (line.val === 3) ? 'O' : 'X';
+        const tu = line.isShi ? 'Thế' : line.isYing ? 'Ứng' : '';
+        const phucThan = line.phucThan ? `${line.phucThan.rel} - ${line.phucThan.branch}` : '-';
+        const tk = line.isTK ? 'K' : '-';
+        const ctk = line.isCTK ? 'K' : '-';
+
+        const vals = [
+            sym,
+            tu,
+            line.relation,
+            `${line.chi}-${line.hanh}`,
+            phucThan,
+            tk,
+            line.changed.relation,
+            `${line.changed.branch}-${line.changed.hanh}`,
+            line.lucThu,
+            ctk,
+            line.tsNgay,
+            line.tsThang
+        ];
+
+        vals.forEach((v, idx) => {
+            const cX = colLefts[idx] + colWidths[idx] / 2;
+            ctx.textAlign = 'center';
+            if (idx === 1 && v) {
+                ctx.font = 'bold 17.5px Inter, sans-serif';
+                ctx.fillStyle = isMoving ? '#e60000' : '#1a1a1a';
+            } else if (idx === 4 && !isMoving) {
+                ctx.font = '17.5px Inter, sans-serif';
+                ctx.fillStyle = '#1a1a1a';
+            } else {
+                ctx.font = rowFont;
+                ctx.fillStyle = textColor;
+            }
+            ctx.fillText(v, cX, centerY);
+        });
+    }
+
+    // 5. Chân trang bản quyền luchao.io.vn/simphongthuy
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(padX, footerTop);
+    ctx.lineTo(W - padX, footerTop);
+    ctx.stroke();
+    ctx.restore();
+
+    const fPart1 = 'Quẻ SĐT được lập tại: ';
+    const fPart2 = 'luchao.io.vn/simphongthuy';
+    ctx.font = 'italic 17px Inter, sans-serif';
+    const w1 = ctx.measureText(fPart1).width;
+    ctx.font = 'bold 17px Inter, sans-serif';
+    const w2 = ctx.measureText(fPart2).width;
+    const fStartX = (W - (w1 + w2)) / 2;
+    ctx.textAlign = 'left';
+    drawSimSpans(ctx, [
+        { text: fPart1, font: 'italic 17px Inter, sans-serif', color: '#475569' },
+        { text: fPart2, font: 'bold 17px Inter, sans-serif', color: '#b91c1c' }
+    ], fStartX, footerTop + 28);
+
+    return canvas;
+}
+
+async function openHexModalDesktopObject(item) {
     if (!item) return;
 
-    const modal = document.getElementById('hexModal');
     const modalBody = document.getElementById('modalBody');
     const isMobile = isMobileDevice();
+    const formattedSim = formatSimNumber(item.sim);
+    const filename = `la-que-sim-${formattedSim.replace(/[^0-9]/g, '')}-${Date.now()}.png`;
 
     modalBody.innerHTML = `
-        <div style="text-align:center; padding:20px; color:#888;">
-            <div style="font-size:1.8rem; margin-bottom:8px;">🔮</div>
-            Đang tạo ảnh lá quẻ sắc nét...
+        <div style="text-align:center; padding:24px; color:#64748b;">
+            <div style="font-size:1.5rem; margin-bottom:8px;">⏳</div>
+            Đang tạo ảnh lá quẻ sắc nét HD...
         </div>
     `;
     openModal('hexModal');
 
-    const tempContainer = document.createElement('div');
-    tempContainer.style.position = 'absolute';
-    tempContainer.style.left = '-9999px';
-    tempContainer.style.width = '900px';
-    tempContainer.innerHTML = buildHexCardHTML(item);
-    document.body.appendChild(tempContainer);
+    try {
+        const canvas = await renderSimHexagramToCanvas(item);
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        const dataUrl = blob ? '' : canvas.toDataURL('image/png');
+        const resolvedBlob = blob || (window.PortalImageDownload ? window.PortalImageDownload.dataURItoBlob(dataUrl) : null);
+        const cachedFile = (resolvedBlob && window.PortalImageDownload)
+            ? window.PortalImageDownload.prepareFile(resolvedBlob, filename)
+            : null;
 
-    setTimeout(() => {
-        const cardElem = tempContainer.querySelector('#hexCardCapture');
-        html2canvas(cardElem, {
-            scale: 2,
-            useCORS: true,
-            scrollX: 0,
-            scrollY: 0,
-            windowWidth: 960
-        }).then(canvas => {
-            const dataUrl = canvas.toDataURL('image/png');
-            document.body.removeChild(tempContainer);
+        if (currentSimModalObjectUrl) {
+            URL.revokeObjectURL(currentSimModalObjectUrl);
+            currentSimModalObjectUrl = null;
+        }
+        const displaySrc = resolvedBlob ? (currentSimModalObjectUrl = URL.createObjectURL(resolvedBlob)) : dataUrl;
 
-            let bottomHtml = '';
-            if (isMobile) {
-                bottomHtml = `
-                    <button id="btnMobileShareTrigger" class="btn-mobile-share-ios">
-                        📤 Chia Sẻ / Lưu Ảnh Về Điện Thoại
-                    </button>
-                `;
-            } else {
-                bottomHtml = `
-                    <div class="desktop-img-hint">
-                        💡 <strong>Mẹo:</strong> Nhấp chuột phải vào ảnh để <em>Sao chép hình ảnh</em> hoặc <em>Lưu hình ảnh thành...</em>
-                    </div>
-                `;
-            }
+        const hintHtml = !isMobile ? `
+            <div class="desktop-img-hint">
+                💡 <strong>Mẹo:</strong> Bạn có thể bấm nút Tải Ảnh phía trên hoặc nhấp chuột phải vào ảnh để <em>Sao chép hình ảnh</em>.
+            </div>
+        ` : '';
 
-            modalBody.innerHTML = `
-                <div class="hex-card-scroll-wrapper">
-                    <img src="${dataUrl}" class="hex-native-img" alt="Lá quẻ SIM ${item.sim}" />
-                </div>
-                ${bottomHtml}
-            `;
+        modalBody.innerHTML = `
+            <div class="hex-card-scroll-wrapper">
+                <img src="${displaySrc}" class="hex-native-img" alt="Lá quẻ SIM ${item.sim}" />
+            </div>
+            <button type="button" id="btnDownloadSimHex" class="btn-mobile-share-ios btn-sim-modal-download">
+                📥 Tải Ảnh / Chia Sẻ Quẻ SIM
+            </button>
+            ${hintHtml}
+        `;
 
-            if (isMobile) {
-                const shareBtn = document.getElementById('btnMobileShareTrigger');
-                if (shareBtn) {
-                    shareBtn.addEventListener('click', () => {
-                        triggerDirectShareOnUserGesture(canvas, formatSimNumber(item.sim), dataUrl);
+        const downloadBtn = document.getElementById('btnDownloadSimHex');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                if (window.PortalImageDownload) {
+                    window.PortalImageDownload.saveOrShare({
+                        file: cachedFile,
+                        blob: resolvedBlob,
+                        dataUrl: dataUrl,
+                        filename: filename,
+                        title: `Lá Quẻ SIM Phong Thủy - ${formattedSim}`,
+                        text: `Lá quẻ Dịch Học SIM Phong Thủy SĐT: ${formattedSim}`,
+                        onSuccess: showToast,
+                        onError: showToast
                     });
+                } else {
+                    fallbackDownloadBlob(resolvedBlob, filename, dataUrl);
                 }
-            }
-        }).catch(err => {
-            console.error('html2canvas error:', err);
-            document.body.removeChild(tempContainer);
-            modalBody.innerHTML = buildHexCardHTML(item);
-        });
-    }, 100);
+            });
+        }
+    } catch (err) {
+        console.error('Native Canvas Sim export error:', err);
+        modalBody.innerHTML = buildHexCardHTML(item);
+    }
 }
 
 function dataURItoBlob(dataURI) {
+    if (window.PortalImageDownload) return window.PortalImageDownload.dataURItoBlob(dataURI);
     try {
         const parts = dataURI.split(',');
         const byteString = atob(parts[1]);
@@ -564,58 +924,13 @@ function dataURItoBlob(dataURI) {
     }
 }
 
-function triggerDirectShareOnUserGesture(canvas, simNumber, dataUrl) {
-    const filename = `la-que-sim-${simNumber.replace(/[^0-9]/g, '')}-${Date.now()}.png`;
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-    // 1. Dành riêng cho iPhone / iPad (iOS): Giữ nguyên 100% logic cũ (Share sheet -> Lưu hình ảnh vào Photos)
-    if (isIOS) {
-        canvas.toBlob(blob => {
-            if (!blob) {
-                showToast("Không thể khởi tạo file ảnh.");
-                return;
-            }
-
-            const file = new File([blob], filename, { type: 'image/png' });
-
-            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                navigator.share({
-                    files: [file],
-                    title: `Lá Quẻ SIM Phong Thủy - ${simNumber}`,
-                    text: `Lá quẻ Dịch Học SIM Phong Thủy SĐT: ${simNumber}`
-                }).then(() => {
-                    showToast("Đã chia sẻ / lưu ảnh thành công!");
-                }).catch(err => {
-                    if (err.name !== 'AbortError') {
-                        fallbackDownloadBlob(blob, filename, dataUrl);
-                    }
-                });
-            } else {
-                fallbackDownloadBlob(blob, filename, dataUrl);
-            }
-        }, 'image/png');
+function fallbackDownloadBlob(blob, filename, dataUrl) {
+    if (window.PortalImageDownload) {
+        const ok = window.PortalImageDownload.directDownload(blob, filename, dataUrl);
+        if (ok) showToast('Đã tải ảnh HD về máy thành công!');
+        else showToast('Không thể tải ảnh. Vui lòng thử lại!');
         return;
     }
-
-    // 2. Dành riêng cho Android (áp dụng Direct Download tương tự tab HKPT & Lục Hào): Tải trực tiếp file về máy
-    let blob = null;
-    if (dataUrl) {
-        blob = dataURItoBlob(dataUrl);
-    }
-
-    if (blob) {
-        fallbackDownloadBlob(blob, filename, dataUrl);
-    } else if (canvas && canvas.toBlob) {
-        canvas.toBlob(b => {
-            fallbackDownloadBlob(b, filename, dataUrl);
-        }, 'image/png');
-    } else {
-        fallbackDownloadBlob(null, filename, dataUrl);
-    }
-}
-
-function fallbackDownloadBlob(blob, filename, dataUrl) {
     const downloadUrl = blob ? URL.createObjectURL(blob) : (dataUrl || '');
     if (!downloadUrl) {
         showToast("Không thể tải ảnh. Vui lòng thử lại!");
@@ -628,14 +943,10 @@ function fallbackDownloadBlob(blob, filename, dataUrl) {
     document.body.appendChild(link);
     link.click();
     setTimeout(() => {
-        if (document.body.contains(link)) {
-            document.body.removeChild(link);
-        }
-        if (blob) {
-            URL.revokeObjectURL(downloadUrl);
-        }
+        if (document.body.contains(link)) document.body.removeChild(link);
+        if (blob) URL.revokeObjectURL(downloadUrl);
     }, 500);
-    showToast(`Đã tải ảnh về máy thành công!`);
+    showToast('Đã tải ảnh về máy thành công!');
 }
 
 let lastCloseTime = 0;
